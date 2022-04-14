@@ -8,3 +8,6 @@ def index(request):
 
 def mapPage(request):
     return render(request, 'food/mercadinhos_map.html', {})
+
+def aboutPage(request):
+    return render(request, 'food/about.html', {})
