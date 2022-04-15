@@ -1,0 +1,65 @@
+/*
+SPACING SYSTEM (px)
+2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
+
+FONT SIZE SYSTEM (px)
+10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+*/
+
+/* 
+MAIN COLOR: #087f5b 
+GREY COLOR: #343a40
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: #343a40;
+  margin: 0 12px;
+}
+
+nav{
+  background-color: #087f5b;
+  margin-top: 12px;
+}
+
+nav ul{
+  overflow: hidden;
+}
+
+nav ul li{
+  display: inline;
+}
+
+nav ul li a{
+  float:right;
+  color: #fff;
+  padding: 12px 12px;
+}
+
+nav ul li a:hover:not(.active){
+  background-color: #045039;
+}
+
+h1,h2,h3{
+  margin: 12px 0;
+}
+
+a{
+  text-decoration: none;
+}
+
+li{
+  margin-bottom: 12px;
+}
+
+footer{
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 12px;
+}
