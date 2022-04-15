@@ -7,6 +7,7 @@
 <body>
     <h1>Contacte-nos!</h1>
     <form action="{% url 'food:contactos' %}" method="post">
+        {% csrf_token %}
         <label for="email">Email: </label>
         <input type="email" name="email"> <br>
         <!-- Este é o email para qual será enviado a resposta -->
