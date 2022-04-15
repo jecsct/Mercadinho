@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mercadinho</title>
+</head>
+<body>
+  {% load static %}
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="{% static 'food/style.css' %}"
+  />
+  <h1>Mercadinho</h1>
+  {% if request.user.is_authenticated %}
+    <h3>Olá {{ request.user }}!</h3>
+  {% else %}
+    <h3>Ainda não está logado!</h3>
+  {% endif %}
+  {% block content %}
+    <ul>
+      <li>
+        <a href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
+      </li>
+      <li>
+        <a href="{% url 'food:loginutilizador' %}">Login</a>
+      </li>
+      <li>
+        <a href="{% url 'food:logoututilizador' %}">Logout</a>
+      </li>
+    </ul>
+  {% endblock %}
+  <footer>
+    <p>
+      &copy; Bernardo Santos - 92439 | João Travassos - 93089 | Sara Vieira - 92696
+    </p>
+  </footer>
+</body>
+</html>
