@@ -17,30 +17,49 @@ GREY COLOR: #343a40
   box-sizing: border-box;
 }
 
-/* ------------------------ */
-/* GENERAL STYLES */
-/* ------------------------ */
 body {
   font-family: "Inter", sans-serif;
   color: #343a40;
-  margin-left: 10px;
+  margin: 0 12px;
+}
+
+nav{
+  background-color: #087f5b;
+  margin-top: 12px;
+}
+
+nav ul{
+  overflow: hidden;
+}
+
+nav ul li{
+  display: inline;
+}
+
+nav ul li a{
+  float:right;
+  color: #fff;
+  padding: 12px 12px;
+}
+
+nav ul li a:hover:not(.active){
+  background-color: #045039;
 }
 
 h1,h2,h3{
-  margin: 10px 0;
+  margin: 12px 0;
 }
-
 
 a{
   text-decoration: none;
 }
 
 li{
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 footer{
   position: absolute;
   bottom: 0;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }

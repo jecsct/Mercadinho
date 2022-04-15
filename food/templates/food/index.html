@@ -13,13 +13,7 @@
     type="text/css"
     href="{% static 'food/style.css' %}"
   />
-  <h1>Mercadinho</h1>
-  {% if request.user.is_authenticated %}
-    <h3>Olá {{ request.user }}!</h3>
-  {% else %}
-    <h3>Ainda não está logado!</h3>
-  {% endif %}
-  {% block content %}
+  <nav>
     <ul>
       <li>
         <a href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
@@ -33,7 +27,24 @@
       <li>
         <a href="/#">Cesto de compras</a>
       </li>
+      <li>
+        <a href="/#">Mapa dos Mercadinhos</a>
+      </li>
+      <li>
+        <a href="/#">Sobre nós</a>
+      </li>
+      <li>
+        <a href="/#">Contactos</a>
+      </li>
     </ul>
+  </nav>
+  <h1>Mercadinho</h1>
+  {% if request.user.is_authenticated %}
+    <h3>Olá {{ request.user }}!</h3>
+  {% else %}
+    <h3>Ainda não está logado!</h3>
+  {% endif %}
+  {% block content %}
   {% endblock %}
   <footer>
     <p>
