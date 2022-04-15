@@ -33,10 +33,15 @@ def contactos(request):
     return render(request, 'food/contactos.html')
 
 def caixaMensagens(request):
-  lista_mensagens=Mensagem.objects.order_by('-dataHora')
+  lista_mensagens = Mensagem.objects.order_by('-dataHora')
   return render(request, 'food/caixaMensagens.html', {'lista_mensagens':lista_mensagens})
 
 def cestoCompras(request):
+  #cesto_compras =
+  #return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
+  return render(request, 'food/cestoCompras.html')
+
+def adicionarCesto(request):
   return render(request, 'food/cestoCompras.html')
 
 def removerCesto(request):
