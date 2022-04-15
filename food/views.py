@@ -24,3 +24,7 @@ def contactos(request):
       return HttpResponseRedirect(reverse('food:contactos'))
   else:
     return render(request, 'food/contactos.html')
+
+def caixaMensagens(request):
+  lista_mensagens=Mensagem.objects.order_by('-dataHora')
+  return render(request, 'food/caixaMensagens.html', {'lista_mensagens':lista_mensagens})
