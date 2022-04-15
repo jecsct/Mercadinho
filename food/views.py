@@ -57,15 +57,13 @@ def logoututilizador(request):
     logout(request)
     return HttpResponseRedirect(reverse('food:index'))
 
-
-def productDetailPage(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    return render(request, 'food')
-
-
 def mapPage(request):
     return render(request, 'food/mercadinhos_map.html', {})
 
 
 def aboutPage(request):
     return render(request, 'food/about.html', {})
+
+def productDetailPage(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    return render(request, 'food/detalhe.html')
