@@ -54,7 +54,7 @@ ROOT_URLCONF = 'Mercadinho.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['food/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
