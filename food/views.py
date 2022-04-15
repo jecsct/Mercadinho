@@ -88,3 +88,7 @@ def loginutilizador(request):
 def logoututilizador(request):
   logout(request)
   return HttpResponseRedirect(reverse('food:index'))
+
+
+def redirect_view(request):
+    return redirect('/food')
