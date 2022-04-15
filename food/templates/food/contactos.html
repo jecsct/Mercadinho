@@ -8,10 +8,10 @@
     <h1>Contacte-nos!</h1>
     <form action="{% url 'food:contactos' %}" method="post">
         <label for="email">Email: </label>
-        <input type="email"> <br>
+        <input type="email" name="email"> <br>
         <!-- Este é o email para qual será enviado a resposta -->
         <!--Só pessoas loggadas podem contactar o administardor?-->
-        <textarea name="text"></textarea> <br>
+        <textarea name="texto"></textarea> <br>
         <input type="submit" value="Enviar Mensagem">
     </form>
     <!--Acho que este footer faz sentido ser daquelas cenas que passam entre TODAS as paginas-->
