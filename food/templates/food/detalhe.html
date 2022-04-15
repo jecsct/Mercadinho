@@ -6,13 +6,10 @@
 </head>
 <body>
 {% include 'food/navbar.html' %}
-<br>
-<br>
-<br>
-<br>
 <h1>{{ product.name }}</h1>
 <p>{{ product.description }}</p>
 <p>{{ product.salesman.user.username }}</p>
 
+{% include 'food/copyright_footer.html' %}
 </body>
 </html>

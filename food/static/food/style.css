@@ -12,54 +12,77 @@ GREY COLOR: #343a40
 */
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: "Inter", sans-serif;
-  color: #343a40;
-  margin: 0 12px;
+    font-family: "Inter", sans-serif;
+    color: #343a40;
+    margin: 0 12px;
 }
 
-nav{
-  background-color: #087f5b;
-  margin-top: 12px;
+nav {
+    background-color: #087f5b;
+    margin-top: 12px;
 }
 
-nav ul{
-  overflow: hidden;
+nav ul {
+    overflow: hidden;
 }
 
-nav ul li{
-  display: inline;
+nav ul li {
+    display: inline;
 }
 
-nav ul li a{
-  float:right;
-  color: #fff;
-  padding: 12px 12px;
+nav div {
+    float: left;
+    -webkit-margin-collapse: collapse;
 }
 
-nav ul li a:hover:not(.active){
-  background-color: #045039;
+nav p {
+    font-size: 18px;
 }
 
-h1,h2,h3{
-  margin: 12px 0;
+.Logo {
+    float: left;
+    color: #fff;
+    padding: 12px 12px;
 }
 
-a{
-  text-decoration: none;
+.navOption {
+    float: right;
+    color: #fff;
+    padding: 12px 12px;
 }
 
-li{
-  margin-bottom: 12px;
+.navOption:hover {
+    background-color: #045039;
 }
 
-footer{
-  position: absolute;
-  bottom: 0;
-  margin-bottom: 12px;
+h1, h2, h3 {
+    margin: 12px 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    margin-bottom: 12px;
+}
+
+footer {
+    min-height: 20px;
+    background: rgba(51, 170, 51, .4);
+}
+
+footer {
+    margin-top: auto;
+}
+
+footer div {
+    bottom: 0;
+    text-align: center;
 }

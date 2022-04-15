@@ -1,5 +1,4 @@
-{% extends "food/index.html" %}
-{% block content %}
+{% include "food/navbar.html" %}
   <h2>Login Utilizador</h2>
   {% if error_message %}
     <p>{{ error_message }}</p>
@@ -10,4 +9,5 @@
     Password: <input type="password" name="password" /><br /><br />
     <input type="submit" value="Login" />
   </form>
-{% endblock %}
+
+    {% include 'food/copyright_footer.html' %}

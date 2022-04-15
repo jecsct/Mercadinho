@@ -5,24 +5,46 @@
     <title>Title</title>
 </head>
 <body>
-{% block navbar %}
-    <div class="navbar" style="background-color: aquamarine">
-        <div>
-            <label style="float:left;">Mercadinho</label>
-        </div>
-
-        {% if not request.user.is_authenticate %}
-            <a style="float:right">Registar novo User</a>
-            {#    <a href="{% url 'votacao:registarUserPage' %}" style="float:right">Registar novo User</a>#}
-            <a style="float:right">Login</a>
-            {#    <a href="{% url 'votacao:loginPage' %}" style="float:right">Login</a>#}
+{% load static %}
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="{% static 'food/style.css' %}"
+/>
+{#{% block navbar %}#}
+<nav>
+    <ul>
+        <li>
+            <div>
+                <a class="Logo" href="{% url 'food:index' %}">Mercadinho</a>
+            </div>
+        </li>
+        {% if not request.user.is_authenticated %}
+            <li>
+                <a class="navOption" href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
+            </li>
+            <li>
+                <a class="navOption" href="{% url 'food:loginutilizador' %}">Login</a>
+            </li>
         {% else %}
-            <a style="float:right">Logout</a>
-            {#    <a href="{% url 'votacao:logoutPage' %}" style="float:right">Logout</a>#}
-            <a style="float:right">Informacao Pessoal</a>
-            {#    <a href="{% url 'votacao:infoPessoalPage' %}" style="float:right">Informacao Pessoal</a>#}
+            <li>
+                <a class="navOption" href="{% url 'food:logoututilizador' %}">Logout</a>
+            </li>
         {% endif %}
-    </div>
-{% endblock %}
+        <li>
+            <a class="navOption" href="/#">Cesto de compras</a>
+        </li>
+        <li>
+            <a class="navOption" href="{% url 'food:mapPage' %}">Mapa dos Mercadinhos</a>
+        </li>
+        <li>
+            <a class="navOption" href="/#">Sobre nós</a>
+        </li>
+        <li>
+            <a class="navOption" href="/#">Contactos</a>
+        </li>
+    </ul>
+</nav>
+{#{% endblock %}#}
 </body>
 </html>
