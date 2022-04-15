@@ -11,11 +11,18 @@ def index(request):
 
 def contactos(request):
   if request.method == 'POST':
-    try:
-      email_resposta = request.POST.get("email")
-      texto_mensagem = request.POST.get("texto")
-    except KeyError:
-      return render(request, 'food/contactos.html')
+    if request.user.is_authenticated:
+      email_resposta=request.user.email
+      try:
+        texto_mensagem = request.POST.get("texto")
+      except KeyError:
+        return render(request, 'food/contactos.html')
+    else:
+      try:
+        email_resposta = request.POST.get("email")
+        texto_mensagem = request.POST.get("texto")
+      except KeyError:
+        return render(request, 'food/contactos.html')
     if email_resposta and texto_mensagem:
       mensagem = Mensagem(email_resposta=email_resposta, texto_mensagem=texto_mensagem, dataHora=timezone.now())
       mensagem.save()

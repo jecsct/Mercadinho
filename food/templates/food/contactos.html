@@ -8,9 +8,10 @@
     <h1>Contacte-nos!</h1>
     <form action="{% url 'food:contactos' %}" method="post">
         {% csrf_token %}
-        {% if user  %}
+        {% if not request.user.is_authenticated %}
         <label for="email">Email: </label>
         <input type="email" name="email"> <br>
+        {% endif %}
         <textarea name="texto"></textarea> <br>
         <input type="submit" value="Enviar Mensagem">
     </form>
