@@ -10,7 +10,6 @@ from .models import Product, Salesman, Comment
 def redirect_view(request):
     return redirect('/food')
 
-
 def index(request):
     return render(request, 'food/index.html')
 
@@ -66,4 +65,4 @@ def aboutPage(request):
 
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    return render(request, 'food/detalhe.html')
+    return render(request, 'food/detalhe.html', {'product': product})
