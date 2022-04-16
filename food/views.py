@@ -13,7 +13,6 @@ def redirect_view(request):
 def index(request):
     return render(request, 'food/index.html')
 
-
 def registarutilizador(request):
     if request.method == 'POST':
         try:
@@ -57,11 +56,10 @@ def logoututilizador(request):
     return HttpResponseRedirect(reverse('food:index'))
 
 def mapPage(request):
-    return render(request, 'food/mercadinhos_map.html', {})
-
+    return render(request, 'food/mercadinhos_map.html')
 
 def aboutPage(request):
-    return render(request, 'food/about.html', {})
+    return render(request, 'food/about.html')
 
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
