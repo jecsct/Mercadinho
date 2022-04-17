@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  {% load static %}
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="{% static 'food/style.css' %}"
+  />
+  {% block navbar %}
+  <nav>
+    <ul>
+      <li>
+        <a href="/#">Contactos</a>
+      </li>
+      <li>
+        <a href="{% url 'food:aboutPage' %}">Sobre nós</a>
+      </li>
+      <li>
+        <a href="/#">Cesto de compras</a>
+      </li>
+      <li>
+        <a href="{% url 'food:mapPage' %}">Mapa dos Mercadinhos</a>
+      </li>
+      <li>
+        <a href="{% url 'food:logoututilizador' %}">Logout</a>
+      </li>
+      <li>
+        <a href="{% url 'food:loginutilizador' %}">Login</a>
+      </li>
+      <li>
+        <a href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
+      </li>
+      <li>
+        <a href="/#">Página Inicial</a>
+      </li>
+    </ul>
+  </nav>
+  {% endblock %}
+</body>
+</html>

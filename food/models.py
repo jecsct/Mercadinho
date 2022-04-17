@@ -16,6 +16,7 @@ class Salesman(models.Model):
     phone_number = models.IntegerField(blank=True,
                                        validators=[MinValueValidator(900000000), MaxValueValidator(999999999)])
 
+
 class Product(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=1000)
@@ -26,6 +27,7 @@ class Product(models.Model):
     rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
                                  decimal_places=1)
     salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
+
 
 class Comment(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
