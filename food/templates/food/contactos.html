@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Contactos</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}"/>
 </head>
 <body>
+    {% include 'food/navbar.html' %}<br/>
     <h1>Contacte-nos!</h1>
     <form action="{% url 'food:contactos' %}" method="post">
         {% csrf_token %}
@@ -14,16 +17,15 @@
         {% endif %}
         <textarea name="texto"></textarea> <br>
         <input type="submit" value="Enviar Mensagem">
-    </form>
-    <!--Acho que este footer faz sentido ser daquelas cenas que passam entre TODAS as paginas-->
-    <footer>
-        <p>Contactos</p>
-        <ul>
-            <li>Facebook: Mercadinho Portugal</li>
-            <li>Instagram: mercadinho.pt</li>
-            <li>Telefone: +351 888 888 888</li>
-            <li>Email: mercadinho@mercadinho.pt</li>
-        </ul>
-    </footer>
+    </form> <br>
+    <!--Esta parte faz sentido ser acrescnetada ao footer?-->
+    <h1>Contactos</h1>
+    <ul>
+        <li>Facebook: Mercadinho Portugal</li>
+        <li>Instagram: mercadinho.pt</li>
+        <li>Telefone: +351 888 888 888</li>
+        <li>Email: mercadinho@mercadinho.pt</li>
+    </ul>
+    {% include 'food/footer.html' %}
 </body>
 </html>
