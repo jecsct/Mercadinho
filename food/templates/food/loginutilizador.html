@@ -1,4 +1,14 @@
-{% include "food/navbar.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Utilizador</title>
+</head>
+<body>
+  {% load static %}
+  {% include 'food/navbar.html' %}
   <h2>Login Utilizador</h2>
   {% if error_message %}
     <p>{{ error_message }}</p>
@@ -9,5 +19,6 @@
     Password: <input type="password" name="password" /><br /><br />
     <input type="submit" value="Login" />
   </form>
-
     {% include 'food/copyright_footer.html' %}
+</body>
+</html>

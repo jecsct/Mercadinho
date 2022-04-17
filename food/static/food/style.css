@@ -61,6 +61,7 @@ nav p {
     background-color: #045039;
 }
 
+<<<<<<< HEAD
 h1, h2, h3 {
     margin: 12px 0;
 }
@@ -86,3 +87,10 @@ footer div {
     bottom: 0;
     text-align: center;
 }
+=======
+footer{
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 12px;
+}
+>>>>>>> master
