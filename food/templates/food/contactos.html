@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Contactos</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}"/>
-</head>
-<body>
-    {% include 'food/navbar.html' %}<br/>
-    <h1>Contacte-nos!</h1>
-    <form action="{% url 'food:contactos' %}" method="post">
-        {% csrf_token %}
-        {% if not request.user.is_authenticated %}
-        <label for="email">Email: </label>
-        <input type="email" name="email"> <br>
-        {% endif %}
-        <textarea name="texto"></textarea> <br>
-        <input type="submit" value="Enviar Mensagem">
-    </form> <br>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'food/style.css' %}"
+    />
+  </head>
+  <body>
+    {% include 'food/navbar.html' %}
     <!--Esta parte faz sentido ser acrescnetada ao footer?-->
     <h1>Contactos</h1>
     <ul>
-        <li>Facebook: Mercadinho Portugal</li>
-        <li>Instagram: mercadinho.pt</li>
-        <li>Telefone: +351 888 888 888</li>
-        <li>Email: mercadinho@mercadinho.pt</li>
+      <li><strong>Facebook</strong>: Mercadinho Portugal</li>
+      <li><strong>Instagram</strong>: mercadinho.pt</li>
+      <li><strong>Telefone</strong>: +351 888 888 888</li>
+      <li><strong>Email</strong>: ajuda@mercadinho.pt</li>
     </ul>
-    {% include 'food/footer.html' %}
-</body>
+    <br />
+    <h1>Contacte-nos!</h1>
+    <form action="{% url 'food:contactos' %}" method="post">
+      {% csrf_token %} {% if not request.user.is_authenticated %}
+      <label for="email">Email: </label>
+      <input type="email" name="email" /> <br /><br />
+      {% endif %}
+      <textarea name="texto"></textarea> <br /><br />
+      <input type="submit" value="Enviar Mensagem" />
+    </form>
+    {% include 'food/copyright_footer.html' %}
+  </body>
 </html>

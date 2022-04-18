@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Mensagens</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Caixa de Entrada</h1>
     {% for mensagem in lista_mensagens %}
-        <p>{{ mensagem.email_resposta }}</p>
-        <p>{{ mensagem.texto_mensagem }} </p>
-        <p>{{ mensagem.dataHora }}</p>
+    <p>{{ mensagem.email_resposta }}</p>
+    <p>{{ mensagem.texto_mensagem }}</p>
+    <p>{{ mensagem.dataHora }}</p>
     {% endfor %}
-</body>
+  </body>
 </html>

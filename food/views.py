@@ -55,7 +55,6 @@ def adicionarCesto(request):
 def removerCesto(request):
   return render(request, 'food/cestoCompras.html')
 
-
 def registarutilizador(request):
     if request.method == 'POST':
         try:
@@ -71,7 +70,6 @@ def registarutilizador(request):
             return render(request, 'food/registarutilizador.html')
     else:
         return render(request, 'food/registarutilizador.html')
-
 
 def loginutilizador(request):
     if request.method == 'POST':
@@ -92,7 +90,6 @@ def loginutilizador(request):
             return render(request, 'food/loginutilizador.html')
     else:
         return render(request, 'food/loginutilizador.html')
-
 
 def logoututilizador(request):
     logout(request)
