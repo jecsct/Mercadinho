@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-{% include 'food/navbar.html' %}
-<h1>{{ product.name }}</h1>
-<p>{{ product.description }}</p>
-<p>{{ product.salesman.user.username }}</p>
+  </head>
+  <body>
+    {% include 'food/navbar.html' %}
+    <h1>{{ product.name }}</h1>
+    <p>{{ product.description }}</p>
+    <p>{{ product.salesman.user.username }}</p>
 
-{% include 'food/copyright_footer.html' %}
-</body>
+    {% include 'food/copyright_footer.html' %}
+  </body>
 </html>
