@@ -1,15 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Title</title>
-  </head>
-  <body>
-    {% include 'food/navbar.html' %}
-    <h1>{{ product.name }}</h1>
-    <p>{{ product.description }}</p>
-    <p>{{ product.salesman.user.username }}</p>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Mercadinho - {{ product.name }}</title>
+</head>
+<body>
+{% include 'food/navbar.html' %}
+<div>
+    <div class="product_title">
+        <h1>{{ product.name }}</h1>
+    </div>
+    <div>
+        <div class="product_details_zone">
+            <div class="image_details">
+                <div>
+                    {# <img alt="Imagem do produto. {{ product.name }}" src="{{ product.image }}">#}
+                    <img alt="Imagem do produto. {{ product.name }}"
+                         src="https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Kiwi-fruits-582a07b.jpg?quality=90&resize=661%2C600"
+                         style="height: 250px;width: 250px">
+                </div>
+                <div>
+                    <ul class="specs">
+                        <li>Description: {{ product.description }}</li>
+                        <li>Salesman: {{ product.salesman.user.username }}</li>
+                        <li>Rating : {{ product.rating }}</li>
+                        <li>Sales : {{ product.sales }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <label>Quantity<input type="number"></label>
+                <input type="submit" value="Adicionar ao cesto">
+            </div>
+        </div>
+    </div>
+    <br>
+    <div>
+        <div class="comments_header">
+            <h3>Comments</h3>
+        </div>
+        <div>
+            <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
+                  method="post">
+                {% csrf_token %}
+                <label>Comment: </label><input id="txtFldComment" name="commentInput" type="text" required>
+                <label>Rating: </label><input id="nmbrFldRating" max="5.0" min="0.0" name="ratingInput" step="0.1"
+                                              type="number" required>
+                <input type="submit" value="Comment"/>
+            </form>
+        </div>
+        <div class="comments">
+            <ul class="specs">
+                {% for comment in comments %}
+                    {{ comment.user.username }} - {{ comment.rating }}
+                    <li>{{ comment.text }}
+                        {% if request.user.is_authenticated %}
+                            {% if comment.user.username == request.user.username %}
+                                <form action="{% url 'food:deleteProductComment' product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <a href="{% url 'food:updateProductComment' product.id %}">Update</a>
+                                    <input type="submit" value="Delete">
+                                </form>
+                            {% endif %} {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 
-    {% include 'food/copyright_footer.html' %}
-  </body>
+{#{% include 'food/copyright_footer.html' %}#}
+</body>
 </html>
