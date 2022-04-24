@@ -1,8 +1,11 @@
+from time import localtime, timezone
+
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.utils import timezone
+import datetime
+from django.contrib.auth.decorators import login_required
 
 from food.models import Mensagem
 from django.contrib.auth.models import User
@@ -16,7 +19,9 @@ def redirect_view(request):
 
 
 def index(request):
-    return render(request, 'food/index.html')
+    products = Product.objects.all()
+    context = {'products_list': products}
+    return render(request, 'food/index.html', context)
 
 
 def contactos(request):
@@ -116,4 +121,16 @@ def aboutPage(request):
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     comments = Comment.objects.all()
-    return render(request, 'food/detalhe.html', {'product': product, 'comments': comments})
+    context = {'product': product, 'comments': comments}
+    return render(request, 'food/detalhe.html', context)
+
+@login_required
+def commentOnItem(request, product_id):
+    if request.method == 'POST':
+        commentText = request.POST['commentInput']
+        commentRating = request.POST['ratingInput']
+        product = Product.objects.get(id=product_id)
+        Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
+                product=product).save()
+    return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+    # return productDetailPage(request, product_id)
