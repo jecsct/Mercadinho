@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>Title</title>
+    <title>Mercadinho - {{ product.name }}</title>
 </head>
 <body>
 {% include 'food/navbar.html' %}
@@ -40,24 +40,29 @@
             <h3>Comments</h3>
         </div>
         <div>
-            <form action="{% url 'food:commentOnItem' 1 %}" enctype="multipart/form-data"
+            <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
                   method="post">
                 {% csrf_token %}
                 <label>Comment: </label><input id="txtFldComment" name="commentInput" type="text" required>
                 <label>Rating: </label><input id="nmbrFldRating" max="5.0" min="0.0" name="ratingInput" step="0.1"
                                               type="number" required>
-                 <input class="form-submit-button" type="submit" value="Comment"/>
+                <input type="submit" value="Comment"/>
             </form>
         </div>
         <div class="comments">
             <ul class="specs">
                 {% for comment in comments %}
-                {{ comment.user.username }} - {{ comment.rating }}
-                <li>{{ comment.text }}
-                    {% if request.user.is_authenticated %}
-                    {% if comment.user.username == request.user.username %} -
-                    Editar {% endif %} {% endif %}
-                </li>
+                    {{ comment.user.username }} - {{ comment.rating }}
+                    <li>{{ comment.text }}
+                        {% if request.user.is_authenticated %}
+                            {% if comment.user.username == request.user.username %}
+                                <form action="{% url 'food:deleteProductComment' product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <a href="{% url 'food:updateProductComment' product.id %}">Update</a>
+                                    <input type="submit" value="Delete">
+                                </form>
+                            {% endif %} {% endif %}
+                    </li>
                 {% endfor %}
             </ul>
         </div>

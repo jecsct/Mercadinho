@@ -105,6 +105,7 @@ def loginutilizador(request):
         return render(request, 'food/loginutilizador.html')
 
 
+@login_required
 def logoututilizador(request):
     logout(request)
     return HttpResponseRedirect(reverse('food:index'))
@@ -124,6 +125,7 @@ def productDetailPage(request, product_id):
     context = {'product': product, 'comments': comments}
     return render(request, 'food/detalhe.html', context)
 
+
 @login_required
 def commentOnItem(request, product_id):
     if request.method == 'POST':
@@ -134,3 +136,25 @@ def commentOnItem(request, product_id):
                 product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
     # return productDetailPage(request, product_id)
+
+
+@login_required
+def updateProductComment(request, product_id):
+    print(request.method)
+    if request.method == 'POST':
+        newText = request.POST['newCommentText']
+        newRating = request.POST['newCommentRating']
+        Comment.objects.filter(user_id=request.user.id, product_id=product_id).update(text=newText, rating=newRating)
+        return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+    product = get_object_or_404(Product, pk=product_id)
+    comment = Comment.objects.get(user_id=request.user.id, product_id=product_id)
+    context = {'product': product, 'comment': comment}
+    return render(request, 'food/updateProductComment.html', context)
+
+
+@login_required
+def deleteProductComment(request, product_id):
+    print('SHEEEEEEEEEEEEEEEEEEESH')
+    if request.method == 'POST':
+        Comment.objects.get(product=product_id, user_id=request.user).delete()
+    return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
