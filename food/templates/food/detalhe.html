@@ -1,15 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Title</title>
-  </head>
-  <body>
-    {% include 'food/navbar.html' %}
-    <h1>{{ product.name }}</h1>
-    <p>{{ product.description }}</p>
-    <p>{{ product.salesman.user.username }}</p>
+</head>
+<body>
+{% include 'food/navbar.html' %}
+<div>
+    <div class="product_title">
+        <h1>{{ product.name }}</h1>
+    </div>
+    <div>
+        <div class="product_details_zone">
+            <div class="image_details">
+                <div>
+                    {#                    <img src="{{ product.image }}" alt="Imagem do produto. {{ product.name }}">#}
+                    <img src="https://a.wattpad.com/useravatar/thanosbussy.256.801166.jpg"
+                         alt="Imagem do produto. {{ product.name }}">
+                </div>
+                <div>
+                    <ul class="specs">
+                        <li>Description: {{ product.description }}</li>
+                        <li>Salesman: {{ product.salesman.user.username }}</li>
+                        <li>Rating : {{ product.rating }}</li>
+                        <li>Sales : {{ product.sales }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <label>Quantity<input type="number"></label>
+                <input type="submit" value="Adicionar ao cesto">
+            </div>
+        </div>
+    </div>
+    <br>
+    <div>
+        <div class="comments_header">
+            <h3>Comments</h3>
+        </div>
+        <div class="comments">
+            <ul class="specs">
+                {% for comment in comments %}
+                    <li>{{ comment.text }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 
-    {% include 'food/copyright_footer.html' %}
-  </body>
+{% include 'food/copyright_footer.html' %}
+</body>
 </html>

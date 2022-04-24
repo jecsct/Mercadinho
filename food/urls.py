@@ -19,3 +19,4 @@ urlpatterns = [
   path('about/', views.aboutPage, name='about'),
   path('<int:product_id>', views.productDetailPage, name='productDetailPage'),
 ]
+
