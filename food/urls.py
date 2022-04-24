@@ -7,15 +7,16 @@ app_name= 'food'
 urlpatterns = [
   path("", views.index, name="index"),
   path("contactos/", views.contactos, name="contactos"),
-  path("caixaMensagens/", views.caixaMensagens, name="Caixa Mensagens"),
-  path("cestoCompras/", views.cestoCompras, name="Cesto Compras"),
-  path("removerCesto", views.removerCesto, name="Remover Cesto"),
+  path("caixaMensagens/", views.caixaMensagens, name="caixamensagens"),
+  path("cestoCompras/", views.cestoCompras, name="cestocompras"),
+  path("removerCesto/", views.removerCesto, name="removercesto"),
+  path("perfil", views.perfil, name="perfil"),
   path('', redirect_view),
-  path('food', views.index, name='index'),
+  path('food/', views.index, name='index'),
   path('registar-utilizador',views.registarutilizador,name='registarutilizador'),
   path('login-utilizador',views.loginutilizador,name='loginutilizador'),
   path('logout-utilizador',views.logoututilizador,name='logoututilizador'),
   path('maps', views.mapPage, name='mapPage'),
-  path('about', views.aboutPage, name='aboutPage'),
-  path('<int:product_id>', views.productDetailPage, name='productDetailPage')
+  path('about/', views.aboutPage, name='about'),
+  path('<int:product_id>', views.productDetailPage, name='productDetailPage'),
 ]

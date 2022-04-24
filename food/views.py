@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils import timezone
+
 from food.models import Mensagem
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -53,6 +54,8 @@ def adicionarCesto(request):
 def removerCesto(request):
   return render(request, 'food/cestoCompras.html')
 
+def perfil(request):
+    return render(request, "food/perfil.html")
 
 def registarutilizador(request):
     if request.method == 'POST':

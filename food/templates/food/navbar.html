@@ -14,11 +14,14 @@
   {% block navbar %}
   <nav>
     <ul>
+        <li>
+                <a href="{% url 'food:perfil' %}" class="dropbtn"><img src="{% static 'food/images/user.png'  %}" width="20" ></a>
+        </li>
       <li>
         <a href="{% url 'food:contactos' %}">Contactos</a>
       </li>
       <li>
-        <a href="{% url 'food:aboutPage' %}">Sobre nós</a>
+            <a class="navOption" href="{% url 'food:about' %}">Sobre nós</a>
       </li>
       <li>
         <a href="/#">Cesto de compras</a>
@@ -26,15 +29,18 @@
       <li>
         <a href="{% url 'food:mapPage' %}">Mapa dos Mercadinhos</a>
       </li>
+        {% if request.user.is_authenticated %}
       <li>
         <a href="{% url 'food:logoututilizador' %}">Logout</a>
       </li>
+        {% else %}
       <li>
         <a href="{% url 'food:loginutilizador' %}">Login</a>
       </li>
       <li>
         <a href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
       </li>
+        {% endif %}
       <li>
         <a href="/#">Página Inicial</a>
       </li>
