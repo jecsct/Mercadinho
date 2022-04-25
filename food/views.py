@@ -122,6 +122,7 @@ def aboutPage(request):
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     comments = Comment.objects.all()
+    product.addView()
     context = {'product': product, 'comments': comments}
     return render(request, 'food/detalhe.html', context)
 
@@ -132,6 +133,8 @@ def commentOnItem(request, product_id):
         commentText = request.POST['commentInput']
         commentRating = request.POST['ratingInput']
         product = Product.objects.get(id=product_id)
+        # product.update(rating=calculateItemRating(product_id, commentRating))
+        product.addRating(newRating=commentRating)
         Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
                 product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
@@ -141,12 +144,13 @@ def commentOnItem(request, product_id):
 @login_required
 def updateProductComment(request, product_id):
     print(request.method)
+    product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
         newText = request.POST['newCommentText']
         newRating = request.POST['newCommentRating']
+        product.updateRating(Comment.objects.get(product_id=product_id, user_id=request.user.id).rating, newRating)
         Comment.objects.filter(user_id=request.user.id, product_id=product_id).update(text=newText, rating=newRating)
         return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-    product = get_object_or_404(Product, pk=product_id)
     comment = Comment.objects.get(user_id=request.user.id, product_id=product_id)
     context = {'product': product, 'comment': comment}
     return render(request, 'food/updateProductComment.html', context)
@@ -154,7 +158,21 @@ def updateProductComment(request, product_id):
 
 @login_required
 def deleteProductComment(request, product_id):
-    print('SHEEEEEEEEEEEEEEEEEEESH')
     if request.method == 'POST':
+        Product.objects.get(id=product_id).deleteRating(
+            Comment.objects.get(product_id=product_id, user_id=request.user.id).rating)
         Comment.objects.get(product=product_id, user_id=request.user).delete()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+
+# def updateProductRating(product_id, product, newRating):
+
+
+# def calculateItemRating(product_id, newRating):
+#     try:
+#         comments = Comment.objects.get(product_id=product_id)
+#     except Comment.DoesNotExist:
+#         comments = []
+#     ratingSum = newRating
+#     for comment in comments:
+#         ratingSum += comment.rating
+#     return ratingSum / len(comments)
