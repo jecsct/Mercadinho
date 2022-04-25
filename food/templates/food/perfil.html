@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Perfil</title>
+    {% load static %}
+      <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}"/>
 </head>
 <body>
-
+    {% include 'food/navbar.html' %}
+    <h1>{{ request.user }}</h1>
+    {% include 'food/copyright_footer.html' %}
 </body>
 </html>
