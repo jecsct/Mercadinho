@@ -3,13 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <title>Mensagens</title>
+      {% load static %}
+      <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}"/>
   </head>
   <body>
+    {% include 'food/navbar.html' %}
     <h1>Caixa de Entrada</h1>
     {% for mensagem in lista_mensagens %}
-    <p>{{ mensagem.email_resposta }}</p>
-    <p>{{ mensagem.texto_mensagem }}</p>
-    <p>{{ mensagem.dataHora }}</p>
+        <div class="mensagem">
+        <p class="mensagem-Email">{{ mensagem.email_resposta }}</p>
+        <p>{{ mensagem.texto_mensagem }}</p>
+        <p class="mensagem-Hora">{{ mensagem.dataHora }}</p>
+        </div>
+        <br>
     {% endfor %}
+    {% include 'food/copyright_footer.html' %}
   </body>
 </html>

@@ -21,7 +21,7 @@ body {
     font-family: "Inter", sans-serif;
     color: #343a40;
     margin: 0 12px;
-    background: #A8FFB1;
+    background: #ACE1AF;
 }
 
 nav {
@@ -151,3 +151,32 @@ footer div {
 /*    grid-row: 2;*/
 /*    background-color: firebrick;*/
 /*}*/
+
+ ul li ul.dropdown {
+     background-color: rgba(51, 170, 51, 0.4);
+     display: none;
+     position: relative;
+     z-index: 1;
+     float: right;
+ }
+
+ul li:hover ul.dropdown {
+    display: inline-block; /* Display the dropdown */
+}
+
+ul li ul.dropdown li {
+    display: inline-block;
+}
+
+.mensagem {
+    background-color: #eeeeee;
+    padding: 30px 30px 30px 30px ;
+}
+
+.mensagem-Hora {
+    float: right;
+}
+
+.mensagem-Email {
+    color: gray;
+}

@@ -1,5 +1,4 @@
 from time import localtime, timezone
-
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
@@ -7,15 +6,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
 from django.contrib.auth.decorators import login_required
-
 from django.utils import timezone
-
 from food.models import Mensagem
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import Product, Salesman, Comment
-
 
 def redirect_view(request):
   return redirect('/food')
