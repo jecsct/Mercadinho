@@ -1,51 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-  {% load static %}
-  <link
-    rel="stylesheet"
-    type="text/css"
-    href="{% static 'food/style.css' %}"
-  />
-  {% block navbar %}
-  <nav>
-    <ul>
+  </head>
+  <body>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'food/style.css' %}"
+    />
+    {#{% block navbar %}#}
+    <nav>
+      <ul>
         <li>
-                <a href="{% url 'food:perfil' %}" class="dropbtn"><img src="{% static 'food/images/user.png'  %}" width="20" ></a>
+          <div>
+            <a class="Logo" href="{% url 'food:index' %}">Mercadinho</a>
+          </div>
         </li>
-      <li>
-        <a href="{% url 'food:contactos' %}">Contactos</a>
-      </li>
-      <li>
-            <a class="navOption" href="{% url 'food:about' %}">Sobre nós</a>
-      </li>
-      <li>
-        <a href="/#">Cesto de compras</a>
-      </li>
-      <li>
-        <a href="{% url 'food:mapPage' %}">Mapa dos Mercadinhos</a>
-      </li>
-        {% if request.user.is_authenticated %}
-      <li>
-        <a href="{% url 'food:logoututilizador' %}">Logout</a>
-      </li>
+        {% if not request.user.is_authenticated %}
+        <li>
+          <a class="navOption" href="{% url 'food:registarutilizador' %}"
+            >Registar Utilizador</a
+          >
+        </li>
+        <li>
+          <a class="navOption" href="{% url 'food:loginutilizador' %}">Login</a>
+        </li>
         {% else %}
-      <li>
-        <a href="{% url 'food:loginutilizador' %}">Login</a>
-      </li>
-      <li>
-        <a href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
-      </li>
+        <li>
+          <a class="navOption" href="{% url 'food:logoututilizador' %}"
+            >Logout</a
+          >
+        </li>
         {% endif %}
-      <li>
-        <a href="/#">Página Inicial</a>
-      </li>
-    </ul>
-  </nav>
-  {% endblock %}
-</body>
+        <li>
+          <a class="navOption" href="{% url 'food:cestocompras' %}"
+            >Cesto de compras</a
+          >
+        </li>
+        <li>
+          <a class="navOption" href="{% url 'food:mapPage' %}"
+            >Mapa dos Mercadinhos</a
+          >
+        </li>
+        <li>
+          <a class="navOption" href="{% url 'food:about' %}">Sobre nós</a>
+        </li>
+        <li>
+          <a class="navOption" href="{% url 'food:contactos' %}">Contactos</a>
+        </li>
+      </ul>
+    </nav>
+    {#{% endblock %}#}
+  </body>
 </html>
