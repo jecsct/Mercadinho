@@ -1,17 +1,19 @@
 from time import localtime, timezone
 
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 from food.models import Mensagem
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import Product, Salesman, Comment
+from .decorators import unauthenticated_user
 
 
 def redirect_view(request):
@@ -83,7 +85,7 @@ def registarutilizador(request):
     else:
         return render(request, 'food/registarutilizador.html')
 
-
+@unauthenticated_user
 def loginutilizador(request):
     if request.method == 'POST':
         try:
@@ -121,7 +123,7 @@ def aboutPage(request):
 
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    comments = Comment.objects.all()
+    comments = Comment.objects.all().filter(product_id=product_id)
     product.addView()
     context = {'product': product, 'comments': comments}
     return render(request, 'food/detalhe.html', context)
@@ -164,15 +166,23 @@ def deleteProductComment(request, product_id):
         Comment.objects.get(product=product_id, user_id=request.user).delete()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
-# def updateProductRating(product_id, product, newRating):
 
-
-# def calculateItemRating(product_id, newRating):
-#     try:
-#         comments = Comment.objects.get(product_id=product_id)
-#     except Comment.DoesNotExist:
-#         comments = []
-#     ratingSum = newRating
-#     for comment in comments:
-#         ratingSum += comment.rating
-#     return ratingSum / len(comments)
+# TODO E preciso que apenas Salesman possam meter produtos
+@login_required
+def addProduct(request):
+    if request.method == 'POST':
+        print(request.FILES)
+        print(request.POST.get("myfile"))
+        if request.FILES['myfile']:
+            productImage = request.FILES['myfile']
+            fs = FileSystemStorage()
+            filename = fs.save(productImage.name, productImage)
+            uploaded_file_url = fs.url(filename)
+            Product.objects.create(name=request.POST.get('productName'),
+                                   description=request.POST.get('productDescription'),
+                                   price=request.POST.get('productPrice'),
+                                   image=uploaded_file_url,
+                                   salesman_id=request.user.salesman.id
+                                   )
+            return HttpResponseRedirect(reverse('food:index'))
+    return render(request, 'food/add_product.html')
