@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import Product, Salesman, Comment
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_users
 
 
 def redirect_view(request):
@@ -120,7 +120,6 @@ def mapPage(request):
 def aboutPage(request):
     return render(request, 'food/about.html')
 
-
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     comments = Comment.objects.all().filter(product_id=product_id)
@@ -167,8 +166,8 @@ def deleteProductComment(request, product_id):
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
-# TODO E preciso que apenas Salesman possam meter produtos
 @login_required
+@allowed_users(allowed_roles=['Salesman'])
 def addProduct(request):
     if request.method == 'POST':
         print(request.FILES)
