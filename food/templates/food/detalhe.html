@@ -16,15 +16,17 @@
                 <div>
                     {# <img alt="Imagem do produto. {{ product.name }}" src="{{ product.image }}">#}
                     <img alt="Imagem do produto. {{ product.name }}"
-                         src="https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Kiwi-fruits-582a07b.jpg?quality=90&resize=661%2C600"
+{#                         src="https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Kiwi-fruits-582a07b.jpg?quality=90&resize=661%2C600"#}
+                         src="{{ product.image }}"
                          style="height: 250px;width: 250px">
                 </div>
                 <div>
                     <ul class="specs">
+                        <li>Price: {{ product.price }}</li>
                         <li>Description: {{ product.description }}</li>
                         <li>Salesman: {{ product.salesman.user.username }}</li>
-                        <li>Rating : {{ product.rating }}</li>
-                        <li>Sales : {{ product.sales }}</li>
+                        <li>Rating: {{ product.rating }}</li>
+                        <li>Sales: {{ product.sales }}</li>
                     </ul>
                 </div>
             </div>

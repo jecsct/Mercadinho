@@ -1,17 +1,17 @@
 from time import localtime, timezone
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
-from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required, user_passes_test
 from food.models import Mensagem
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import Product, Salesman, Comment
+from .decorators import unauthenticated_user, allowed_users
 
 def redirect_view(request):
   return redirect('/food')
@@ -76,7 +76,7 @@ def registarutilizador(request):
     else:
         return render(request, 'food/registarutilizador.html')
 
-
+@unauthenticated_user
 def loginutilizador(request):
     if request.method == 'POST':
         try:
@@ -111,7 +111,8 @@ def aboutPage(request):
 
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    comments = Comment.objects.all()
+    comments = Comment.objects.all().filter(product_id=product_id)
+    product.addView()
     context = {'product': product, 'comments': comments}
     return render(request, 'food/detalhe.html', context)
 
@@ -122,6 +123,8 @@ def commentOnItem(request, product_id):
         commentText = request.POST['commentInput']
         commentRating = request.POST['ratingInput']
         product = Product.objects.get(id=product_id)
+        # product.update(rating=calculateItemRating(product_id, commentRating))
+        product.addRating(newRating=commentRating)
         Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
                 product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
@@ -131,12 +134,13 @@ def commentOnItem(request, product_id):
 @login_required
 def updateProductComment(request, product_id):
     print(request.method)
+    product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
         newText = request.POST['newCommentText']
         newRating = request.POST['newCommentRating']
+        product.updateRating(Comment.objects.get(product_id=product_id, user_id=request.user.id).rating, newRating)
         Comment.objects.filter(user_id=request.user.id, product_id=product_id).update(text=newText, rating=newRating)
         return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-    product = get_object_or_404(Product, pk=product_id)
     comment = Comment.objects.get(user_id=request.user.id, product_id=product_id)
     context = {'product': product, 'comment': comment}
     return render(request, 'food/updateProductComment.html', context)
@@ -144,7 +148,29 @@ def updateProductComment(request, product_id):
 
 @login_required
 def deleteProductComment(request, product_id):
-    print('SHEEEEEEEEEEEEEEEEEEESH')
     if request.method == 'POST':
+        Product.objects.get(id=product_id).deleteRating(
+            Comment.objects.get(product_id=product_id, user_id=request.user.id).rating)
         Comment.objects.get(product=product_id, user_id=request.user).delete()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+
+
+@login_required
+@allowed_users(allowed_roles=['Salesman'])
+def addProduct(request):
+    if request.method == 'POST':
+        print(request.FILES)
+        print(request.POST.get("myfile"))
+        if request.FILES['myfile']:
+            productImage = request.FILES['myfile']
+            fs = FileSystemStorage()
+            filename = fs.save(productImage.name, productImage)
+            uploaded_file_url = fs.url(filename)
+            Product.objects.create(name=request.POST.get('productName'),
+                                   description=request.POST.get('productDescription'),
+                                   price=request.POST.get('productPrice'),
+                                   image=uploaded_file_url,
+                                   salesman_id=request.user.salesman.id
+                                   )
+            return HttpResponseRedirect(reverse('food:index'))
+    return render(request, 'food/add_product.html')

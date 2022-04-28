@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+</head>
+<body>
+{% include 'food/navbar.html' %}
+
+<form action="{% url 'food:addProduct' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Nome: </label><input name="productName" type="text" required><br>
+    <label>Description: </label><input name="productDescription" type="text" required><br>
+    <label>Preco: </label><input name="productPrice" type="number" step="0.01" min="0" required><br>
+    <label>Ficheiro da imagem: </label><input name="myfile" type="file" required><br>
+    <input type="submit" value="Adicionar">
+    <a href="{% url 'food:index' %}">Cancelar</a>
+
+</form>
+
+{#{% include 'food/copyright_footer.html' %}#}
+</body>
+</html>

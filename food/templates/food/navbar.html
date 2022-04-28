@@ -1,69 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Title</title>
-  </head>
-  <body>
-    {% load static %}
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'food/style.css' %}"
-    />
-    {#{% block navbar %}#}
-    <nav>
-      <ul>
+</head>
+<body>
+{% load static %}
+{% load custom_filters %}
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="{% static 'food/style.css' %}"
+/>
+<nav>
+    <ul>
         <li>
-          <div>
-            <a class="Logo" href="{% url 'food:index' %}">Mercadinho</a>
-          </div>
+            <div>
+                <a class="Logo" href="{% url 'food:index' %}">Mercadinho</a>
+            </div>
         </li>
         <li>
             <a class="navOption">
                 <img src="{% static 'food/images/user.png' %}" width="25">
             </a>
-        {% if not request.user.is_authenticated %}
-        <ul class="dropdown">
+            {% if not request.user.is_authenticated %}
+                {#<<<<<<< HEAD#}
+                <ul class="dropdown" style="float: right">
+                    <li>
+                        <a class="navOption" href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
+                    </li>
+                    <li>
+                        <a class="navOption" href="{% url 'food:loginutilizador' %}">Login</a>
+                    </li>
+                </ul>
+            {% else %}
+                <ul class="dropdown" style="float: right">
+                    <li>
+                        <a href="{% url 'food:perfil' %}" class="navOption">Perfil</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'food:caixamensagens' %}" class="navOption">Mensagens</a>
+                    </li>
+                    <li>
+                        <a class="navOption" href="{% url 'food:logoututilizador' %}">Logout</a>
+                    </li>
+                </ul>
+                <li>
+                    <a class="navOption" href="{% url 'food:cestocompras' %}"
+                    >Cesto de compras</a
+                    >
+                </li>
+            {% endif %}
+        {% if request.user|has_group:'Salesman' %}
             <li>
-                <a class="navOption" href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
+                <a class="navOption" href="{% url 'food:addProduct' %}"
+                >Adicionar Produto</a
+                >
             </li>
-            <li>
-                <a class="navOption" href="{% url 'food:loginutilizador' %}">Login</a>
-            </li>
-        </ul>
-        {% else %}
-            <ul class="dropdown">
-                <li>
-                    <a href="{% url 'food:perfil' %}" class="navOption">Perfil</a>
-                </li>
-                <li>
-                    <a href="{% url 'food:caixamensagens' %}" class="navOption">Mensagens</a>
-                </li>
-                <li>
-                    <a class="navOption" href="{% url 'food:logoututilizador' %}">Logout</a>
-                </li>
-            </ul>
         {% endif %}
-        </li>
         <li>
-          <a class="navOption" href="{% url 'food:cestocompras' %}"
-            >Cesto de compras</a
-          >
-        </li>
-        <li>
-          <a class="navOption" href="{% url 'food:mapPage' %}"
+            <a class="navOption" href="{% url 'food:mapPage' %}"
             >Mapa dos Mercadinhos</a
-          >
+            >
         </li>
         <li>
-          <a class="navOption" href="{% url 'food:about' %}">Sobre nós</a>
+            <a class="navOption" href="{% url 'food:about' %}">Sobre nós</a>
         </li>
         <li>
-          <a class="navOption" href="{% url 'food:contactos' %}">Contactos</a>
+            <a class="navOption" href="{% url 'food:contactos' %}">Contactos</a>
         </li>
-      </ul>
-    </nav>
-    {#{% endblock %}#}
-  </body>
+    </ul>
+</nav>
+</body>
 </html>
