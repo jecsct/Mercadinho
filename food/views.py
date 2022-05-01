@@ -13,52 +13,63 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Product, Salesman, Comment
 from .decorators import unauthenticated_user, allowed_users
 
+
 def redirect_view(request):
-  return redirect('/food')
+    return redirect('/food')
+
 
 def index(request):
-  return render(request, 'food/index.html')
+    products = Product.objects.all()
+    context = {'products_list': products}
+    return render(request, 'food/index.html', context)
+
 
 def contactos(request):
-  if request.method == 'POST':
-    if request.user.is_authenticated:
-      email_resposta=request.user.email
-      try:
-        texto_mensagem = request.POST.get("texto")
-      except KeyError:
-        return render(request, 'food/contactos.html')
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            email_resposta = request.user.email
+            try:
+                texto_mensagem = request.POST.get("texto")
+            except KeyError:
+                return render(request, 'food/contactos.html')
+        else:
+            try:
+                email_resposta = request.POST.get("email")
+                texto_mensagem = request.POST.get("texto")
+            except KeyError:
+                return render(request, 'food/contactos.html')
+        if email_resposta and texto_mensagem:
+            mensagem = Mensagem(email_resposta=email_resposta, texto_mensagem=texto_mensagem, dataHora=timezone.now())
+            mensagem.save()
+            return HttpResponseRedirect(reverse('food:contactos'))
+        else:
+            return HttpResponseRedirect(reverse('food:contactos'))
     else:
-      try:
-        email_resposta = request.POST.get("email")
-        texto_mensagem = request.POST.get("texto")
-      except KeyError:
         return render(request, 'food/contactos.html')
-    if email_resposta and texto_mensagem:
-      mensagem = Mensagem(email_resposta=email_resposta, texto_mensagem=texto_mensagem, dataHora=timezone.now())
-      mensagem.save()
-      return  HttpResponseRedirect(reverse('food:contactos'))
-    else:
-      return HttpResponseRedirect(reverse('food:contactos'))
-  else:
-    return render(request, 'food/contactos.html')
+
 
 def caixaMensagens(request):
-  lista_mensagens = Mensagem.objects.order_by('-dataHora')
-  return render(request, 'food/caixaMensagens.html', {'lista_mensagens':lista_mensagens})
+    lista_mensagens = Mensagem.objects.order_by('-dataHora')
+    return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
+
 
 def cestoCompras(request):
-  #cesto_compras =
-  #return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
-  return render(request, 'food/cestoCompras.html')
+    # cesto_compras =
+    # return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
+    return render(request, 'food/cestoCompras.html')
+
 
 def adicionarCesto(request):
-  return render(request, 'food/cestoCompras.html')
+    return render(request, 'food/cestoCompras.html')
+
 
 def removerCesto(request):
-  return render(request, 'food/cestoCompras.html')
+    return render(request, 'food/cestoCompras.html')
+
 
 def perfil(request):
     return render(request, "food/perfil.html")
+
 
 def registarutilizador(request):
     if request.method == 'POST':
@@ -75,6 +86,7 @@ def registarutilizador(request):
             return render(request, 'food/registarutilizador.html')
     else:
         return render(request, 'food/registarutilizador.html')
+
 
 @unauthenticated_user
 def loginutilizador(request):
@@ -103,11 +115,14 @@ def logoututilizador(request):
     logout(request)
     return HttpResponseRedirect(reverse('food:index'))
 
+
 def mapPage(request):
     return render(request, 'food/mercadinhos_map.html')
 
+
 def aboutPage(request):
     return render(request, 'food/about.html')
+
 
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -159,8 +174,6 @@ def deleteProductComment(request, product_id):
 @allowed_users(allowed_roles=['Salesman'])
 def addProduct(request):
     if request.method == 'POST':
-        print(request.FILES)
-        print(request.POST.get("myfile"))
         if request.FILES['myfile']:
             productImage = request.FILES['myfile']
             fs = FileSystemStorage()
