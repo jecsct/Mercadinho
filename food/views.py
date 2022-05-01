@@ -10,7 +10,7 @@ from food.models import Mensagem
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .models import Product, Salesman, Comment
+from .models import Product, Salesman, Comment, Customer
 from .decorators import unauthenticated_user, allowed_users
 
 
@@ -48,7 +48,6 @@ def contactos(request):
         return render(request, 'food/contactos.html')
 
 
-
 def caixaMensagens(request):
     lista_mensagens = Mensagem.objects.order_by('-dataHora')
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
@@ -81,7 +80,13 @@ def registarutilizador(request):
         except KeyError:
             return render(request, 'food/registarutilizador.html')
         if username and email and password:
-            User.objects.create_user(username=username, email=email, password=password)
+            u = User.objects.create_user(username=username, email=email, password=password)
+            if request.FILES['myfile']:
+                productImage = request.FILES['myfile']
+                fs = FileSystemStorage()
+                filename = fs.save(productImage.name, productImage)
+                uploaded_file_url = fs.url(filename)
+                Customer.objects.create(user=u, profile_pic=uploaded_file_url, gender=request.POST.get['gender'])
             return HttpResponseRedirect(reverse('food:index'))
         else:
             return render(request, 'food/registarutilizador.html')

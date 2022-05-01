@@ -18,18 +18,24 @@ class Salesman(models.Model):
     phone_number = models.IntegerField(blank=True,
                                        validators=[MinValueValidator(900000000), MaxValueValidator(999999999)])
 
+
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # profile_pic
-    # gender
-    # birthday
+    profile_pic = models.ImageField(null=True, blank=True)
+    gender = (
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other')
+    )
+    gender = models.CharField(max_length=6, null=True, blank=True, choices=gender)
+    birthday = models.DateField()
 
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=1000)
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    image = models.ImageField(null=True, blank=True)#retirei upload to
+    image = models.ImageField(null=True, blank=True)  # retirei upload to
     sales = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     views = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
@@ -64,7 +70,7 @@ class Product(models.Model):
         Product.objects.filter(id=self.id).update(rating=(ratingSum / totalRatings))
 
     def addView(self):
-        Product.objects.filter(id=self.id).update(views=self.views+1)
+        Product.objects.filter(id=self.id).update(views=self.views + 1)
 
     def getExistingComments(self):
         try:

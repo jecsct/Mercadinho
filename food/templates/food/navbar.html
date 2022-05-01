@@ -21,10 +21,9 @@
         </li>
         <li class="navOption">
             <a >
-                <img src="{% static 'food/images/user.png' %}" width="20">
+                <img src="/static/media/default_logo.png" style="width: 20px ">
             </a>
             {% if not request.user.is_authenticated %}
-                {#<<<<<<< HEAD#}
                 <ul class="dropdown" style="float: right">
                     <li>
                         <a class="navOption" href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
@@ -71,5 +70,6 @@
         </li>
     </ul>
 </nav>
+
 </body>
 </html>
