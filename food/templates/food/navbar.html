@@ -19,29 +19,29 @@
             <a class="Logo" href="{% url 'food:index' %}">Mercadinho</a>
           </div>
         </li>
-        <li>
-            <a class="navOption">
-                <img src="{% static 'food/images/user.png' %}" width="25">
+        <li class="navOption">
+            <a >
+                <img src="{% static 'food/images/user.png' %}" width="20">
             </a>
         {% if not request.user.is_authenticated %}
         <ul class="dropdown">
             <li>
-                <a class="navOption" href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
+                <a href="{% url 'food:registarutilizador' %}">Registar Utilizador</a>
             </li>
-            <li>
-                <a class="navOption" href="{% url 'food:loginutilizador' %}">Login</a>
+            <li >
+                <a href="{% url 'food:loginutilizador' %}">Login</a>
             </li>
         </ul>
         {% else %}
             <ul class="dropdown">
                 <li>
-                    <a href="{% url 'food:perfil' %}" class="navOption">Perfil</a>
+                    <a href="{% url 'food:perfil' %}" id="panel">Perfil</a>
                 </li>
                 <li>
-                    <a href="{% url 'food:caixamensagens' %}" class="navOption">Mensagens</a>
+                    <a href="{% url 'food:caixamensagens' %}" id="panel">Mensagens</a>
                 </li>
                 <li>
-                    <a class="navOption" href="{% url 'food:logoututilizador' %}">Logout</a>
+                    <a href="{% url 'food:logoututilizador' %}">Logout</a>
                 </li>
             </ul>
         {% endif %}
@@ -52,9 +52,7 @@
           >
         </li>
         <li>
-          <a class="navOption" href="{% url 'food:mapPage' %}"
-            >Mapa dos Mercadinhos</a
-          >
+          <a class="navOption" href="{% url 'food:mapPage' %}">Mapa dos Mercadinhos</a>
         </li>
         <li>
           <a class="navOption" href="{% url 'food:about' %}">Sobre nós</a>
