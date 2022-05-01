@@ -19,9 +19,9 @@
                 <a class="Logo" href="{% url 'food:index' %}">Mercadinho</a>
             </div>
         </li>
-        <li>
-            <a class="navOption">
-                <img src="{% static 'food/images/user.png' %}" width="25">
+        <li class="navOption">
+            <a >
+                <img src="{% static 'food/images/user.png' %}" width="20">
             </a>
             {% if not request.user.is_authenticated %}
                 {#<<<<<<< HEAD#}

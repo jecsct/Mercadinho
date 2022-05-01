@@ -156,17 +156,18 @@ footer div {
  ul li ul.dropdown {
      background-color: rgba(51, 170, 51, 0.4);
      display: none;
-     position: relative;
+     position: absolute;
      z-index: 1;
-     float: right;
+     right: 0;
+     text-decoration: none;
  }
 
 ul li:hover ul.dropdown {
-    display: inline-block; /* Display the dropdown */
+    display: block; /* Display the dropdown */
 }
 
 ul li ul.dropdown li {
-    display: inline-block;
+    display: block;
 }
 
 .mensagem {

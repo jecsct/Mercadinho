@@ -48,6 +48,7 @@ def contactos(request):
         return render(request, 'food/contactos.html')
 
 
+
 def caixaMensagens(request):
     lista_mensagens = Mensagem.objects.order_by('-dataHora')
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
