@@ -5,7 +5,6 @@ from .views import redirect_view
 
 app_name = 'food'
 urlpatterns = [
-
     path("", views.index, name="index"),
     path("contactos/", views.contactos, name="contactos"),
     path("caixaMensagens/", views.caixaMensagens, name="caixamensagens"),
@@ -24,4 +23,6 @@ urlpatterns = [
     path('<int:product_id>/updateProductComment/', views.updateProductComment, name='updateProductComment'),
     path('<int:product_id>/deleteProductComment/', views.deleteProductComment, name='deleteProductComment'),
     path('addProduct/', views.addProduct, name='addProduct'),
+    path('pagamento/', views.pagamento, name="pagamento"),
+    path('pagamento/checkOut',views.checkOut, name="checkOut")
 ]

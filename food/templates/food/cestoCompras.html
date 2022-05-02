@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>Cestinho de Compras</title>
+       {% load static %}
+      <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}"/>
   </head>
   <body>
     {% include 'food/navbar.html' %}
@@ -23,11 +25,16 @@
         {% endfor %}
       </form>
     </ul>
-    <form method="POST">
+    <!--<form method="POST">
       <label for="checkout">Deseja fazer o checkout?</label> <br /><br />
       <input type="submit" value="Sim" formaction="pagamento" />
       <input type="submit" value="Ainda não" formaction="listaCompras" />
-    </form>
+    </form>-->
+    <div class="left-down-corner">
+    <p>Deseja fazer o checkout?</p>
+    <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
+    <a href="{% url 'food:pagamento' %}" class="button-link">Sim</a>
     {% include 'food/copyright_footer.html' %}
+    </div>
   </body>
 </html>

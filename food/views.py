@@ -52,21 +52,21 @@ def caixaMensagens(request):
     lista_mensagens = Mensagem.objects.order_by('-dataHora')
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
-
+@login_required
 def cestoCompras(request):
     # cesto_compras =
     # return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
     return render(request, 'food/cestoCompras.html')
 
-
+@login_required
 def adicionarCesto(request):
     return render(request, 'food/cestoCompras.html')
 
-
+@login_required
 def removerCesto(request):
     return render(request, 'food/cestoCompras.html')
 
-
+@login_required
 def perfil(request):
     return render(request, "food/perfil.html")
 
@@ -193,3 +193,24 @@ def addProduct(request):
                                    )
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
+
+@login_required
+def pagamento(request):
+ #   if request.method == 'POST':
+ #       try:
+ #           morada = request.POST.get('morada')
+ #           zipCode = request.POST.get('zipCode')
+ #           phoneNumber = request.POST.get('phoneNumber')
+ #       except KeyError:
+ #           return render(request, 'food/pagamento.html')
+ #       if morada and zipCode and phoneNumber:
+ #           return HttpResponseRedirect(reverse('food:index'))
+ #       else:
+    return render(request, 'food/pagamento.html')
+ #   else:
+ #   return HttpResponseRedirect(reverse('food:pagamento'))
+
+@login_required
+def checkOut(request):
+    print("reduzir laterninhas")
+    return HttpResponseRedirect(reverse('food:index'))

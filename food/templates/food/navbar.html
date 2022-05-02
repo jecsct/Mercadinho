@@ -50,13 +50,11 @@
                     >
                 </li>
             {% endif %}
-        {% if request.user|has_group:'Salesman' %}
             <li>
                 <a class="navOption" href="{% url 'food:addProduct' %}"
                 >Adicionar Produto</a
                 >
             </li>
-        {% endif %}
         <li>
             <a class="navOption" href="{% url 'food:mapPage' %}"
             >Mapa dos Mercadinhos</a
