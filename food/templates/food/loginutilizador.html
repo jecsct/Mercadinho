@@ -7,17 +7,18 @@
     <title>Login Utilizador</title>
   </head>
   <body>
-    {% load static %} {% include 'food/navbar.html' %}
+    {% load static %}
+    {% include 'food/navbar.html' %}
     <h2>Login Utilizador</h2>
     {% if error_message %}
     <p>{{ error_message }}</p>
     <br />
     {% endif %}
     <form method="post">
-      {% csrf_token %} Username:
-      <input type="username" name="username" /><br /><br />
-      Password: <input type="password" name="password" /><br /><br />
-      <input type="submit" value="Login" />
+      {% csrf_token %}
+      <p> Username: {{ loginform.username }} </p><br/>
+      <p> Password: {{ loginform.password }} </p><br/>
+      <input type="submit" value="Login"/>
     </form>
     {% include 'food/copyright_footer.html' %}
   </body>

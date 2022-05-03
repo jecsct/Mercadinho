@@ -25,44 +25,6 @@ body {
     background-color: #D1FFD6;
 }
 
-nav {
-    background-color: #087f5b;
-    margin-top: 12px;
-}
-
-nav ul {
-    overflow: hidden;
-}
-
-nav ul li {
-    display: inline;
-}
-
-nav div {
-    float: left;
-    -webkit-margin-collapse: collapse;
-}
-
-nav p {
-    font-size: 18px;
-}
-
-.Logo {
-    float: left;
-    color: #fff;
-    padding: 12px 12px;
-}
-
-.navOption {
-    float: right;
-    color: #fff;
-    padding: 12px 12px;
-}
-
-.navOption:hover {
-    background-color: #045039;
-}
-
 h1,
 h2,
 h3 {
@@ -76,15 +38,6 @@ a {
 li {
     margin-bottom: 12px;
     list-style-type: none;
-}
-
-footer {
-    background: rgba(51, 170, 51, 0.4);
-    position: absolute;
-    bottom: 0;
-    width: 99%;
-    margin-bottom: 12px;
-    padding: 4px;
 }
 
 footer div {
@@ -153,23 +106,78 @@ footer div {
 /*    background-color: firebrick;*/
 /*}*/
 
- ul li ul.dropdown {
-     background-color: rgba(51, 170, 51, 0.4);
-     display: none;
-     position: absolute;
-     z-index: 1;
-     right: 0;
-     text-decoration: none;
+/* Navigation */
+nav {
+    background-color: #087f5b;
+    margin-top: 12px;
+}
+
+nav ul {
+    overflow: hidden;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav div {
+    float: left;
+}
+
+nav p {
+    font-size: 18px;
+}
+
+.mercadinho {
+    float: left;
+    color: #fff;
+    padding: 12px 12px;
+}
+
+.navOption {
+    float: right;
+    color: #fff;
+    padding: 12px 12px;
+    margin-bottom: 0;
+}
+
+.navOption:hover {
+    background-color: #045039;
+}
+
+/* Navigation drop down */
+ul.dropdown {
+    background-color: rgba(51, 170, 51, 0.4);
+    display: none;
+    position: absolute;
+    right: 0;
+    margin-right: 12px;
  }
 
-ul li:hover ul.dropdown {
+li:hover ul.dropdown {
     display: block; /* Display the dropdown */
 }
 
-ul li ul.dropdown li {
+.dropdown li {
     display: block;
 }
 
+.dropdown li a {
+    width: 100%;
+    text-align: right;
+}
+
+/* Footer */
+footer {
+    background: rgba(51, 170, 51, 0.4);
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    margin: 12px 0;
+    padding: 4px;
+}
+
+/* Caixa de mensagens */
 .mensagem {
     background-color: #eeeeee;
     padding: 30px 30px 30px 30px ;

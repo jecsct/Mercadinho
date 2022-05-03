@@ -1,16 +1,16 @@
-from time import localtime, timezone
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
-from django.utils import timezone
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from food.models import Mensagem
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .models import Product, Salesman, Comment, Customer
+
+from .forms import CustomerForm, UserForm, ContactForm
+from .models import Product, Comment
 from .decorators import unauthenticated_user, allowed_users
 
 
@@ -27,25 +27,19 @@ def index(request):
 def contactos(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
-            email_resposta = request.user.email
-            try:
-                texto_mensagem = request.POST.get("texto")
-            except KeyError:
-                return render(request, 'food/contactos.html')
+            form = ContactForm(request.POST, initial={'email_envio': request.user.email})
         else:
-            try:
-                email_resposta = request.POST.get("email")
-                texto_mensagem = request.POST.get("texto")
-            except KeyError:
-                return render(request, 'food/contactos.html')
-        if email_resposta and texto_mensagem:
-            mensagem = Mensagem(email_resposta=email_resposta, texto_mensagem=texto_mensagem, dataHora=timezone.now())
+            form = ContactForm(request.POST)
+        if form.is_valid():
+            mensagem = form.save(commit=False)
             mensagem.save()
-            return HttpResponseRedirect(reverse('food:contactos'))
-        else:
-            return HttpResponseRedirect(reverse('food:contactos'))
+            return render(request, 'food/contactos.html', {'contactForm': form})
     else:
-        return render(request, 'food/contactos.html')
+        if request.user.is_authenticated:
+            form = ContactForm(initial={'email_envio': request.user.email})
+        else:
+            form = ContactForm()
+    return render(request, 'food/contactos.html', {'contactForm': form})
 
 
 def caixaMensagens(request):
@@ -72,48 +66,39 @@ def perfil(request):
 
 
 def registarutilizador(request):
-    if request.method == 'POST':
-        try:
-            username = request.POST.get('username')
-            email = request.POST.get('email')
-            password = request.POST.get('password')
-        except KeyError:
-            return render(request, 'food/registarutilizador.html')
-        if username and email and password:
-            u = User.objects.create_user(username=username, email=email, password=password)
-            if request.FILES['myfile']:
-                productImage = request.FILES['myfile']
-                fs = FileSystemStorage()
-                filename = fs.save(productImage.name, productImage)
-                uploaded_file_url = fs.url(filename)
-                Customer.objects.create(user=u, profile_pic=uploaded_file_url, gender=request.POST.get['gender'])
-            return HttpResponseRedirect(reverse('food:index'))
-        else:
-            return render(request, 'food/registarutilizador.html')
+    if request.method == "POST":
+        customerForm = CustomerForm(request.POST)
+        userForm = UserForm(request.POST)
+        if customerForm.is_valid() and userForm.is_valid():
+            user = userForm.save(commit=False)
+            user.save()
+
+            customer = customerForm.save(commit=False)
+            customer.user = user
+            customer.save()
+
+            return render(request, 'food/index.html')
     else:
-        return render(request, 'food/registarutilizador.html')
+        customerForm = CustomerForm()
+        userForm = UserForm()
+        return render(request, 'food/registarutilizador.html', {'userForm': userForm, 'customerForm': customerForm})
 
 
 @unauthenticated_user
 def loginutilizador(request):
-    if request.method == 'POST':
-        try:
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-        except KeyError:
-            return render(request, 'food/loginutilizador.html')
-        if username and password:
+    error_message = False
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('food:index'))
-            else:
-                return render(request, 'food/loginutilizador.html',
-                              {'error_message': "Utilizador não existe, tente de novo com outro username/password"})
-        else:
-            return render(request, 'food/loginutilizador.html')
-    else:
-        return render(request, 'food/loginutilizador.html')
+                return render(request, "food/index.html")
+        error_message = 'Utilizador não existe ou a password está incorreta'
+    form = AuthenticationForm()
+    return render(request, "food/loginutilizador.html", {"loginform": form, 'error_message': error_message})
 
 
 @login_required

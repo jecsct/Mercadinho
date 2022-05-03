@@ -5,9 +5,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Mensagem(models.Model):
+    email_envio = models.CharField(max_length=50)
     email_resposta = models.CharField(max_length=50)
     texto_mensagem = models.CharField(max_length=500)
-    dataHora = models.DateTimeField('Data Mensagem Enviada')
+    dataHora = models.DateTimeField()
 
 
 # Create your models here.
