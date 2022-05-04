@@ -168,6 +168,13 @@ def updateProductComment(request, product_id):
 
 
 @login_required
+@allowed_users(allowed_roles=['Salesman'])
+def deleteProduct(request, product_id):
+    get_object_or_404(Product, pk=product_id).delete()
+    return HttpResponseRedirect(reverse('food:index'))
+
+
+@login_required
 def deleteProductComment(request, product_id):
     if request.method == 'POST':
         Product.objects.get(id=product_id).deleteRating(
