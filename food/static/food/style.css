@@ -196,5 +196,15 @@ footer {
     padding: 4px 6px 4px 6px;
     background-color: #087f5b;
     color: #eeeeee;
+    cursor: pointer;
 }
 
+input[type=submit] {
+    background-color: #087f5b;
+    color: #eeeeee;
+    cursor: pointer;
+    padding: 6px 8px 6px 8px;
+    text-decoration: none;
+    font: sans-serif;
+    border:none;
+}

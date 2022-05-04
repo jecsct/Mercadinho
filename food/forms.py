@@ -39,3 +39,6 @@ class ContactForm(ModelForm):
     class Meta:
         model = Mensagem
         fields = ('email_envio', 'email_resposta', 'texto_mensagem', 'dataHora')
+        widgets = {
+            "texto_mensagem": forms.Textarea
+        }
