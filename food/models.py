@@ -5,16 +5,31 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Mensagem(models.Model):
-    email = models.CharField(max_length=50)
+    email_envio = models.CharField(max_length=50)
+    email_resposta = models.CharField(max_length=50)
     texto_mensagem = models.CharField(max_length=500)
     dataHora = models.DateTimeField('Data Mensagem Enviada')
 
+
+# Create your models here.
 class Salesman(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
                                  decimal_places=1)
     phone_number = models.IntegerField(blank=True,
                                        validators=[MinValueValidator(900000000), MaxValueValidator(999999999)])
+
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_pic = models.ImageField(null=True, blank=True)
+    gender = (
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other')
+    )
+    gender = models.CharField(max_length=6, null=True, blank=True, choices=gender)
+    birthday = models.DateField()
 
 
 class Product(models.Model):
@@ -65,18 +80,6 @@ class Product(models.Model):
             comments = []
         return comments
 
-class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_pic = models.ImageField(null=True, blank=True)
-    gender = (
-        ('Male', 'Male'),
-        ('Female', 'Female'),
-        ('Other', 'Other')
-    )
-    gender = models.CharField(max_length=6, null=True, blank=True, choices=gender)
-    birthday = models.DateField()
-    cestoCompras = models.ManyToManyField(Product, related_name='cestoCompras')
-
 
 class Comment(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -88,5 +91,3 @@ class Comment(models.Model):
 
     class Meta:
         unique_together = (("user", "product"),)
-
-

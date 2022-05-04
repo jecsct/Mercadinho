@@ -16,12 +16,12 @@
     <ul>
         <li>
             <div>
-                <a class="Logo" href="{% url 'food:index' %}">Mercadinho</a>
+                <a class="mercadinho" href="{% url 'food:index' %}">Mercadinho</a>
             </div>
         </li>
         <li class="navOption">
             <a >
-                <img src="/static/media/default_logo.png" style="width: 20px ">
+                <img src="/static/media/default_logo.png" style="height: 15px ">
             </a>
             {% if not request.user.is_authenticated %}
                 <ul class="dropdown" style="float: right">
@@ -45,20 +45,14 @@
                     </li>
                 </ul>
                 <li>
-                    <a class="navOption" href="{% url 'food:cestocompras' %}"
-                    >Cesto de compras</a
-                    >
+                    <a class="navOption" href="{% url 'food:cestocompras' %}">Cesto de compras</a>
                 </li>
             {% endif %}
             <li>
-                <a class="navOption" href="{% url 'food:addProduct' %}"
-                >Adicionar Produto</a
-                >
+                <a class="navOption" href="{% url 'food:addProduct' %}">Adicionar Produto</a>
             </li>
         <li>
-            <a class="navOption" href="{% url 'food:mapPage' %}"
-            >Mapa dos Mercadinhos</a
-            >
+            <a class="navOption" href="{% url 'food:mapPage' %}">Mapa dos Mercadinhos</a>
         </li>
         <li>
             <a class="navOption" href="{% url 'food:about' %}">Sobre nós</a>
