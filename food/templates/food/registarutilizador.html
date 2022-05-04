@@ -11,16 +11,14 @@
 {% block content %}
     <h2>Registar Utilizador</h2>
     <form method="post" enctype="multipart/form-data">
-        {% csrf_token %} Username:
-        <input type="username" name="username"/><br/><br/>
-        Email: <input type="email" name="email"/><br/><br/>
-        Password: <input type="password" name="password"/><br/><br/>
-        Profile Picture: <input type="file" name="myfile"> <br> <br>
-        <label for="gender">Gender:</label><select name="gender" id="gender">
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Other">Other</option>
-    </select> <br> <br>
+        {% csrf_token %}
+        <p> Username: {{ userForm.username }} </p><br/>
+        <p> Email: {{ userForm.email }} </p><br/>
+        <p> Password: {{ userForm.password1 }} </p><br/>
+        <p> Gender: {{ customerForm.gender }} </p><br/>
+        <p> Profile picture: {{ customerForm.profile_pic }} </p><br/>
+        <p> Birthday: {{ customerForm.birthday }} </p><br/>
+        <p> Salesman: {{ customerForm.isSalesman }}</p><br/>
         <input type="submit" value="Gravar novo Utilizador"/>
     </form>
 {% endblock %}

@@ -15,10 +15,10 @@
         <br/>
     {% endif %}
     <form method="post">
-        {% csrf_token %} Username:
-        <input type="username" name="username"/><br/><br/>
-        Password: <input type="password" name="password"/><br/><br/>
-        <input type="submit" value="Login"/>
+      {% csrf_token %}
+      <p> Username: {{ loginform.username }} </p><br/>
+      <p> Password: {{ loginform.password }} </p><br/>
+      <input type="submit" value="Login"/>
     </form>
 {% endblock %}
 </body>

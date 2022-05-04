@@ -10,7 +10,7 @@
     <h1>Caixa de Entrada</h1>
     {% for mensagem in lista_mensagens %}
         <div class="mensagem">
-            <p class="mensagem-Email">{{ mensagem.email_resposta }}</p>
+            <p class="mensagem-Email"> Email de: {{ mensagem.email_envio }}</p>
             <p>{{ mensagem.texto_mensagem }}</p>
             <p class="mensagem-Hora">{{ mensagem.dataHora }}</p>
         </div>

@@ -4,10 +4,11 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
-class Mensagem(models.Model):
+class Message(models.Model):
+    email_envio = models.CharField(max_length=50)
     email_resposta = models.CharField(max_length=50)
     texto_mensagem = models.CharField(max_length=500)
-    dataHora = models.DateTimeField('Data Mensagem Enviada')
+    dataHora = models.DateTimeField()
 
 
 # Create your models here.
@@ -29,6 +30,7 @@ class Customer(models.Model):
     )
     gender = models.CharField(max_length=6, null=True, blank=True, choices=gender)
     birthday = models.DateField()
+    isSalesman = models.BooleanField(default=False)
 
 
 class Product(models.Model):
