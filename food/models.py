@@ -81,7 +81,7 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=10000)
     dataHour = models.DateTimeField()
     rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
