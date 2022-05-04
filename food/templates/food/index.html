@@ -11,14 +11,24 @@
     <h3>Olá {{ request.user }}!</h3>
     {% else %}
     <h3>Ainda não está logado!</h3>
-    {% endif %} Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    {% endif %}
+    <p class="index_sobre">Lorem ipsum dolor sit amet consectetur adipisicing elit.
     Inventore velit laborum vel rem. Assumenda sapiente ea incidunt ab, unde
-    harum fugiat omnis, sit culpa at nam architecto, dolore voluptatibus quis!
+        harum fugiat omnis, sit culpa at nam architecto, dolore voluptatibus quis!</p>
+    <br/>
     {% if products_list %}
-    {% for product in products_list %}
-        <br>
-        <a href="{% url 'food:productDetailPage' product.id %}">{{ product.name }}</a>
-    {% endfor %}
+        <div class="product_list">
+            {% for product in products_list %}
+                <div class="product">
+                    <a href="{% url 'food:productDetailPage' product.id %}">
+                        <img class="product_image" src="{{ product.image }}"/>
+                        <p class="product_text">{{ product.name }}</p>
+                        <p class="lanterna product_price">Preço: {{ product.price }}</p>
+                        <div class="center_button"><a class="product_button" href="#">Add to Cart</a></div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
     {% include 'food/copyright_footer.html' %}
   </body>

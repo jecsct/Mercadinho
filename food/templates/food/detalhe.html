@@ -8,6 +8,7 @@
 {% include 'food/navbar.html' %}
 <div>
     <h1 class="product_title">{{ product.name }}</h1>
+<div class="grid">
     <div class="row">
         <div class="column">
             <img alt="Imagem do produto. {{ product.name }}"
@@ -31,6 +32,7 @@
             <input type="submit" value="Adicionar ao cesto">
         </div>
     </div>
+</div>
     <h3>Comentários</h3>
     <div>
         <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"

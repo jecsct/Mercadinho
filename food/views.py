@@ -5,13 +5,13 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
 from django.contrib.auth.decorators import login_required
-from food.models import Mensagem
+from food.models import Message
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
 from .forms import CustomerForm, UserForm, ContactForm
 from .models import Product, Comment
-from .decorators import unauthenticated_user, allowed_users
+from .decorators import unauthenticated_user
 
 
 def redirect_view(request):
@@ -43,7 +43,7 @@ def contactos(request):
 
 
 def caixaMensagens(request):
-    lista_mensagens = Mensagem.objects.order_by('-dataHora')
+    lista_mensagens = Message.objects.order_by('-dataHora')
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
 

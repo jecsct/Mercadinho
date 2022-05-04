@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 import datetime
 
-from food.models import Customer, Mensagem
+from food.models import Customer, Message
 from django import forms
 
 
@@ -27,7 +27,7 @@ class UserForm(UserCreationForm):
 class CustomerForm(ModelForm):
     class Meta:
         model = Customer
-        fields = ('gender', 'profile_pic', 'birthday')
+        fields = ('gender', 'profile_pic', 'birthday', 'isSalesman')
         widgets = {
             "birthday": DateInput(attrs={'type': 'date'}),
         }
@@ -37,5 +37,5 @@ class ContactForm(ModelForm):
     dataHora = forms.DateTimeField(initial=datetime.datetime.now())
 
     class Meta:
-        model = Mensagem
+        model = Message
         fields = ('email_envio', 'email_resposta', 'texto_mensagem', 'dataHora')
