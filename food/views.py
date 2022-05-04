@@ -201,25 +201,6 @@ def pagamento(request):
     else:
         return render(request, 'food/pagamento.html')
 
-
-
-
-@login_required
-def pagamento(request):
- #   if request.method == 'POST':
- #       try:
- #           morada = request.POST.get('morada')
- #           zipCode = request.POST.get('zipCode')
- #           phoneNumber = request.POST.get('phoneNumber')
- #       except KeyError:
- #           return render(request, 'food/pagamento.html')
- #       if morada and zipCode and phoneNumber:
- #           return HttpResponseRedirect(reverse('food:index'))
- #       else:
-    return render(request, 'food/pagamento.html')
- #   else:
- #   return HttpResponseRedirect(reverse('food:pagamento'))
-
 @login_required
 def checkOut(request):
     print("reduzir laterninhas")

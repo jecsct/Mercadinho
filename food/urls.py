@@ -25,6 +25,6 @@ urlpatterns = [
     path('<int:product_id>/deleteProductComment/', views.deleteProductComment, name='deleteProductComment'),
     path('addProduct/', views.addProduct, name='addProduct'),
     path('pagamento/', views.pagamento, name="pagamento"),
-    path('pagamento/cestoCompras',views.cestoCompras, name="cesto compras")
+    path('pagamento/cestoCompras',views.cestoCompras, name="cesto compras"),
     path('pagamento/checkOut',views.checkOut, name="checkOut")
 ]
