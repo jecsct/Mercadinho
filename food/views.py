@@ -200,3 +200,6 @@ def addProduct(request):
                                    )
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
+
+def base(request):
+    return render(request, 'food/base.html')

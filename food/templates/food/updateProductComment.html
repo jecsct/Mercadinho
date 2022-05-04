@@ -1,3 +1,4 @@
+{% extends 'food/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,15 +6,14 @@
     <title>Mercadinho - Update Comentario</title>
 </head>
 <body>
-{% include 'food/navbar.html' %}
-
-<form action="{% url 'food:updateProductComment' product.id %}" method="post">
-    {% csrf_token %}
-    <label>Text: <input type="text" value="{{ comment.text }}" name="newCommentText"></label><br>
-    <label>Rating: <input type="number" value="{{ comment.rating }}" step="0.1" max="5" min="0" name="newCommentRating"></label><br>
-    <input type="submit" value="Update Comment"/>
-</form>
-
-{#{% include 'food/copyright_footer.html' %}#}
+{% block content %}
+    <form action="{% url 'food:updateProductComment' product.id %}" method="post">
+        {% csrf_token %}
+        <label>Text: <input type="text" value="{{ comment.text }}" name="newCommentText"></label><br>
+        <label>Rating: <input type="number" value="{{ comment.rating }}" step="0.1" max="5" min="0"
+                              name="newCommentRating"></label><br>
+        <input type="submit" value="Update Comment"/>
+    </form>
+{% endblock %}
 </body>
 </html>

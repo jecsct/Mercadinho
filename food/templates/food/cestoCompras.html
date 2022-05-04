@@ -1,33 +1,34 @@
+{% extends 'food/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Cestinho de Compras</title>
-  </head>
-  <body>
-    {% include 'food/navbar.html' %}
+</head>
+<body>
+{% block content %}
     <h1>Os seu Produtos</h1>
     <ul>
-      <form method="POST">
-        {% for item in cesto_compras %}
-        <li>
-          <img src="{{ item.image }}" />
-          <a href="{% url 'food:detalhe' produto.id %}">{{ item.name }}</a>
-          <p>{{ item.price }} laterninhas</p>
-          <input
-            type="submit"
-            value="Remover"
-            formaction="{% url 'food:removerCesto' %}"
-          />
-        </li>
-        {% endfor %}
-      </form>
+        <form method="POST">
+            {% for item in cesto_compras %}
+                <li>
+                    <img src="{{ item.image }}"/>
+                    <a href="{% url 'food:detalhe' produto.id %}">{{ item.name }}</a>
+                    <p>{{ item.price }} laterninhas</p>
+                    <input
+                            type="submit"
+                            value="Remover"
+                            formaction="{% url 'food:removerCesto' %}"
+                    />
+                </li>
+            {% endfor %}
+        </form>
     </ul>
     <form method="POST">
-      <label for="checkout">Deseja fazer o checkout?</label> <br /><br />
-      <input type="submit" value="Sim" formaction="pagamento" />
-      <input type="submit" value="Ainda não" formaction="listaCompras" />
+        <label for="checkout">Deseja fazer o checkout?</label> <br/><br/>
+        <input type="submit" value="Sim" formaction="pagamento"/>
+        <input type="submit" value="Ainda não" formaction="listaCompras"/>
     </form>
-    {% include 'food/copyright_footer.html' %}
-  </body>
+{% endblock %}
+</body>
 </html>

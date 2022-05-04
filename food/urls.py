@@ -25,4 +25,6 @@ urlpatterns = [
     path('<int:product_id>/deleteProductComment/', views.deleteProductComment, name='deleteProductComment'),
     path('addProduct/', views.addProduct, name='addProduct'),
     path('<int:product_id>/deleteProduct/', views.deleteProduct, name='deleteProduct'),
+
+    path('base/', views.base, name='base'),
 ]
