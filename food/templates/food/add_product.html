@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    {% load static %}
 </head>
 <body>
+{% load static %}
 {% include 'food/navbar.html' %}
 
 <form action="{% url 'food:addProduct' %}" method="post" enctype="multipart/form-data">
@@ -16,9 +16,8 @@
     <label>Ficheiro da imagem: </label><input name="myfile" type="file" required><br>
     <input type="submit" value="Adicionar">
     <a href="{% url 'food:index' %}">Cancelar</a>
-
 </form>
 
-{#{% include 'food/copyright_footer.html' %}#}
+{% include 'food/copyright_footer.html' %}
 </body>
 </html>

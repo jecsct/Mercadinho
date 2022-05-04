@@ -162,7 +162,7 @@ def deleteProductComment(request, product_id):
 
 
 @login_required
-@allowed_users(allowed_roles=['Salesman'])
+#@allowed_users(allowed_roles=['Salesman'])
 def addProduct(request):
     if request.method == 'POST':
         if request.FILES['myfile']:
