@@ -194,6 +194,31 @@ def addProduct(request):
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
 
+def send_confirmation( morada, zipCode):
+    texto_mensagem = "A sua encomenda está confirmada! Será enviada para a "+str(morada)+"com o codigo postal "+str(zipCode)
+    mensagem = Mensagem(email="service@mercadinho.pt",texto_mensagem=texto_mensagem,dataHora=timezone.now())
+    mensagem.save()
+
+@login_required
+def pagamento(request):
+    if request.method == 'POST':
+        try:
+            morada = request.POST.get('morada')
+            zipCode = request.POST.get('zipCode')
+        except KeyError:
+            return render(request, 'food/pagamento.html')
+        if morada and zipCode:
+            send_confirmation(morada, zipCode)
+            print("reduzir laterninhas")
+            return HttpResponseRedirect(reverse('food:index'))
+        else:
+            return HttpResponseRedirect(reverse('food:pagamento'))
+    else:
+        return render(request, 'food/pagamento.html')
+
+
+
+
 @login_required
 def pagamento(request):
  #   if request.method == 'POST':

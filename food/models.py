@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Mensagem(models.Model):
-    email_resposta = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
     texto_mensagem = models.CharField(max_length=500)
     dataHora = models.DateTimeField('Data Mensagem Enviada')
 
@@ -88,4 +88,5 @@ class Comment(models.Model):
 
     class Meta:
         unique_together = (("user", "product"),)
+
 
