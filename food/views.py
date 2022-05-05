@@ -1,5 +1,4 @@
 from time import timezone
-
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
@@ -10,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from food.models import Mensagem, Customer
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.auth.models import User
 from .forms import CustomerForm, UserForm, ContactForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
@@ -46,7 +45,8 @@ def caixaMensagens(request):
 @login_required
 @allowed_users(allowed_roles=['Customer'])
 def cestoCompras(request):
-    customer = Customer.objects.get(id=request.user.id)
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(user=user)
     try:
         cesto_compras = CestoCompras.objects.filter(customer=customer)
     except CestoCompras.DoesNotExist:
@@ -74,7 +74,6 @@ def removeFromCart(request, product_id):
 @login_required
 def perfil(request):
     return render(request, "food/perfil.html")
-
 
 def registarCustomer(request):
     if request.method == "POST":
