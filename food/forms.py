@@ -38,12 +38,4 @@ class ContactForm(ModelForm):
 
     class Meta:
         model = Mensagem
-        fields = ('email', 'texto_mensagem', 'dataHora')
-        widgets = {
-            "texto_mensagem": forms.Textarea
-        }
-
-class PaymentForm(ModelForm):
-    class Meta:
-        fields = ('morada', 'zipCode')
-
+        fields = ('email_envio', 'email_resposta', 'texto_mensagem', 'dataHora')

@@ -3,9 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <title>Cestinho de Compras</title>
-       {% load static %}
+      {% load static %}
       <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}"/>
-  </head>
+</head>
+<body>
+{% block content %}
   <body>
     {% include 'food/navbar.html' %}
     <h1>Os seu Produtos</h1>
@@ -13,13 +15,13 @@
       <form method="POST">
         {% for item in cesto_compras %}
         <li>
-          <img src="{{ item.product.image }}" />
-          <a href="{% url 'food:productDetailPage' item.product.id %}">{{ item.product.name }}</a>
+          <img src="{{ item.image }}" />
+          <a href="{% url 'food:detalhe' produto.id %}">{{ item.name }}</a>
           <p>{{ item.price }} laterninhas</p>
           <input
             type="submit"
             value="Remover"
-            formaction="{% url 'food:removeFromCart' item.product_id %}"
+            formaction="{% url 'food:removerCesto' %}"
           />
         </li>
         {% endfor %}

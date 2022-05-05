@@ -1,23 +1,18 @@
+{% extends 'food/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Contactos</title>
-    {% load static %}
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'food/style.css' %}"
-    />
-  </head>
-  <body>
-    {% include 'food/navbar.html' %}
+</head>
+<body>
+{% block content %}
     <h1>Contactos</h1>
     <ul>
-      <li><strong>Facebook</strong>: Mercadinho Portugal</li>
-      <li><strong>Instagram</strong>: mercadinho.pt</li>
-      <li><strong>Telefone</strong>: +351 888 888 888</li>
-      <li><strong>Email</strong>: ajuda@mercadinho.pt</li>
+        <li><strong>Facebook</strong>: Mercadinho Portugal</li>
+        <li><strong>Instagram</strong>: mercadinho.pt</li>
+        <li><strong>Telefone</strong>: +351 888 888 888</li>
+        <li><strong>Email</strong>: ajuda@mercadinho.pt</li>
     </ul>
     <h1>Contacte-nos!</h1>
     <form action="{% url 'food:contactos' %}" method="post">
@@ -27,6 +22,6 @@
         <p hidden>Data e hora de envio: {{ contactForm.dataHora }}</p>
       <input type="submit" value="Enviar Mensagem" />
     </form>
-    {% include 'food/copyright_footer.html' %}
-  </body>
+{% endblock %}
+</body>
 </html>

@@ -1,13 +1,12 @@
+{% extends 'food/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Mensagens</title>
-      {% load static %}
-      <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}"/>
-  </head>
-  <body>
-    {% include 'food/navbar.html' %}
+</head>
+<body>
+{% block content %}
     <h1>Caixa de Entrada</h1>
     {% for mensagem in lista_mensagens %}
         <div class="mensagem">
@@ -17,6 +16,6 @@
         </div>
         <br>
     {% endfor %}
-    {% include 'food/copyright_footer.html' %}
-  </body>
+{% endblock %}
+</body>
 </html>

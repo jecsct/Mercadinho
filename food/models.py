@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Mensagem(models.Model):
     email = models.CharField(max_length=50)
     texto_mensagem = models.CharField(max_length=500)
-    dataHora = models.DateTimeField('Data Mensagem Enviada')
+    dataHora = models.DateTimeField()
 
 
 # Create your models here.
@@ -15,6 +15,7 @@ class Salesman(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
                                  decimal_places=1)
+    profile_pic = models.ImageField(null=True, blank=True)
     phone_number = models.IntegerField(blank=True,
                                        validators=[MinValueValidator(900000000), MaxValueValidator(999999999)])
 
@@ -81,7 +82,7 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=10000)
     dataHour = models.DateTimeField()
     rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,

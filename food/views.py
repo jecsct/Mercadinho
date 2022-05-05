@@ -5,9 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-
-from food.models import Mensagem, Customer
+from food.models import Mensagem
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
@@ -81,7 +79,7 @@ def perfil(request):
     return render(request, "food/perfil.html")
 
 
-def registarutilizador(request):
+def registarCustomer(request):
     if request.method == "POST":
         customerForm = CustomerForm(request.POST)
         userForm = UserForm(request.POST)
@@ -92,13 +90,19 @@ def registarutilizador(request):
             customer = customerForm.save(commit=False)
             customer.user = user
             customer.save()
-
-            return render(request, 'food/index.html')
+            print("asdasdsad")
+            return HttpResponseRedirect(reverse('food:index'))
+        # print("nao deu") TODO TEMOS DE COLOCAR AQUI UM RETURN PARA ELE FICAR NA PAGINA MAS SURGIR UMA MENSAGEM A DIZER QUE ALGO CORREU MAL
     else:
         customerForm = CustomerForm()
         userForm = UserForm()
-        return render(request, 'food/registarutilizador.html', {'userForm': userForm, 'customerForm': customerForm})
+        return render(request, 'food/registarCustomer.html', {'userForm': userForm, 'customerForm': customerForm})
 
+
+def registarSalesman(request):
+    if request.method == 'POST':
+        HttpResponseRedirect(reverse('food:index'))
+    return render(request, 'food/registarSalesman.html')
 
 @unauthenticated_user
 def loginutilizador(request):
@@ -129,6 +133,7 @@ def mapPage(request):
 
 def aboutPage(request):
     return render(request, 'food/about.html')
+
 
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -165,6 +170,13 @@ def updateProductComment(request, product_id):
     comment = Comment.objects.get(user_id=request.user.id, product_id=product_id)
     context = {'product': product, 'comment': comment}
     return render(request, 'food/updateProductComment.html', context)
+
+
+@login_required
+@allowed_users(allowed_roles=['Salesman'])
+def deleteProduct(request, product_id):
+    get_object_or_404(Product, pk=product_id).delete()
+    return HttpResponseRedirect(reverse('food:index'))
 
 
 @login_required
@@ -211,3 +223,7 @@ def pagamento(request):
 #            return HttpResponseRedirect(reverse('food:pagamento'))
 #    else:
         return render(request, 'food/pagamento.html')
+
+
+def base(request):
+    return render(request, 'food/base.html')

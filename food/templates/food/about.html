@@ -1,3 +1,4 @@
+{% extends 'food/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,7 +6,7 @@
     <title>Sobre nós</title>
   </head>
   <body>
-    {% include 'food/navbar.html' %}
+  {% block content %}
     <h1>Connosco seguem o plano</h1>
     <p>
       Somos uma marca de comida oriental que se foca em ter sempre os melhores e
@@ -27,6 +28,6 @@
       >, o <i>Lanterninha</i> vai nos permitir criar um melhor ambiente para os
       nossos clientes
     </p>
-    {% include 'food/copyright_footer.html' %}
+  {% endblock %}
   </body>
 </html>

@@ -12,8 +12,9 @@ urlpatterns = [
     path("cestoCompras/", views.cestoCompras, name="cestocompras"),
     path("perfil", views.perfil, name="perfil"),
     path('', redirect_view),
-    path('registar-utilizador', views.registarutilizador, name='registarutilizador'),
-    path('login-utilizador', views.loginutilizador, name='loginutilizador'),
+    path('registerCustomer', views.registarCustomer, name='registarCustomer'),
+    path('registerSalesman', views.registarSalesman, name='registarSalesman'),
+    path('loginUser', views.loginutilizador, name='loginutilizador'),
     path('logout-utilizador', views.logoututilizador, name='logoututilizador'),
     path('maps', views.mapPage, name='mapPage'),
     path('about/', views.aboutPage, name='about'),
@@ -26,5 +27,8 @@ urlpatterns = [
     path('pagamento/', views.pagamento, name="pagamento"),
     path('<int:product_id>/addToCart',views.addToCart, name='addToCart'),
     path('<int:product_id>/removeFromCart',views.removeFromCart, name='removeFromCart'),
-    path('pagamento/cestoCompras',views.cestoCompras, name="cesto compras")
+    path('pagamento/cestoCompras',views.cestoCompras, name="cesto compras"),
+    path('<int:product_id>/deleteProduct/', views.deleteProduct, name='deleteProduct'),
+
+    path('base/', views.base, name='base')
 ]
