@@ -7,11 +7,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
 from django.contrib.auth.decorators import login_required
-from food.models import Mensagem, Customer
+from food.models import Mensagem, Customer, Salesman
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm
+from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import Group
@@ -86,11 +86,23 @@ def registarCustomer(request):
             group = Group.objects.get(name='Customer')
             group.user_set.add(user)
 
-            customer = customerForm.save(commit=False)
+            fs = FileSystemStorage()
+            filename = fs.save(customerForm.cleaned_data.get("profile_pic"),customerForm.cleaned_data.get("profile_pic"))
+            uploaded_file_url = fs.url(filename)
+
+            customer = Customer.objects.create(
+                profile_pic=uploaded_file_url,
+                gender=customerForm.cleaned_data.get("gender"),
+                birthday=customerForm.cleaned_data.get("birthday"),
+                credit=customerForm.cleaned_data.get("credit"),
+                user_id=user.id
+            )
+
             customer.user = user
             customer.save()
-
+            login(request, user)
             return render(request, 'food/index.html')
+        #TODO: FALTA AQUI UM RETURN
     else:
         customerForm = CustomerForm()
         userForm = UserForm()
@@ -98,9 +110,35 @@ def registarCustomer(request):
 
 
 def registarSalesman(request):
-    if request.method == 'POST':
-        HttpResponseRedirect(reverse('food:index'))
-    return render(request, 'food/registarSalesman.html')
+    if request.method == "POST":
+        salesmanForm = SalesmanForm(request.POST, request.FILES)
+        userForm = UserForm(request.POST)
+        if salesmanForm.is_valid() and userForm.is_valid():
+            user = userForm.save(commit=False)
+            user.save()
+            group = Group.objects.get(name='Salesman')
+            group.user_set.add(user)
+
+            fs = FileSystemStorage()
+            filename = fs.save(salesmanForm.cleaned_data.get("profile_pic"), salesmanForm.cleaned_data.get("profile_pic"))
+            uploaded_file_url = fs.url(filename)
+
+            salesman = Salesman.objects.create(
+                profile_pic=uploaded_file_url,
+                rating=salesmanForm.cleaned_data.get("rating"),
+                phone_number=salesmanForm.cleaned_data.get("phone_number"),
+                user_id=user.id
+            )
+
+            salesman.user = user
+            salesman.save()
+            login(request, user)
+            return render(request, 'food/index.html')
+        #TODO: FALTA AQUI UM RETURN
+    else:
+        salesmanForm = SalesmanForm()
+        userForm = UserForm()
+        return render(request, 'food/registarSalesman.html', {'userForm': userForm, 'salesmanForm': salesmanForm})
 
 @unauthenticated_user
 def loginutilizador(request):

@@ -28,7 +28,9 @@
             {% else %}
                 <a>
                     {% if request.user|has_group:'Customer' %}
-                        <img src="/static/media/{{ request.user.customer.profile_pic }}">
+                        <img src="{{ request.user.customer.profile_pic }}" style="height: 15px" class="nav_pic">
+                    {% else %}
+                        <img src="{{ request.user.salesman.profile_pic }}" style="height: 15px" class="nav_pic">
                     {% endif %}
                 </a>
             {% endif %}

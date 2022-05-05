@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 import datetime
 
-from food.models import Customer, Mensagem
+from food.models import Customer, Mensagem, Salesman
 from django import forms
 
 
@@ -39,3 +39,11 @@ class ContactForm(ModelForm):
     class Meta:
         model = Mensagem
         fields = ('email', 'texto_mensagem', 'dataHora')
+
+
+class SalesmanForm(ModelForm):
+    rating = forms.IntegerField(initial=0)
+
+    class Meta:
+        model = Salesman
+        fields = ('rating', 'profile_pic', 'phone_number')
