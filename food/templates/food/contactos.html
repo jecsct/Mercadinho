@@ -18,7 +18,7 @@
     <form action="{% url 'food:contactos' %}" method="post">
       {% csrf_token %}
         <p>O seu email: {{ contactForm.email }} </p><br/>
-        <p>Texto da mensagem:<br> {{ contactForm.texto_mensagem }} </p><br/>
+        <p>Texto da mensagem: {{ contactForm.texto_mensagem }} </p><br/>
         <p hidden>Data e hora de envio: {{ contactForm.dataHora }}</p>
       <input type="submit" value="Enviar Mensagem" />
     </form>

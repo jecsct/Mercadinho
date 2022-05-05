@@ -8,7 +8,7 @@ from django import forms
 
 
 class UserForm(UserCreationForm):
-    password1 = forms.CharField(max_length=100)
+    password1 = forms.PasswordInput()
     username = forms.CharField(max_length=100)
 
     class Meta:
@@ -16,7 +16,6 @@ class UserForm(UserCreationForm):
         fields = ('username', 'email', 'password1')
         widgets = {
             "email": EmailInput(attrs={'type': 'email'}),
-            "password1": PasswordInput(attrs={'type': 'password'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -35,7 +34,8 @@ class CustomerForm(ModelForm):
 
 class ContactForm(ModelForm):
     dataHora = forms.DateTimeField(initial=datetime.datetime.now())
+    texto_mensagem = forms.Textarea()
 
     class Meta:
         model = Mensagem
-        fields = ( 'email', 'texto_mensagem', 'dataHora')
+        fields = ('email', 'texto_mensagem', 'dataHora')
