@@ -1,19 +1,23 @@
-{% extends 'food/base.html' %}
-{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <title>Mercadinho - {{ product.name }}</title>
+    {% load custom_filters %}
 </head>
 <body>
 {% block content %}
+<div>
+    <div class="product_title">
+        <h1>{{ product.name }}</h1>
+    </div>
     <div>
         <h1 class="product_title">{{ product.name }}</h1>
         <div class="grid">
             <div class="row">
                 <div class="column">
                     <img alt="Imagem do produto. {{ product.name }}"
+                            {#                         src="https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Kiwi-fruits-582a07b.jpg?quality=90&resize=661%2C600"#}
                          src="{{ product.image }}"
                          style="height: 250px;width: 250px">
                 </div>
@@ -26,6 +30,28 @@
                         <li class="lanterna">Sales: {{ product.sales }}</li>
                     </ul>
                 </div>
+            </div>
+            {% if request.user|has_group:'Salesman' %}
+                <div>
+{#                    <input type="submit" value="Eliminar">#}
+                    <button type="submit" onclick="location.href='{% url 'food:deleteProduct' product.id %}'" name='mybtn2'>Eliminar</button>
+                </div>
+            {% else %}
+                <div>
+                    <form action="{% url 'food:addToCart'  product.id %}" method="post">
+                        {% csrf_token %}
+                        <label>Quantity<input type="number" name="quant"></label>
+                        <!--a href="{% url 'food:addToCart'  product.id %}" class="button-link">Adicionar ao cesto</a-->
+                        <input type="submit" value="Adicionar ao cesto"/>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <div>
+        <div class="comments_header">
+            <h3>Comments</h3>
             </div>
             <div class="row">
                 <div class="double_column">
@@ -69,6 +95,7 @@
             </ul>
         </div>
     </div>
+</div>
 {% endblock %}
 </body>
 </html>

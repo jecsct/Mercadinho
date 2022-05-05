@@ -12,25 +12,22 @@
     <h1>Os seu Produtos</h1>
     <ul>
         <form method="POST">
-            {% for item in cesto_compras %}
-                <li>
-                    <img src="{{ item.image }}" />
-                    <a href="{% url 'food:detalhe' produto.id %}">{{ item.name }}</a>
-                    <p>{{ item.price }} laterninhas</p>
-                    <input
-                            type="submit"
-                            value="Remover"
-                            formaction="{% url 'food:removerCesto' %}"
-                    />
-                </li>
-            {% endfor %}
-        </form>
+        {% csrf_token %}
+        {% for item in cesto_compras %}
+        <li>
+          <img src="{{ item.image }}" />
+          <a href="#">{{ item.name }}</a>
+          <img src="{{ item.product.image }}" />
+          <a href="{% url 'food:productDetailPage' item.product.id %}">{{ item.product.name }}</a>
+          <p>{{ item.price }} laterninhas</p>
+          <input
+            type="submit"
+            value="Remover"
+            formaction="{% url 'food:removeFromCart' item.id %}"
+          />
+        </li>
+        {% endfor %}
     </ul>
-    <!--<form method="POST">
-      <label for="checkout">Deseja fazer o checkout?</label> <br /><br />
-      <input type="submit" value="Sim" formaction="pagamento" />
-      <input type="submit" value="Ainda não" formaction="listaCompras" />
-    </form>-->
     <div class="left-down-corner">
         <p>Deseja fazer o checkout?</p><br/>
         <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
