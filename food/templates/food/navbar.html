@@ -13,6 +13,7 @@
         href="{% static 'food/style.css' %}"
 />
 <nav>
+    {% csrf_token %}
     <ul>
         <li>
             <div>
@@ -43,10 +44,10 @@
                     <li>
                         <a class="navOption" href="{% url 'food:logoututilizador' %}">Logout</a>
                     </li>
+                    <li>
+                        <a class="navOption" href="{% url 'food:cestocompras' %}">Cesto de compras</a>
+                    </li>
                 </ul>
-                <li>
-                    <a class="navOption" href="{% url 'food:cestocompras' %}">Cesto de compras</a>
-                </li>
             {% endif %}
             <li>
                 <a class="navOption" href="{% url 'food:addProduct' %}">Adicionar Produto</a>

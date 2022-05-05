@@ -31,8 +31,7 @@
                 </div>
             </div>
             <div>
-                <label>Quantity<input type="number"></label>
-                <input type="submit" value="Adicionar ao cesto">
+                <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao Cesto</a>
             </div>
         </div>
     </div>

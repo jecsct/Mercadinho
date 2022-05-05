@@ -22,8 +22,7 @@
     <h1>Contacte-nos!</h1>
     <form action="{% url 'food:contactos' %}" method="post">
       {% csrf_token %}
-        <p>O seu email: {{ contactForm.email_envio }} </p><br/>
-        <p>Email de envio: {{ contactForm.email_resposta }} </p><br/>
+        <p>O seu email: {{ contactForm.email }} </p><br/>
         <p>Texto da mensagem:<br> {{ contactForm.texto_mensagem }} </p><br/>
         <p hidden>Data e hora de envio: {{ contactForm.dataHora }}</p>
       <input type="submit" value="Enviar Mensagem" />

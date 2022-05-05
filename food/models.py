@@ -5,8 +5,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Mensagem(models.Model):
-    email_envio = models.CharField(max_length=50)
-    email_resposta = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
     texto_mensagem = models.CharField(max_length=500)
     dataHora = models.DateTimeField('Data Mensagem Enviada')
 
@@ -30,7 +29,7 @@ class Customer(models.Model):
     )
     gender = models.CharField(max_length=6, null=True, blank=True, choices=gender)
     birthday = models.DateField()
-
+    credit = models.IntegerField()
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
@@ -91,3 +90,7 @@ class Comment(models.Model):
 
     class Meta:
         unique_together = (("user", "product"),)
+
+class CestoCompras(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)

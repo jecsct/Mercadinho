@@ -205,6 +205,6 @@ input[type=submit] {
     cursor: pointer;
     padding: 6px 8px 6px 8px;
     text-decoration: none;
-    font: sans-serif;
+    font-family: "Inter", sans-serif;
     border:none;
 }

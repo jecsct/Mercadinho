@@ -5,12 +5,14 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
 from django.contrib.auth.decorators import login_required
-from food.models import Mensagem
+from django.utils import timezone
+
+from food.models import Mensagem, Customer
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm
-from .models import Product, Comment
+from .forms import CustomerForm, UserForm, ContactForm, PaymentForm
+from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 
 
@@ -27,16 +29,16 @@ def index(request):
 def contactos(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
-            form = ContactForm(request.POST, initial={'email_envio': request.user.email})
+            form = ContactForm(request.POST, initial={'email': request.user.email})
         else:
             form = ContactForm(request.POST)
         if form.is_valid():
             mensagem = form.save(commit=False)
             mensagem.save()
-            return render(request, 'food/contactos.html', {'contactForm': form})
+            return HttpResponseRedirect(reverse('food:contactos'))
     else:
         if request.user.is_authenticated:
-            form = ContactForm(initial={'email_envio': request.user.email})
+            form = ContactForm(initial={'email': request.user.email})
         else:
             form = ContactForm()
     return render(request, 'food/contactos.html', {'contactForm': form})
@@ -47,17 +49,25 @@ def caixaMensagens(request):
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
 @login_required
+@allowed_users(allowed_roles=['Customer'])
 def cestoCompras(request):
-    # cesto_compras =
-    # return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
+    customer = Customer.objects.get(id=request.user.id)
+    try:
+        cesto_compras = CestoCompras.objects.filter(customer=customer)
+    except CestoCompras.DoesNotExist:
+        cesto_compras = None
+    return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
+    # return render(request, 'food/cestoCompras.html')
+
+def addToCart(request, product_id):
+    user = request.user
+    product = Product.objects.get(id=product_id)
+    shoppingCart = cestoCompras(user=user, product=product)
+    shoppingCart.save()
     return render(request, 'food/cestoCompras.html')
 
 @login_required
-def adicionarCesto(request):
-    return render(request, 'food/cestoCompras.html')
-
-@login_required
-def removerCesto(request):
+def removeFromCart(request, product_id):
     return render(request, 'food/cestoCompras.html')
 
 @login_required
@@ -113,7 +123,6 @@ def mapPage(request):
 
 def aboutPage(request):
     return render(request, 'food/about.html')
-
 
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -186,22 +195,13 @@ def send_confirmation( morada, zipCode):
 
 @login_required
 def pagamento(request):
-    if request.method == 'POST':
-        try:
-            morada = request.POST.get('morada')
-            zipCode = request.POST.get('zipCode')
-        except KeyError:
-            return render(request, 'food/pagamento.html')
-        if morada and zipCode:
-            send_confirmation(morada, zipCode)
-            print("reduzir laterninhas")
-            return HttpResponseRedirect(reverse('food:index'))
-        else:
-            return HttpResponseRedirect(reverse('food:pagamento'))
-    else:
+#    if request.method == 'POST':
+#        form = PaymentForm(request.POST)
+#        if form.is_valid():
+#            send_confirmation(morada, zipCode)
+#            print("reduzir laterninhas")
+#            return HttpResponseRedirect(reverse('food:index'))
+#        else:
+#            return HttpResponseRedirect(reverse('food:pagamento'))
+#    else:
         return render(request, 'food/pagamento.html')
-
-@login_required
-def checkOut(request):
-    print("reduzir laterninhas")
-    return HttpResponseRedirect(reverse('food:index'))

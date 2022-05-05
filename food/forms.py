@@ -27,7 +27,7 @@ class UserForm(UserCreationForm):
 class CustomerForm(ModelForm):
     class Meta:
         model = Customer
-        fields = ('gender', 'profile_pic', 'birthday')
+        fields = ('gender', 'profile_pic', 'birthday', 'credit')
         widgets = {
             "birthday": DateInput(attrs={'type': 'date'}),
         }
@@ -38,7 +38,12 @@ class ContactForm(ModelForm):
 
     class Meta:
         model = Mensagem
-        fields = ('email_envio', 'email_resposta', 'texto_mensagem', 'dataHora')
+        fields = ('email', 'texto_mensagem', 'dataHora')
         widgets = {
             "texto_mensagem": forms.Textarea
         }
+
+class PaymentForm(ModelForm):
+    class Meta:
+        fields = ('morada', 'zipCode')
+
