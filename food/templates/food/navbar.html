@@ -28,7 +28,7 @@
             {% else %}
                 <a>
                     {% if request.user|has_group:'Customer' %}
-                        <img src="/static/media/{{ request.user.customer.profile_pic }}">
+                        <!--img src="/static/media/{{ request.user.customer.profile_pic }}"-->
                     {% endif %}
                 </a>
             {% endif %}
