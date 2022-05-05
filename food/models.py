@@ -16,6 +16,7 @@ class Salesman(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
                                  decimal_places=1)
+    profile_pic = models.ImageField(null=True, blank=True)
     phone_number = models.IntegerField(blank=True,
                                        validators=[MinValueValidator(900000000), MaxValueValidator(999999999)])
 
@@ -30,8 +31,6 @@ class Customer(models.Model):
     )
     gender = models.CharField(max_length=6, null=True, blank=True, choices=gender)
     birthday = models.DateField()
-    isSalesman = models.BooleanField(default=False)
-
 
 class Product(models.Model):
     name = models.CharField(max_length=50)

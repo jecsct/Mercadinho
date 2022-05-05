@@ -60,12 +60,12 @@ def adicionarCesto(request):
 def removerCesto(request):
     return render(request, 'food/cestoCompras.html')
 
-
+@login_required
 def perfil(request):
     return render(request, "food/perfil.html")
 
 
-def registarutilizador(request):
+def registarCustomer(request):
     if request.method == "POST":
         customerForm = CustomerForm(request.POST)
         userForm = UserForm(request.POST)
@@ -76,13 +76,19 @@ def registarutilizador(request):
             customer = customerForm.save(commit=False)
             customer.user = user
             customer.save()
-
-            return render(request, 'food/index.html')
+            print("asdasdsad")
+            return HttpResponseRedirect(reverse('food:index'))
+        # print("nao deu") TODO TEMOS DE COLOCAR AQUI UM RETURN PARA ELE FICAR NA PAGINA MAS SURGIR UMA MENSAGEM A DIZER QUE ALGO CORREU MAL
     else:
         customerForm = CustomerForm()
         userForm = UserForm()
-        return render(request, 'food/registarutilizador.html', {'userForm': userForm, 'customerForm': customerForm})
+        return render(request, 'food/registarCustomer.html', {'userForm': userForm, 'customerForm': customerForm})
 
+
+def registarSalesman(request):
+    if request.method == 'POST':
+        HttpResponseRedirect(reverse('food:index'))
+    return render(request, 'food/registarSalesman.html')
 
 @unauthenticated_user
 def loginutilizador(request):
@@ -95,7 +101,8 @@ def loginutilizador(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return render(request, "food/index.html")
+                print("asdasdasdsad")
+                return HttpResponseRedirect(reverse('food:index'))
         error_message = 'Utilizador não existe ou a password está incorreta'
     form = AuthenticationForm()
     return render(request, "food/loginutilizador.html", {"loginform": form, 'error_message': error_message})
@@ -129,12 +136,10 @@ def commentOnItem(request, product_id):
         commentText = request.POST['commentInput']
         commentRating = request.POST['ratingInput']
         product = Product.objects.get(id=product_id)
-        # product.update(rating=calculateItemRating(product_id, commentRating))
         product.addRating(newRating=commentRating)
         Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
                 product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-    # return productDetailPage(request, product_id)
 
 
 @login_required
@@ -169,7 +174,7 @@ def deleteProductComment(request, product_id):
 
 
 @login_required
-#@allowed_users(allowed_roles=['Salesman'])
+@allowed_users(allowed_roles=['Salesman'])
 def addProduct(request):
     if request.method == 'POST':
         if request.FILES['myfile']:
@@ -185,6 +190,7 @@ def addProduct(request):
                                    )
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
+
 
 def base(request):
     return render(request, 'food/base.html')

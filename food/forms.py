@@ -27,7 +27,7 @@ class UserForm(UserCreationForm):
 class CustomerForm(ModelForm):
     class Meta:
         model = Customer
-        fields = ('gender', 'profile_pic', 'birthday', 'isSalesman')
+        fields = ('gender', 'birthday', 'profile_pic')
         widgets = {
             "birthday": DateInput(attrs={'type': 'date'}),
         }

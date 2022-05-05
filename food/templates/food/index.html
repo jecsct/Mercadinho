@@ -9,6 +9,7 @@
 </head>
 <body>
 {% block content %}
+    <img src="{{ request.user.Customer.profile_pic }}">
     {% if request.user.is_authenticated %}
         <h3>Olá {{ request.user }}!</h3>
     {% else %}

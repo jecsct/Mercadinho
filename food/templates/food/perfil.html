@@ -8,6 +8,10 @@
 <body>
 {% block content %}
     <h1>{{ request.user }}</h1>
+    <h1>{{ request.user.customer.gender }}</h1>
+    <h1>{{ request.user.customer }}</h1>
+    <h1>{{ request.user.customer.birthday }}</h1>
+    <h1>{{ request.user.customer.profile_pic }}</h1>
 {% endblock %}
 </body>
 </html>
