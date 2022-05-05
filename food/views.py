@@ -60,11 +60,14 @@ def cestoCompras(request):
     # return render(request, 'food/cestoCompras.html')
 
 def addToCart(request, product_id):
-    user = request.user
-    product = Product.objects.get(id=product_id)
-    shoppingCart = cestoCompras(user=user, product=product)
-    shoppingCart.save()
-    return render(request, 'food/cestoCompras.html')
+    if request.user.is_authenticated:
+        user = request.user
+        product = Product.objects.get(id=product_id)
+        shoppingCart = cestoCompras(user=user, product=product)
+        shoppingCart.save()
+        return render(request, 'food/cestoCompras.html')
+    else:
+        return HttpResponseRedirect(reverse('food:loginutilizador'))
 
 @login_required
 def removeFromCart(request, product_id):
@@ -105,7 +108,7 @@ def loginutilizador(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return render(request, "food/index.html")
+                return HttpResponseRedirect(reverse('food:index'))
         error_message = 'Utilizador não existe ou a password está incorreta'
     form = AuthenticationForm()
     return render(request, "food/loginutilizador.html", {"loginform": form, 'error_message': error_message})
