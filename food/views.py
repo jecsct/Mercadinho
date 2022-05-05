@@ -1,3 +1,5 @@
+from time import timezone
+
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
@@ -5,13 +7,14 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
 from django.contrib.auth.decorators import login_required
-from food.models import Mensagem
+from food.models import Mensagem, Customer
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm, PaymentForm
+from .forms import CustomerForm, UserForm, ContactForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
+from django.contrib.auth.models import Group
 
 
 def redirect_view(request):
@@ -26,19 +29,13 @@ def index(request):
 
 def contactos(request):
     if request.method == 'POST':
-        if request.user.is_authenticated:
-            form = ContactForm(request.POST, initial={'email': request.user.email})
-        else:
-            form = ContactForm(request.POST)
+        form = ContactForm(request.POST)
         if form.is_valid():
             mensagem = form.save(commit=False)
             mensagem.save()
             return HttpResponseRedirect(reverse('food:contactos'))
     else:
-        if request.user.is_authenticated:
-            form = ContactForm(initial={'email': request.user.email})
-        else:
-            form = ContactForm()
+        form = ContactForm()
     return render(request, 'food/contactos.html', {'contactForm': form})
 
 
@@ -81,18 +78,19 @@ def perfil(request):
 
 def registarCustomer(request):
     if request.method == "POST":
-        customerForm = CustomerForm(request.POST)
+        customerForm = CustomerForm(request.POST, request.FILES)
         userForm = UserForm(request.POST)
         if customerForm.is_valid() and userForm.is_valid():
             user = userForm.save(commit=False)
             user.save()
+            group = Group.objects.get(name='Customer')
+            group.user_set.add(user)
 
             customer = customerForm.save(commit=False)
             customer.user = user
             customer.save()
-            print("asdasdsad")
-            return HttpResponseRedirect(reverse('food:index'))
-        # print("nao deu") TODO TEMOS DE COLOCAR AQUI UM RETURN PARA ELE FICAR NA PAGINA MAS SURGIR UMA MENSAGEM A DIZER QUE ALGO CORREU MAL
+
+            return render(request, 'food/index.html')
     else:
         customerForm = CustomerForm()
         userForm = UserForm()

@@ -1,3 +1,4 @@
+{% extends 'food/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +9,7 @@
 </head>
 <body>
 {% block content %}
-    <h2>Registar Utilizador</h2>`
+    <h2>Registar Utilizador</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <p> Username: {{ userForm.username }} </p><br/>
@@ -19,9 +20,8 @@
         <p> Birthday: {{ customerForm.birthday }} </p><br/>
         <p> Credit: {{ customerForm.credit }} </p><br>
         <input type="submit" value="Gravar novo Utilizador"/>
-    </form>
-
-    É um vendedor? Registe-se <a href="{% url 'food:registarSalesman'%}">aqui</a>!
+    </form><br/>
+    <p>É um vendedor? Registe-se <a href="{% url 'food:registarSalesman'%}">aqui</a>!</p>
 {% endblock %}
 </body>
 </html>

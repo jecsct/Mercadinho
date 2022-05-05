@@ -28,9 +28,7 @@
             {% else %}
                 <a>
                     {% if request.user|has_group:'Customer' %}
-                        <img src="{{ request.user.customer.profile_pic }}">
-{#                    {% else %}#}
-{#                         <img src="{% request.user.Custom %}">#}
+                        <img src="/static/media/{{ request.user.customer.profile_pic }}">
                     {% endif %}
                 </a>
             {% endif %}
@@ -59,9 +57,12 @@
                     </li>
                 </ul>
             {% endif %}
-            <li>
+
+        <li>
+            {% if request.user.is_authenticated and request.user|has_group:'Salesman' %}
                 <a class="navOption" href="{% url 'food:addProduct' %}">Adicionar Produto</a>
-            </li>
+            {% endif %}
+        </li>
         <li>
             <a class="navOption" href="{% url 'food:mapPage' %}">Mapa dos Mercadinhos</a>
         </li>
