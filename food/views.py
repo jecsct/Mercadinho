@@ -14,7 +14,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 
 
 def redirect_view(request):
@@ -46,7 +46,8 @@ def caixaMensagens(request):
 @login_required
 @allowed_users(allowed_roles=['Customer'])
 def cestoCompras(request):
-    customer = Customer.objects.get(id=request.user.id)
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(user=user)
     try:
         cesto_compras = CestoCompras.objects.filter(customer=customer)
     except CestoCompras.DoesNotExist:
