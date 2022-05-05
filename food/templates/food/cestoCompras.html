@@ -23,7 +23,7 @@
           <input
             type="submit"
             value="Remover"
-            formaction="{% url 'food:removeFromCart' item.product_id %}"
+            formaction="{% url 'food:removeFromCart' item.id %}"
           />
         </li>
         {% endfor %}

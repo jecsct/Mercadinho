@@ -68,8 +68,9 @@ def addToCart(request, product_id):
         return HttpResponseRedirect(reverse('food:loginutilizador'))
 
 @login_required
-def removeFromCart(request, product_id):
-    return render(request, 'food/cestoCompras.html')
+def removeFromCart(request, cestoCompras_id):
+    get_object_or_404(CestoCompras, pk=cestoCompras_id).delete()
+    return HttpResponseRedirect(reverse('food:cestocompras'))
 
 @login_required
 def perfil(request):
