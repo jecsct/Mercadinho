@@ -32,9 +32,6 @@
                     </ul>
                 </div>
             </div>
-            <div>
-                <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao Cesto</a>
-            </div>
             {% if request.user|has_group:'Salesman' %}
                 <div>
 {#                    <input type="submit" value="Eliminar">#}
@@ -42,8 +39,12 @@
                 </div>
             {% else %}
                 <div>
-                    <label>Quantity<input type="number"></label>
-                    <input type="submit" value="Adicionar ao cesto">
+                    <form action="{% url 'food:addToCart'  product.id %}" method="post">
+                        {% csrf_token %}
+                        <label>Quantity<input type="number" name="quant"></label>
+                        <!--a href="{% url 'food:addToCart'  product.id %}" class="button-link">Adicionar ao cesto</a-->
+                        <input type="submit" value="Adicionar ao cesto"/>
+                    </form>
                 </div>
             {% endif %}
         </div>
