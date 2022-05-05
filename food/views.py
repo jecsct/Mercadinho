@@ -40,7 +40,7 @@ def contactos(request):
 
 
 def caixaMensagens(request):
-    lista_mensagens = Mensagem.objects.order_by('-dataHora')
+    lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(email=request.user.email)
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
 @login_required

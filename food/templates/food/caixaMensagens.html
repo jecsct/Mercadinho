@@ -8,14 +8,18 @@
 <body>
 {% block content %}
     <h1>Caixa de Entrada</h1>
-    {% for mensagem in lista_mensagens %}
-        <div class="mensagem">
-            <p class="mensagem-Email"> Email de: {{ mensagem.email }}</p>
-            <p>{{ mensagem.texto_mensagem }}</p>
-            <p class="mensagem-Hora">{{ mensagem.dataHora }}</p>
-        </div>
-        <br>
-    {% endfor %}
+    {% if lista_mensagens %}
+        {% for mensagem in lista_mensagens %}
+            <div class="mensagem">
+                <p class="mensagem-Email"> Email de: {{ mensagem.email }}</p>
+                <p>{{ mensagem.texto_mensagem }}</p>
+                <p class="mensagem-Hora">{{ mensagem.dataHora }}</p>
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>Não tem nenhuma mensagem na caixa de mensagens!</p>
+    {% endif %}
 {% endblock %}
 </body>
 </html>
