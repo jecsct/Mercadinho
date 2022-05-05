@@ -53,24 +53,31 @@ def cestoCompras(request):
     except CestoCompras.DoesNotExist:
         cesto_compras = None
     return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
-    # return render(request, 'food/cestoCompras.html')
 
-@login_required
-@allowed_users(allowed_roles=['Customer'])
 def addToCart(request, product_id):
     if request.user.is_authenticated:
-        user = request.user
-        customer = Customer.objects.get(user=user)
-        product = Product.objects.get(id=product_id)
-        shoppingCart = CestoCompras(customer=customer, product=product)
-        shoppingCart.save()
-        return HttpResponseRedirect(reverse('food:cestocompras'))
+        try:
+            for x in range(int(request.POST.get('quant'))):
+                user = request.user
+                customer = Customer.objects.get(user=user)
+                product = Product.objects.get(id=product_id)
+                shoppingCart = CestoCompras(customer=customer, product=product)
+                shoppingCart.save()
+            return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+        except:
+            user = request.user
+            customer = Customer.objects.get(user=user)
+            product = Product.objects.get(id=product_id)
+            shoppingCart = CestoCompras(customer=customer, product=product)
+            shoppingCart.save()
+            return HttpResponseRedirect(reverse('food:index'))
     else:
         return HttpResponseRedirect(reverse('food:loginutilizador'))
 
 @login_required
-def removeFromCart(request, product_id):
-    return render(request, 'food/cestoCompras.html')
+def removeFromCart(request, cestoCompras_id):
+    get_object_or_404(CestoCompras, pk=cestoCompras_id).delete()
+    return HttpResponseRedirect(reverse('food:cestocompras'))
 
 @login_required
 def perfil(request):
