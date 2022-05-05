@@ -59,13 +59,16 @@ def cestoCompras(request):
     return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
     # return render(request, 'food/cestoCompras.html')
 
+@login_required
+@allowed_users(allowed_roles=['Customer'])
 def addToCart(request, product_id):
     if request.user.is_authenticated:
         user = request.user
+        customer = Customer.objects.get(user=user)
         product = Product.objects.get(id=product_id)
-        shoppingCart = cestoCompras(user=user, product=product)
+        shoppingCart = CestoCompras(customer=customer, product=product)
         shoppingCart.save()
-        return render(request, 'food/cestoCompras.html')
+        return HttpResponseRedirect(reverse('food:cestocompras'))
     else:
         return HttpResponseRedirect(reverse('food:loginutilizador'))
 
