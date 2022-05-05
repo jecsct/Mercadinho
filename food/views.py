@@ -5,12 +5,14 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+
 from food.models import Mensagem
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm, PaymentForm
-from .models import Product, Comment, CestoCompras
+from .forms import CustomerForm, UserForm, ContactForm
+from .models import Product, Comment, CestoCompras, Customer
 from .decorators import unauthenticated_user, allowed_users
 
 

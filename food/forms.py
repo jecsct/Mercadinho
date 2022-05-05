@@ -38,4 +38,4 @@ class ContactForm(ModelForm):
 
     class Meta:
         model = Mensagem
-        fields = ('email_envio', 'email_resposta', 'texto_mensagem', 'dataHora')
+        fields = ( 'email', 'texto_mensagem', 'dataHora')
