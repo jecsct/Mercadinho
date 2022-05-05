@@ -1,11 +1,11 @@
-from django.urls import include, path
+from django.urls import path
 from . import views
 
 from .views import redirect_view
 
 app_name = 'food'
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("food/", views.index, name="index"),
     path("contactos/", views.contactos, name="contactos"),
     path("caixaMensagens/", views.caixaMensagens, name="caixamensagens"),
     path("cestoCompras/", views.cestoCompras, name="cestocompras"),
