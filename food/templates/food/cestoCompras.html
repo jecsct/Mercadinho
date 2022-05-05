@@ -15,8 +15,6 @@
         {% csrf_token %}
         {% for item in cesto_compras %}
         <li>
-          <img src="{{ item.image }}" />
-          <a href="#">{{ item.name }}</a>
           <img src="{{ item.product.image }}" />
           <a href="{% url 'food:productDetailPage' item.product.id %}">{{ item.product.name }}</a>
           <p>{{ item.price }} laterninhas</p>
@@ -27,6 +25,7 @@
           />
         </li>
         {% endfor %}
+        </form>
     </ul>
     <div class="left-down-corner">
         <p>Deseja fazer o checkout?</p><br/>

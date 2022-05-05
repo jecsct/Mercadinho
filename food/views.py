@@ -217,17 +217,13 @@ def send_confirmation( morada, zipCode):
 
 @login_required
 def pagamento(request):
-#    if request.method == 'POST':
-#        form = PaymentForm(request.POST)
-#        if form.is_valid():
-#            send_confirmation(morada, zipCode)
-#            print("reduzir laterninhas")
-#            return HttpResponseRedirect(reverse('food:index'))
-#        else:
-#            return HttpResponseRedirect(reverse('food:pagamento'))
-#    else:
-        return render(request, 'food/pagamento.html')
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(user=user)
+    cesto_compras = CestoCompras.objects.filter(customer=customer)
+    price = 0
+    for item in cesto_compras:
+        price += item.product.price
+    #if price == 0:
+        #return
+    return render(request, 'food/pagamento.html', {'price':price})
 
-
-def base(request):
-    return render(request, 'food/base.html')
