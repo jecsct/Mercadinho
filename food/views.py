@@ -39,9 +39,11 @@ def contactos(request):
     return render(request, 'food/contactos.html', {'contactForm': form})
 
 
+@login_required
 def caixaMensagens(request):
     lista_mensagens = Mensagem.objects.order_by('-dataHora')
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
+
 
 @login_required
 @allowed_users(allowed_roles=['Customer'])
@@ -51,8 +53,9 @@ def cestoCompras(request):
         cesto_compras = CestoCompras.objects.filter(customer=customer)
     except CestoCompras.DoesNotExist:
         cesto_compras = None
-    return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
+    return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras})
     # return render(request, 'food/cestoCompras.html')
+
 
 @login_required
 @allowed_users(allowed_roles=['Customer'])
@@ -67,15 +70,18 @@ def addToCart(request, product_id):
     else:
         return HttpResponseRedirect(reverse('food:loginutilizador'))
 
+
 @login_required
+@allowed_users(allowed_roles=['Customer'])
 def removeFromCart(request, product_id):
     return render(request, 'food/cestoCompras.html')
+
 
 @login_required
 def perfil(request):
     return render(request, "food/perfil.html")
 
-
+@unauthenticated_user
 def registarCustomer(request):
     if request.method == "POST":
         customerForm = CustomerForm(request.POST, request.FILES)
@@ -96,11 +102,12 @@ def registarCustomer(request):
         userForm = UserForm()
         return render(request, 'food/registarCustomer.html', {'userForm': userForm, 'customerForm': customerForm})
 
-
+@unauthenticated_user
 def registarSalesman(request):
     if request.method == 'POST':
         HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/registarSalesman.html')
+
 
 @unauthenticated_user
 def loginutilizador(request):
@@ -142,6 +149,7 @@ def productDetailPage(request, product_id):
 
 
 @login_required
+@allowed_users(allowed_roles=['Customer'])
 def commentOnItem(request, product_id):
     if request.method == 'POST':
         commentText = request.POST['commentInput']
@@ -156,6 +164,7 @@ def commentOnItem(request, product_id):
 
 
 @login_required
+@allowed_users(allowed_roles=['Customer'])
 def updateProductComment(request, product_id):
     print(request.method)
     product = get_object_or_404(Product, pk=product_id)
@@ -178,13 +187,13 @@ def deleteProduct(request, product_id):
 
 
 @login_required
+@allowed_users(allowed_roles=['Customer'])
 def deleteProductComment(request, product_id):
     if request.method == 'POST':
         Product.objects.get(id=product_id).deleteRating(
             Comment.objects.get(product_id=product_id, user_id=request.user.id).rating)
         Comment.objects.get(product=product_id, user_id=request.user).delete()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-
 
 @login_required
 @allowed_users(allowed_roles=['Salesman'])
@@ -204,24 +213,24 @@ def addProduct(request):
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
 
-def send_confirmation( morada, zipCode):
-    texto_mensagem = "A sua encomenda está confirmada! Será enviada para a "+str(morada)+"com o codigo postal "+str(zipCode)
-    mensagem = Mensagem(email="service@mercadinho.pt",texto_mensagem=texto_mensagem,dataHora=timezone.now())
+def send_confirmation(morada, zipCode):
+    texto_mensagem = "A sua encomenda está confirmada! Será enviada para a " + str(
+        morada) + "com o codigo postal " + str(zipCode)
+    mensagem = Mensagem(email="service@mercadinho.pt", texto_mensagem=texto_mensagem, dataHora=timezone.now())
     mensagem.save()
 
+
 @login_required
+@allowed_users(allowed_roles=['Customer'])
 def pagamento(request):
-#    if request.method == 'POST':
-#        form = PaymentForm(request.POST)
-#        if form.is_valid():
-#            send_confirmation(morada, zipCode)
-#            print("reduzir laterninhas")
-#            return HttpResponseRedirect(reverse('food:index'))
-#        else:
-#            return HttpResponseRedirect(reverse('food:pagamento'))
-#    else:
-        return render(request, 'food/pagamento.html')
+    #    if request.method == 'POST':
+    #        form = PaymentForm(request.POST)
+    #        if form.is_valid():
+    #            send_confirmation(morada, zipCode)
+    #            print("reduzir laterninhas")
+    #            return HttpResponseRedirect(reverse('food:index'))
+    #        else:
+    #            return HttpResponseRedirect(reverse('food:pagamento'))
+    #    else:
+    return render(request, 'food/pagamento.html')
 
-
-def base(request):
-    return render(request, 'food/base.html')

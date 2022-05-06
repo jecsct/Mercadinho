@@ -2,7 +2,6 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 
-
 # Create your models here.
 class Mensagem(models.Model):
     email = models.CharField(max_length=50)
@@ -15,7 +14,7 @@ class Salesman(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
                                  decimal_places=1)
-    profile_pic = models.ImageField(null=True, blank=True)
+    profile_pic = models.ImageField()
     phone_number = models.IntegerField(blank=True,
                                        validators=[MinValueValidator(900000000), MaxValueValidator(999999999)])
 

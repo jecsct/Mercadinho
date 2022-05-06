@@ -1,33 +1,39 @@
 {% extends 'food/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Sobre nós</title>
-  </head>
-  <body>
-  {% block content %}
-    <h1>Connosco seguem o plano</h1>
-    <p>
-      Somos uma marca de comida oriental que se foca em ter sempre os melhores e
-      mais frescos produtos
-    </p>
-    <br />
-    <p>
-      Para alem de nos focarmos em termos a melhor qualidade de produtos
-      orientais, tambem nos focamos no desenvolvimento da nossa propria
-      criptomoeda, o <strong>Lanterninha</strong>
-    </p>
-    <p>
-      O <i><strong>Lanterninha</strong></i
-      >, e uma criptomoeda desenvolvida especificamente para ser usada nas
-      nossas lojas.<br />
-      Desenvolvida com tecnologia de
-      <a href="https://pt.wikipedia.org/wiki/Blockchain" target="_blank"
-        ><i>Blockchain</i></a
-      >, o <i>Lanterninha</i> vai nos permitir criar um melhor ambiente para os
-      nossos clientes
-    </p>
-  {% endblock %}
-  </body>
+</head>
+<body>
+{% block content %}
+    <div class="about_general">
+        <div class="about_header">
+            <h1>Connosco seguem o plano</h1>
+        </div>
+        <div class="about_info">
+            <p>
+                Somos uma marca de comida oriental que se foca em ter sempre os melhores e
+                mais frescos produtos
+            </p>
+            <br/>
+            <p>
+                Para alem de nos focarmos em termos a melhor qualidade de produtos
+                orientais, tambem nos focamos no desenvolvimento da nossa propria
+                criptomoeda, o <strong>Lanterninha</strong>
+            </p>
+            <p>
+                O <i><strong>Lanterninha</strong></i
+            >, e uma criptomoeda desenvolvida especificamente para ser usada nas
+                nossas lojas.<br/>
+                Desenvolvida com tecnologia de
+                <a href="https://pt.wikipedia.org/wiki/Blockchain" target="_blank"
+                ><i>Blockchain</i></a
+                >, o <i>Lanterninha</i> vai nos permitir criar um melhor ambiente para os
+                nossos clientes
+            </p>
+        </div>
+    </div>
+{% endblock %}
+</body>
 </html>
