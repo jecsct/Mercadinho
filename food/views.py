@@ -62,14 +62,19 @@ def addToCart(request, product_id):
                 product = Product.objects.get(id=product_id)
                 shoppingCart = CestoCompras(customer=customer, product=product)
                 shoppingCart.save()
-            return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+            comments = Comment.objects.all().filter(product_id=product_id)
+            product.addView()
+            context = {'product': product, 'comments': comments, 'confirmation' : 'Produto adicionado'}
+            return render(request, 'food/detalhe.html', context)
         except:
             user = request.user
             customer = Customer.objects.get(user=user)
             product = Product.objects.get(id=product_id)
             shoppingCart = CestoCompras(customer=customer, product=product)
             shoppingCart.save()
-            return HttpResponseRedirect(reverse('food:index'))
+            products = Product.objects.all()
+            context = {'products_list': products,'confirmation':'Produto adicionado'}
+            return render(request, 'food/index.html', context)
     else:
         return HttpResponseRedirect(reverse('food:loginutilizador'))
 
@@ -215,15 +220,30 @@ def send_confirmation( morada, zipCode):
     mensagem = Mensagem(email="service@mercadinho.pt",texto_mensagem=texto_mensagem,dataHora=timezone.now())
     mensagem.save()
 
+def get_price(customer):
+    shopping_cart = CestoCompras.objects.filter(customer=customer)
+    price = 0
+    for item in shopping_cart:
+        price += item.product.price
+    return price
+
 @login_required
 def pagamento(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
-    cesto_compras = CestoCompras.objects.filter(customer=customer)
-    price = 0
-    for item in cesto_compras:
-        price += item.product.price
-    #if price == 0:
-        #return
+    price = get_price(customer)
+    if price == 0:
+        return render(request, 'food/cestoCompras.html', {'error_message' : "O seu carrinho está vazio"})
     return render(request, 'food/pagamento.html', {'price':price})
 
+def checkOut(request):
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(user=user)
+    price = get_price(customer)
+    if customer.credit - price < 0:
+        return render(request, 'food/pagamento.html', {'price': price,'error_message': "Não tem laterninhas suficientes para esta compra. Vá investir na crypto"})
+    else:
+        customer.credit = customer.credit - price
+        customer.save()
+        CestoCompras.objects.filter(customer=customer).delete()
+        return HttpResponseRedirect(reverse('food:index'))

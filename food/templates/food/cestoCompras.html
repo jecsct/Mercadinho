@@ -31,6 +31,9 @@
         <p>Deseja fazer o checkout?</p><br/>
         <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
         <a href="{% url 'food:pagamento' %}" class="button-link">Sim</a>
+        {% if error_message %}
+            <p>{{ error_message }}</p>
+        {% endif %}
     </div>
 {% endblock %}
 </body>
