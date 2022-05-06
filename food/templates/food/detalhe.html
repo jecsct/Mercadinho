@@ -1,3 +1,4 @@
+{% extends 'food/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +8,6 @@
 </head>
 <body>
 {% block content %}
-<div>
-    <div class="product_title">
-        <h1>{{ product.name }}</h1>
-    </div>
     <div>
         <h1 class="product_title">{{ product.name }}</h1>
         <div class="grid">
@@ -32,49 +29,35 @@
                 </div>
             </div>
             {% if request.user|has_group:'Salesman' %}
-                <div>
-{#                    <input type="submit" value="Eliminar">#}
-                    <button type="submit" onclick="location.href='{% url 'food:deleteProduct' product.id %}'" name='mybtn2'>Eliminar</button>
+                <div class="row">
+                    <div class="double_column">
+                        {% if request.user|has_group:'Salesman' %}
+                            <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
+                        {% else %}
+                            <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao Cesto</a>
+                        {% endif %}
+                    </div>
                 </div>
             {% else %}
-                <div>
-                    <form action="{% url 'food:addToCart'  product.id %}" method="post">
-                        {% csrf_token %}
-                        <label>Quantity<input type="number" name="quant"></label>
-                        <!--a href="{% url 'food:addToCart'  product.id %}" class="button-link">Adicionar ao cesto</a-->
-                        <input type="submit" value="Adicionar ao cesto"/>
-                    </form>
-                </div>
+                <form action="{% url 'food:addToCart'  product.id %}" method="post">
+                    {% csrf_token %}
+                    <label>Quantity: <input type="number" name="quant"></label>
+                    <!--a href="{% url 'food:addToCart'  product.id %}" class="button-link">Adicionar ao cesto</a--><br/><br/>
+                    <input type="submit" value="Adicionar ao cesto"/>
+                </form>
             {% endif %}
         </div>
-    </div>
-    <br>
-    <div>
-        <div class="comments_header">
-            <h3>Comments</h3>
-            </div>
-            <div class="row">
-                <div class="double_column">
-                    {% if request.user|has_group:'Salesman' %}
-                        <a href="{% url 'food:deleteProduct' product.id %}'" class="button-link">Eliminar</a>
-                    {% else %}
-                        <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao Cesto</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+        <br>
         <h3>Comentários</h3>
-        <div>
-            <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
-                  method="post">
-                {% csrf_token %}
-                <p>Comentário: </p>
-                <input id="txtFldComment" name="commentInput" type="text" required><br/><br/>
-                <p>Avaliação: </p>
-                <input id="nmbrFldRating" max="5.0" min="0.0" name="ratingInput" step="0.1" type="number" required><br/><br/>
-                <input type="submit" value="Comentar"/><br/><br/>
-            </form>
-        </div>
+        <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
+              method="post">
+            {% csrf_token %}
+            <p>Comentário: </p>
+            <input id="txtFldComment" name="commentInput" type="text" required><br/><br/>
+            <p>Avaliação: </p>
+            <input id="nmbrFldRating" max="5.0" min="0.0" name="ratingInput" step="0.1" type="number" required><br/><br/>
+            <input type="submit" value="Comentar"/><br/><br/>
+        </form>
         <div class="comments">
             <ul class="specs">
                 {% for comment in comments %}
@@ -95,7 +78,6 @@
             </ul>
         </div>
     </div>
-</div>
 {% endblock %}
 </body>
 </html>

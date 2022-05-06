@@ -1,4 +1,5 @@
 {% extends 'food/base.html' %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +10,19 @@
 </head>
 <body>
 {% block content %}
-    <img src="{{ request.user.Customer.profile_pic }}">
     {% if request.user.is_authenticated %}
+        {#        <br/>#}
+        {#        {% if request.user|has_group:'Customer' %}#}
+        {#            <img src="{{ request.user.customer.profile_pic }}" style="height: 150px" class="nav_pic">#}
+        {#        {% else %}#}
+        {#            <img src="{{ request.user.salesman.profile_pic }}" style="height: 150px" class="nav_pic">#}
+        {#        {% endif %}#}
         <h3>Olá {{ request.user }}!</h3>
     {% else %}
         <h3>Ainda não está logado!</h3>
     {% endif %}
-    <br/>
     {% if products_list %}
+        <br/>
         <div class="product_list">
             {% for product in products_list %}
                 <div class="product">
@@ -24,11 +30,15 @@
                         <img class="product_image" src="{{ product.image }}"/>
                         <p class="product_text">{{ product.name }}</p>
                         <p class="lanterna product_price">Preço: {{ product.price }}</p>
-                        <div class="center_button"><a class="product_button" href="{% url 'food:addToCart' product.id %}">Add to Cart</a></div>
+                        {% if request.user|has_group:'Customer' %}
+                            <div class="center_button"><a class="product_button" href="{% url 'food:addToCart' product.id %}">Add to Cart</a></div>
+                        {% endif %}
                     </a>
                 </div>
             {% endfor %}
         </div>
+    {% else %}
+        <p>Ainda não existem produtos à venda. Aguarde que algum vendedor decida fazer alguma coisa.</p>
     {% endif %}
 {% endblock %}
 </body>
