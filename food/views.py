@@ -11,7 +11,7 @@ from food.models import Mensagem, Customer, Salesman
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
+from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm, AddProductForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import Group, User
@@ -40,8 +40,9 @@ def contactos(request):
 
 
 def caixaMensagens(request):
-    lista_mensagens = Mensagem.objects.order_by('-dataHora')
+    lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(email=request.user.email)
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
+
 
 @login_required
 @allowed_users(allowed_roles=['Customer'])
@@ -52,7 +53,8 @@ def cestoCompras(request):
         cesto_compras = CestoCompras.objects.filter(customer=customer)
     except CestoCompras.DoesNotExist:
         cesto_compras = None
-    return render(request, 'food/cestoCompras.html', {'cesto_compras':cesto_compras})
+    return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras})
+
 
 def addToCart(request, product_id):
     if request.user.is_authenticated:
@@ -74,10 +76,12 @@ def addToCart(request, product_id):
     else:
         return HttpResponseRedirect(reverse('food:loginutilizador'))
 
+
 @login_required
 def removeFromCart(request, cestoCompras_id):
     get_object_or_404(CestoCompras, pk=cestoCompras_id).delete()
     return HttpResponseRedirect(reverse('food:cestocompras'))
+
 
 @login_required
 def perfil(request):
@@ -95,7 +99,8 @@ def registarCustomer(request):
             group.user_set.add(user)
 
             fs = FileSystemStorage()
-            filename = fs.save(customerForm.cleaned_data.get("profile_pic"),customerForm.cleaned_data.get("profile_pic"))
+            filename = fs.save(customerForm.cleaned_data.get("profile_pic"),
+                               customerForm.cleaned_data.get("profile_pic"))
             uploaded_file_url = fs.url(filename)
 
             customer = Customer.objects.create(
@@ -110,7 +115,7 @@ def registarCustomer(request):
             customer.save()
             login(request, user)
             return render(request, 'food/index.html')
-        #TODO: FALTA AQUI UM RETURN
+        # TODO: FALTA AQUI UM RETURN
     else:
         customerForm = CustomerForm()
         userForm = UserForm()
@@ -128,7 +133,8 @@ def registarSalesman(request):
             group.user_set.add(user)
 
             fs = FileSystemStorage()
-            filename = fs.save(salesmanForm.cleaned_data.get("profile_pic"), salesmanForm.cleaned_data.get("profile_pic"))
+            filename = fs.save(salesmanForm.cleaned_data.get("profile_pic"),
+                               salesmanForm.cleaned_data.get("profile_pic"))
             uploaded_file_url = fs.url(filename)
 
             salesman = Salesman.objects.create(
@@ -142,11 +148,34 @@ def registarSalesman(request):
             salesman.save()
             login(request, user)
             return render(request, 'food/index.html')
-        #TODO: FALTA AQUI UM RETURN
+        # TODO: FALTA AQUI UM RETURN
     else:
         salesmanForm = SalesmanForm()
         userForm = UserForm()
         return render(request, 'food/registarSalesman.html', {'userForm': userForm, 'salesmanForm': salesmanForm})
+
+@login_required
+@allowed_users(allowed_roles=['Salesman'])
+def addProduct(request):
+    if request.method == 'POST':
+        productForm = AddProductForm(request.POST, request.FILES)
+        if productForm.is_valid():
+            fs = FileSystemStorage()
+            filename = fs.save(productForm.cleaned_data.get("image"),
+                               productForm.cleaned_data.get("image"))
+            uploaded_file_url = fs.url(filename)
+
+            Product.objects.create(name=productForm.cleaned_data.get('name'),
+                                   description=productForm.cleaned_data.get('description'),
+                                   price=productForm.cleaned_data.get('price'),
+                                   image=uploaded_file_url,
+                                   salesman_id=request.user.salesman.id,
+                                   )
+            return HttpResponseRedirect(reverse('food:index'))
+    else:
+        productForm = AddProductForm()
+    return render(request, 'food/add_product.html',{'productForm':productForm})
+
 
 @unauthenticated_user
 def loginutilizador(request):
@@ -231,42 +260,25 @@ def deleteProductComment(request, product_id):
         Comment.objects.get(product=product_id, user_id=request.user).delete()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
-
-@login_required
-@allowed_users(allowed_roles=['Salesman'])
-def addProduct(request):
-    if request.method == 'POST':
-        if request.FILES['myfile']:
-            productImage = request.FILES['myfile']
-            fs = FileSystemStorage()
-            filename = fs.save(productImage.name, productImage)
-            uploaded_file_url = fs.url(filename)
-            Product.objects.create(name=request.POST.get('productName'),
-                                   description=request.POST.get('productDescription'),
-                                   price=request.POST.get('productPrice'),
-                                   image=uploaded_file_url,
-                                   salesman_id=request.user.salesman.id
-                                   )
-            return HttpResponseRedirect(reverse('food:index'))
-    return render(request, 'food/add_product.html')
-
-def send_confirmation( morada, zipCode):
-    texto_mensagem = "A sua encomenda está confirmada! Será enviada para a "+str(morada)+"com o codigo postal "+str(zipCode)
-    mensagem = Mensagem(email="service@mercadinho.pt",texto_mensagem=texto_mensagem,dataHora=timezone.now())
+def send_confirmation(morada, zipCode):
+    texto_mensagem = "A sua encomenda está confirmada! Será enviada para a " + str(
+        morada) + "com o codigo postal " + str(zipCode)
+    mensagem = Mensagem(email="service@mercadinho.pt", texto_mensagem=texto_mensagem, dataHora=timezone.now())
     mensagem.save()
+
 
 @login_required
 def pagamento(request):
-#    if request.method == 'POST':
-#        form = PaymentForm(request.POST)
-#        if form.is_valid():
-#            send_confirmation(morada, zipCode)
-#            print("reduzir laterninhas")
-#            return HttpResponseRedirect(reverse('food:index'))
-#        else:
-#            return HttpResponseRedirect(reverse('food:pagamento'))
-#    else:
-        return render(request, 'food/pagamento.html')
+    #    if request.method == 'POST':
+    #        form = PaymentForm(request.POST)
+    #        if form.is_valid():
+    #            send_confirmation(morada, zipCode)
+    #            print("reduzir laterninhas")
+    #            return HttpResponseRedirect(reverse('food:index'))
+    #        else:
+    #            return HttpResponseRedirect(reverse('food:pagamento'))
+    #    else:
+    return render(request, 'food/pagamento.html')
 
 
 def base(request):
