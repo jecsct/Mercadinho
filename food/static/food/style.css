@@ -85,8 +85,8 @@ li {
 
 .column, .double_column {
     padding: 16px;
-    background-color: #eee;
-    border: #000 1px solid;
+    /*background-color:#eee;*/
+    /*border: #000 1px solid;*/
 }
 
 .lanterna::before {
@@ -139,7 +139,8 @@ ul.dropdown {
     position: absolute;
     right: 0;
     margin-right: 12px;
-}
+    margin-top:  12px;
+ }
 
 li:hover ul.dropdown {
     display: block; /* Display the dropdown */

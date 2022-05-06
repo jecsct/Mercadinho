@@ -1,9 +1,9 @@
-from django.forms import ModelForm, EmailInput, DateInput, PasswordInput
+from django.forms import ModelForm, EmailInput, DateInput
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 import datetime
 
-from food.models import Customer, Mensagem
+from food.models import Customer, Mensagem, Salesman, Product
 from django import forms
 
 
@@ -32,6 +32,14 @@ class CustomerForm(ModelForm):
         }
 
 
+class SalesmanForm(ModelForm):
+    rating = forms.IntegerField(initial=0)
+
+    class Meta:
+        model = Salesman
+        fields = ('rating', 'profile_pic', 'phone_number')
+
+
 class ContactForm(ModelForm):
     dataHora = forms.DateTimeField(initial=datetime.datetime.now())
     texto_mensagem = forms.Textarea()
@@ -39,3 +47,13 @@ class ContactForm(ModelForm):
     class Meta:
         model = Mensagem
         fields = ('email', 'texto_mensagem', 'dataHora')
+
+
+class AddProductForm(ModelForm):
+    sales = forms.IntegerField(initial=0)
+    views = forms.IntegerField(initial=0)
+    rating = forms.DecimalField(initial=0)
+
+    class Meta:
+        model = Product
+        fields = ('name', 'description', 'price', 'image', 'sales', 'views', 'rating')
