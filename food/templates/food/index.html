@@ -11,12 +11,13 @@
 {% block content %}
     <img src="{{ request.user.Customer.profile_pic }}">
     {% if request.user.is_authenticated %}
-        <h3>Olá {{ request.user }}!</h3>
+        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;">  Olá {{ request.user }}!</h3>
     {% else %}
-        <h3>Ainda não está logado!</h3>
+        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;"> Ainda não está logado!</h3>
     {% endif %}
     <br/>
     {% if products_list %}
+        <br/>
         <div class="product_list">
             {% for product in products_list %}
                 <div class="product">
@@ -32,6 +33,8 @@
                 </div>
             {% endfor %}
         </div>
+    {% else %}
+        <p>Ainda não existem produtos à venda. Aguarde que algum vendedor decida fazer alguma coisa.</p>
     {% endif %}
 {% endblock %}
 </body>

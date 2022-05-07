@@ -17,18 +17,23 @@
     <ul>
         <li>
             <div>
-                <a class="mercadinho" href="{% url 'food:index' %}">Mercadinho</a>
+                {% if request.user|has_group:'Customer' %}<a class="mercadinho" href="{% url 'food:index' %}"> Mercadinho | Créditos: {{ request.user.customer.credit }}</a>
+                {% else %}
+                    <a class="mercadinho" href="{% url 'food:index' %}">Mercadinho</a>
+                {% endif %}
             </div>
         </li>
-        <li class="navOption">
+        <li class="navOption nav-profile-pic">
             {% if not request.user.is_authenticated %}
                 <a>
-                    <img src="/static/media/default_logo.png" style="height: 15px ">
+                    <img src="/static/media/default_logo.png" class="nav-profile-pic">
                 </a>
             {% else %}
                 <a>
                     {% if request.user|has_group:'Customer' %}
-                        <!--img src="/static/media/{{ request.user.customer.profile_pic }}"-->
+                        <img src="{{ request.user.customer.profile_pic }}" class="nav-profile-pic">
+                    {% else %}
+                        <img src="{{ request.user.salesman.profile_pic }}" class="nav-profile-pic">
                     {% endif %}
                 </a>
             {% endif %}
@@ -38,7 +43,7 @@
                         <a class="navOption" href="{% url 'food:registarCustomer' %}">Registar Utilizador</a>
                     </li>
                     <li>
-                        <a class="navOption" href="{% url 'food:loginutilizador' %}">Login</a>
+                        <a class="navOption" href="{% url 'food:loginutilizador' %}">Entrar</a>
                     </li>
                 </ul>
             {% else %}
@@ -49,11 +54,13 @@
                     <li>
                         <a href="{% url 'food:caixamensagens' %}" class="navOption">Mensagens</a>
                     </li>
-                     <li>
-                        <a class="navOption" href="{% url 'food:cestocompras' %}">Cesto de compras</a>
-                    </li>
+                    {% if request.user|has_group:'Customer' %}
+                        <li>
+                            <a class="navOption" href="{% url 'food:cestocompras' %}">Cesto de compras</a>
+                        </li>
+                    {% endif %}
                     <li>
-                        <a class="navOption" href="{% url 'food:logoututilizador' %}">Logout</a>
+                        <a class="navOption" href="{% url 'food:logoututilizador' %}">Sair</a>
                     </li>
                 </ul>
             {% endif %}
@@ -64,7 +71,7 @@
             {% endif %}
         </li>
         <li>
-            <a class="navOption" href="{% url 'food:mapPage' %}">Mapa dos Mercadinhos</a>
+            <a class="navOption" href="{% url 'food:mapPage' %}">Mapa dos mercadinhos</a>
         </li>
         <li>
             <a class="navOption" href="{% url 'food:about' %}">Sobre nós</a>

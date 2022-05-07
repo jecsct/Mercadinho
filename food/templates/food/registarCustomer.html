@@ -15,12 +15,13 @@
         <p> Username: {{ userForm.username }} </p><br/>
         <p> Email: {{ userForm.email }} </p><br/>
         <p> Password: {{ userForm.password1 }} </p><br/>
-        <p> Gender: {{ customerForm.gender }} </p><br/>
-        <p> Profile picture: {{ customerForm.profile_pic }} </p><br/>
-        <p> Birthday: {{ customerForm.birthday }} </p><br/>
-        <p> Credit: {{ customerForm.credit }} </p><br>
+        <p> Género: {{ customerForm.gender }} </p><br/>
+        <p> Fotografia: {{ customerForm.profile_pic }} </p><br/>
+        <p> Aniversário: {{ customerForm.birthday }} </p><br/>
+        <p> Créditos: {{ customerForm.credit }} </p><br>
         <input type="submit" value="Gravar novo Utilizador"/>
-    </form><br/>
+    </form>
+    <br/>
     <p>É um vendedor? Registe-se <a href="{% url 'food:registarSalesman'%}">aqui</a>!</p>
 {% endblock %}
 </body>

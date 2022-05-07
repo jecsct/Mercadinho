@@ -11,12 +11,15 @@
     />
 </head>
 <body>
-{% include 'food/navbar.html' %}
-
-{% block content %}
-{% endblock %}
-
-{% include 'food/copyright_footer.html' %}
-
+<div class="page-container">
+    {% include 'food/navbar.html' %}
+    <div class="content-wrap">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="footer">
+        {% include 'food/copyright_footer.html' %}
+    </footer>
+</div>
 </body>
 </html>
