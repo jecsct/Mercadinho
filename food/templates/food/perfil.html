@@ -7,11 +7,23 @@
 </head>
 <body>
 {% block content %}
-    <h1>{{ request.user }}</h1>
-    <h1>{{ request.user.customer.gender }}</h1>
-    <h1>{{ request.user.customer }}</h1>
-    <h1>{{ request.user.customer.birthday }}</h1>
-    <h1>{{ request.user.customer.profile_pic }}</h1>
+    <h1>Perfil do utilizador</h1>
+    {% if request.user.customer %}
+        <img src="{{ request.user.customer.profile_pic }}" style="width: 150px;"><br/><br/>
+    {% else %}
+        <img src="{{ request.user.salesman.profile_pic }}" style="width: 150px;"><br/><br/>
+    {% endif %}
+    <p><strong>Username: </strong>{{ request.user.username }}</p><br/>
+    {% if request.user.customer %}
+        <p><strong>Tipo de utilizador: </strong>Cliente</p><br/>
+        <p class="lanterna_after"><strong>Créditos: </strong>{{ request.user.customer.credit }}</p><br/>
+        <p><strong>Género: </strong>{{ request.user.customer.gender }}</p><br/>
+        <p><strong>Aniversário: </strong>{{ request.user.customer.birthday }}</p>
+    {% else %}
+        <p><strong>Tipo de utilizador: </strong>Vendedor</p><br/>
+        <p><strong>Classificação: </strong>{{ request.user.salesman.rating }}</p><br/>
+        <p><strong>Número de telefone: </strong>{{ request.user.salesman.phone_number }}</p>
+    {% endif %}
 {% endblock %}
 </body>
 </html>

@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 class Mensagem(models.Model):
     email = models.CharField(max_length=50)
@@ -31,11 +32,12 @@ class Customer(models.Model):
     birthday = models.DateField()
     credit = models.IntegerField()
 
+
 class Product(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=1000)
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    image = models.ImageField(null=True, blank=True)  # retirei upload to
+    image = models.ImageField(null=True, blank=True)
     sales = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     views = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
@@ -90,6 +92,7 @@ class Comment(models.Model):
 
     class Meta:
         unique_together = (("user", "product"),)
+
 
 class CestoCompras(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

@@ -24,6 +24,7 @@ class UserForm(UserCreationForm):
 
 
 class CustomerForm(ModelForm):
+    credit = forms.IntegerField(initial=0)
     class Meta:
         model = Customer
         fields = ('gender', 'profile_pic', 'birthday', 'credit')
@@ -47,13 +48,3 @@ class ContactForm(ModelForm):
     class Meta:
         model = Mensagem
         fields = ('email', 'texto_mensagem', 'dataHora')
-
-
-class AddProductForm(ModelForm):
-    sales = forms.IntegerField(initial=0)
-    views = forms.IntegerField(initial=0)
-    rating = forms.DecimalField(initial=0)
-
-    class Meta:
-        model = Product
-        fields = ('name', 'description', 'price', 'image', 'sales', 'views', 'rating')
