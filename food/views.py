@@ -36,7 +36,7 @@ def contactos(request):
                 error_message = "Não pode enviar emails para si próprio"
     else:
         form = ContactForm()
-    return render(request, 'food/contactos.html', {'contactForm': form, 'error_message':error_message})
+    return render(request, 'food/contactos.html', {'contactForm': form, 'error_message': error_message})
 
 
 @login_required
@@ -212,7 +212,8 @@ def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     comments = Comment.objects.all().filter(product_id=product_id)
     product.addView()
-    context = {'product': product, 'comments': comments}
+    products = Product.objects.all().exclude(id=product_id)
+    context = {'product': product, 'comments': comments, "products": products}
     return render(request, 'food/detalhe.html', context)
 
 
