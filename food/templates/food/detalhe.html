@@ -60,21 +60,28 @@
                        required><br/><br/>
                 <input type="submit" value="Comentar"/><br/><br/>
             </form>
-            <div class="comments">
-                <ul class="specs">
+            <div>
+                <ul>
                     {% for comment in comments %}
                         <li>
-                            <p class="lanterna">Username: {{ comment.user.username }}</p>
-                            <p class="lanterna">Avaliação: {{ comment.rating }}</p>
-                            <p class="lanterna">Comentário: {{ comment.text }}</p>
-                            {% if request.user.is_authenticated and comment.user.username == request.user.username %}
-                                <br/>
-                                <form action="{% url 'food:deleteProductComment' product.id %}" method="post">
-                                    {% csrf_token %}
-                                    <a href="{% url 'food:updateProductComment' product.id %}"> Update</a>
-                                    <input type="submit" value="Delete">
-                                </form>
-                            {% endif %}
+                            <div class="review_section">
+                                <div>
+                                    <img src="{{ comment.user.customer.profile_pic }}" alt="profile_pic do user">
+                                </div>
+                                <div>
+                                    <p class="lanterna">Username: {{ comment.user.username }}</p>
+                                    <p class="lanterna">Avaliação: {{ comment.rating }}</p>
+                                    <p class="lanterna">Comentário: {{ comment.text }}</p>
+                                </div>
+                                {% if request.user.is_authenticated and comment.user.username == request.user.username %}
+                                    <br/>
+                                    <form action="{% url 'food:deleteProductComment' product.id %}" method="post">
+                                        {% csrf_token %}
+                                        <a href="{% url 'food:updateProductComment' product.id %}"> Update</a>
+                                        <input type="submit" value="Delete">
+                                    </form>
+                                {% endif %}
+                            </div>
                         </li>
                     {% endfor %}
                 </ul>

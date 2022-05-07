@@ -6,3 +6,4 @@ venv/
 media/
 /food/migrations/
 /food/__pycache__/
+/Mercadinho/__pycache__/
