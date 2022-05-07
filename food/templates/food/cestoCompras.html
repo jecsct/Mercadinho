@@ -14,29 +14,27 @@
         <ul>
             <form method="POST">
                 {% csrf_token %}
+            <div class="product_list">
                 {% for item in cesto_compras %}
                     <li>
-                        <img src="{{ item.image }}" />
-                        <a href="#">{{ item.name }}</a>
-                        <img src="{{ item.product.image }}" />
+                        <img style="width:150px; height:150px; object-fit: cover;" src="{{ item.product.image }}" /><br/><br/>
                         <a href="{% url 'food:productDetailPage' item.product.id %}">{{ item.product.name }}</a>
-                        <p>{{ item.price }} laterninhas</p>
-                        <input
-                                type="submit"
-                                value="Remover"
-                                formaction="{% url 'food:removeFromCart' item.id %}"
+                        <p class="lanterna_after">Preço: {{ item.product.price }}</p><br/>
+                        <input type="submit" value="Remover" formaction="{% url 'food:removeFromCart' item.id %}"
                         />
                     </li>
                 {% endfor %}
+            <div/>
             </form>
         </ul>
-        <div class="left-down-corner">
+        <div>
+            <br/>
             <p>Deseja fazer o checkout?</p><br/>
             <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
             <a href="{% url 'food:pagamento' %}" class="button-link">Sim</a>
         </div>
     {% else %}
-        <p>Ainda não colocou nenhum produto no seu carrinho!</p>
+        <p>O seu carrinho encontra-se vazio de momento!</p>
     {% endif %}
 {% endblock %}
 </body>
