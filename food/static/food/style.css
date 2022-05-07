@@ -268,17 +268,20 @@ input[type=submit] {
 }
 
 .about_header {
-    height: 100px;
+    height: auto;
     width: auto;
 
     color: #ffffff;
     background-image: url("https://i.pinimg.com/originals/c4/d8/d7/c4d8d7f9e12230e974cb918678b161b4.gif");
     image-rendering: inherit;
     /*background-image: url("{% static 'media/blockChainGif.gif' %}");*/
+    /*display: inline-block;*/
+    object-fit: cover;
 }
 
 .about_header h1 {
     transform: translate(0%, 75%);
+
 }
 
 .about_info {
