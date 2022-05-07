@@ -150,18 +150,6 @@ li:hover ul.dropdown {
     text-align: right;
 }
 
-/* Footer */
-footer {
-    background: rgba(51, 170, 51, 0.4);
-    display: flex;
-    bottom: 0;
-    margin: 12px 0;
-    margin-top: 32px;
-    padding: 4px;
-    width: 100%;
-    justify-content: center;
-}
-
 /* Caixa de mensagens */
 .mensagem {
     background-color: #eeeeee;
@@ -288,6 +276,37 @@ input[type=submit] {
     transform: translate(0%, 75%);
 }
 
-.about_info{
-    border-color: black;
+.about_info {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+    height: auto;
+}
+
+.about_info p {
+    padding: 7px;
+}
+
+#page-container {
+    position: relative;
+    min-height: 98.35vh;
+}
+
+#content-wrap {
+    padding-bottom: 2.5rem; /* Footer height */
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /*height: 2.5rem;*/
+    height: auto;
+    justify-content: center;
+    background: rgba(51, 170, 51, 0.4);
+    display: flex;
+    margin: 32px 0 12px;
+    padding: 4px;
+    /*width: 100%;*/
 }
