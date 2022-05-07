@@ -8,7 +8,6 @@ FONT SIZE SYSTEM (px)
 
 
 /* General styles */
-
 * {
     margin: 0;
     padding: 0;
@@ -21,6 +20,15 @@ body {
     margin: 0 12px;
     /*background: #ACE1AF;*/
     background-color: #D1FFD6;
+}
+
+.page-container {
+    position: relative;
+    min-height: 98.2vh;
+}
+
+.content-wrap {
+    padding-bottom: 4rem;
 }
 
 h1,
@@ -127,14 +135,21 @@ nav p {
     background-color: #045039;
 }
 
-/* Navigation drop down */
+.nav-profile-pic{
+    margin: 0;
+    padding: 0;
+    height: 44.2px;
+    width: 44.2px;
+    object-fit: cover;
+}
+
 ul.dropdown {
     background-color: rgba(51, 170, 51, 0.4);
     display: none;
     position: absolute;
     right: 0;
-    margin-right: 12px;
-    margin-top:  12px;
+    top: 42.4px;
+    margin: 0;
 }
 
 li:hover ul.dropdown {
@@ -189,41 +204,17 @@ input[type=submit] {
     grid-template-columns: repeat(4, 1fr);
     justify-content: space-between;
     width: 100%;
-    grid-gap: 10px;
-}
-
-.product {
-    padding: 10px;
+    grid-row-gap: 64px;
 }
 
 .product_image {
     display: block;
-    margin-top: 24px;
     margin-left: auto;
     margin-right: auto;
     width: 150px;
     height: 150px;
     object-fit: cover;
     border-radius: 50%;
-    animation: pulse 1s ease-in-out infinite alternate;
-}
-
-.product_image:hover {
-    animation: pulse_hover 1s ease-in-out infinite alternate;
-}
-
-@keyframes pulse {
-    100% {
-        box-shadow: 0 0 20px 3px #e16e6e;
-        transform: scale(1.2);
-    }
-}
-
-@keyframes pulse_hover {
-    100% {
-        box-shadow: 0 0 20px 3px #e16e6e;
-        transform: scale(2);
-    }
 }
 
 .product_text, .product_price {
@@ -257,23 +248,17 @@ input[type=submit] {
     background-color: #f38888;
 }
 
-/*about about*/
+/*Sobre nós*/
 .about_general {
     text-align: center;
 }
 
 .about_header {
-    height: 100px;
-    width: auto;
-
+    margin-top: 12px;
+    text-align: center;
+    padding: 6px;
     color: #ffffff;
     background-image: url("https://i.pinimg.com/originals/c4/d8/d7/c4d8d7f9e12230e974cb918678b161b4.gif");
-    image-rendering: inherit;
-    /*background-image: url("{% static 'media/blockChainGif.gif' %}");*/
-}
-
-.about_header h1 {
-    transform: translate(0%, 75%);
 }
 
 .about_info {
@@ -288,25 +273,14 @@ input[type=submit] {
     padding: 7px;
 }
 
-#page-container {
-    position: relative;
-    min-height: 98.35vh;
-}
-
-#content-wrap {
-    padding-bottom: 2.5rem; /* Footer height */
-}
-
-#footer {
+/* Footer */
+.footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    /*height: 2.5rem;*/
     height: auto;
-    justify-content: center;
+    text-align: center;
     background: rgba(51, 170, 51, 0.4);
-    display: flex;
     margin: 32px 0 12px;
     padding: 4px;
-    /*width: 100%;*/
 }
