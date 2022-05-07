@@ -13,7 +13,7 @@ class Mensagem(models.Model):
 # Create your models here.
 class Salesman(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    rating = models.DecimalField(default=3, validators=[MinValueValidator(0.1), MaxValueValidator(5)], max_digits=2,
+    rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
                                  decimal_places=1)
     profile_pic = models.ImageField()
     phone_number = models.IntegerField(blank=True,

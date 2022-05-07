@@ -25,6 +25,7 @@ class UserForm(UserCreationForm):
 
 class CustomerForm(ModelForm):
     credit = forms.IntegerField(initial=0)
+
     class Meta:
         model = Customer
         fields = ('gender', 'profile_pic', 'birthday', 'credit')

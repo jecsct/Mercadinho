@@ -125,62 +125,11 @@ def registarCustomer(request):
             customer.user = user
             customer.save()
             login(request, user)
-            return render(request, 'food/index.html')
+            return HttpResponseRedirect(reverse('food:index'))
+            # return render(request, 'food/index.html')
     customerForm = CustomerForm()
     userForm = UserForm()
     return render(request, 'food/registarCustomer.html', {'userForm': userForm, 'customerForm': customerForm})
-
-
-@unauthenticated_user
-def registarSalesman(request):
-    if request.method == "POST":
-        salesmanForm = SalesmanForm(request.POST, request.FILES)
-        userForm = UserForm(request.POST)
-        if salesmanForm.is_valid() and userForm.is_valid():
-            user = userForm.save(commit=False)
-            user.save()
-            group = Group.objects.get(name='Salesman')
-            group.user_set.add(user)
-
-            fs = FileSystemStorage()
-            filename = fs.save(salesmanForm.cleaned_data.get("profile_pic"),
-                               salesmanForm.cleaned_data.get("profile_pic"))
-            uploaded_file_url = fs.url(filename)
-
-            salesman = Salesman.objects.create(
-                profile_pic=uploaded_file_url,
-                rating=salesmanForm.cleaned_data.get("rating"),
-                phone_number=salesmanForm.cleaned_data.get("phone_number"),
-                user_id=user.id
-            )
-
-            salesman.user = user
-            salesman.save()
-            login(request, user)
-            return render(request, 'food/index.html')
-        # TODO: FALTA AQUI UM RETURN
-    salesmanForm = SalesmanForm()
-    userForm = UserForm()
-    return render(request, 'food/registarSalesman.html', {'userForm': userForm, 'salesmanForm': salesmanForm})
-
-
-@login_required
-@allowed_users(allowed_roles=['Salesman'])
-def addProduct(request):
-    if request.method == 'POST':
-        if request.FILES['myfile']:
-            productImage = request.FILES['myfile']
-            fs = FileSystemStorage()
-            filename = fs.save(productImage.name, productImage)
-            uploaded_file_url = fs.url(filename)
-            Product.objects.create(name=request.POST.get('productName'),
-                                   description=request.POST.get('productDescription'),
-                                   price=request.POST.get('productPrice'),
-                                   image=uploaded_file_url,
-                                   salesman_id=request.user.salesman.id
-                                   )
-            return HttpResponseRedirect(reverse('food:index'))
-    return render(request, 'food/add_product.html')
 
 
 @unauthenticated_user
@@ -205,6 +154,60 @@ def logoututilizador(request):
     logout(request)
     return HttpResponseRedirect(reverse('food:index'))
 
+@unauthenticated_user
+def registarSalesman(request):
+    print("Inicio")
+    if request.method == "POST":
+        salesmanForm = SalesmanForm(request.POST, request.FILES)
+        userForm = UserForm(request.POST)
+        print(salesmanForm.is_valid())
+        print(userForm.is_valid())
+        if salesmanForm.is_valid() and userForm.is_valid():
+            print("valido")
+            user = userForm.save(commit=False)
+            user.save()
+            group = Group.objects.get(name='Salesman')
+            group.user_set.add(user)
+
+            fs = FileSystemStorage()
+            filename = fs.save(salesmanForm.cleaned_data.get("profile_pic"),
+                               salesmanForm.cleaned_data.get("profile_pic"))
+            uploaded_file_url = fs.url(filename)
+
+            salesman = Salesman.objects.create(
+                profile_pic=uploaded_file_url,
+                rating=salesmanForm.cleaned_data.get("rating"),
+                phone_number=salesmanForm.cleaned_data.get("phone_number"),
+                user_id=user.id
+            )
+
+            salesman.user = user
+            salesman.save()
+            print("save")
+            login(request, user)
+            return render(request, 'food/index.html')
+    salesmanForm = SalesmanForm()
+    userForm = UserForm()
+    return render(request, 'food/registarSalesman.html', {'userForm': userForm, 'salesmanForm': salesmanForm})
+
+
+@login_required
+@allowed_users(allowed_roles=['Salesman'])
+def addProduct(request):
+    if request.method == 'POST':
+        if request.FILES['myfile']:
+            productImage = request.FILES['myfile']
+            fs = FileSystemStorage()
+            filename = fs.save(productImage.name, productImage)
+            uploaded_file_url = fs.url(filename)
+            Product.objects.create(name=request.POST.get('productName'),
+                                   description=request.POST.get('productDescription'),
+                                   price=request.POST.get('productPrice'),
+                                   image=uploaded_file_url,
+                                   salesman_id=request.user.salesman.id
+                                   )
+            return HttpResponseRedirect(reverse('food:index'))
+    return render(request, 'food/add_product.html')
 
 def mapPage(request):
     return render(request, 'food/mercadinhos_map.html')
