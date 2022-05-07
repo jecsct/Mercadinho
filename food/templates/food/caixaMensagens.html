@@ -11,8 +11,7 @@
     {% if lista_mensagens %}
         {% for mensagem in lista_mensagens %}
             <div class="mensagem">
-                <p class="mensagem-Email"> Email de: {{ mensagem.email }}</p>
-                <p>{{ mensagem.texto_mensagem }}</p>
+                <p>Mensagem: {{ mensagem.texto_mensagem }}</p>
                 <p class="mensagem-Hora">{{ mensagem.dataHora }}</p>
             </div>
             <br>

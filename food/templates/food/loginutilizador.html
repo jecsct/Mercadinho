@@ -9,7 +9,7 @@
 </head>
 <body>
 {% block content %}
-    <h2>Login Utilizador</h2>
+    <h2>Entrar na conta</h2>
     {% if error_message %}
         <p>{{ error_message }}</p>
         <br/>
@@ -18,7 +18,7 @@
       {% csrf_token %}
       <p> Username: {{ loginform.username }} </p><br/>
       <p> Password: {{ loginform.password }} </p><br/>
-      <input type="submit" value="Login"/>
+      <input type="submit" value="Entrar"/>
     </form>
 {% endblock %}
 </body>

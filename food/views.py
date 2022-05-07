@@ -8,17 +8,13 @@ from django.urls import reverse
 import datetime
 from django.contrib.auth.decorators import login_required
 from food.models import Mensagem, Customer, Salesman
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm, AddProductForm
+from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import Group, User
-
-
-def redirect_view(request):
-    return redirect('/food')
 
 
 def index(request):
@@ -28,15 +24,19 @@ def index(request):
 
 
 def contactos(request):
+    error_message = False
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            mensagem = form.save(commit=False)
-            mensagem.save()
-            return HttpResponseRedirect(reverse('food:contactos'))
+            if not form.cleaned_data.get("email") == request.user.email:
+                mensagem = form.save(commit=False)
+                mensagem.save()
+                return HttpResponseRedirect(reverse('food:contactos'))
+            else:
+                error_message = "Não pode enviar emails para si próprio"
     else:
         form = ContactForm()
-    return render(request, 'food/contactos.html', {'contactForm': form})
+    return render(request, 'food/contactos.html', {'contactForm': form, 'error_message':error_message})
 
 
 @login_required
@@ -55,6 +55,7 @@ def cestoCompras(request):
     except CestoCompras.DoesNotExist:
         cesto_compras = None
     return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras})
+
 
 @login_required
 @allowed_users(allowed_roles=['Customer'])
@@ -119,11 +120,9 @@ def registarCustomer(request):
             customer.save()
             login(request, user)
             return render(request, 'food/index.html')
-        # TODO: FALTA AQUI UM RETURN
-    else:
-        customerForm = CustomerForm()
-        userForm = UserForm()
-        return render(request, 'food/registarCustomer.html', {'userForm': userForm, 'customerForm': customerForm})
+    customerForm = CustomerForm()
+    userForm = UserForm()
+    return render(request, 'food/registarCustomer.html', {'userForm': userForm, 'customerForm': customerForm})
 
 
 @unauthenticated_user
@@ -154,33 +153,28 @@ def registarSalesman(request):
             login(request, user)
             return render(request, 'food/index.html')
         # TODO: FALTA AQUI UM RETURN
-    else:
-        salesmanForm = SalesmanForm()
-        userForm = UserForm()
-        return render(request, 'food/registarSalesman.html', {'userForm': userForm, 'salesmanForm': salesmanForm})
+    salesmanForm = SalesmanForm()
+    userForm = UserForm()
+    return render(request, 'food/registarSalesman.html', {'userForm': userForm, 'salesmanForm': salesmanForm})
 
 
 @login_required
 @allowed_users(allowed_roles=['Salesman'])
 def addProduct(request):
     if request.method == 'POST':
-        productForm = AddProductForm(request.POST, request.FILES)
-        if productForm.is_valid():
+        if request.FILES['myfile']:
+            productImage = request.FILES['myfile']
             fs = FileSystemStorage()
-            filename = fs.save(productForm.cleaned_data.get("image"),
-                               productForm.cleaned_data.get("image"))
+            filename = fs.save(productImage.name, productImage)
             uploaded_file_url = fs.url(filename)
-
-            Product.objects.create(name=productForm.cleaned_data.get('name'),
-                                   description=productForm.cleaned_data.get('description'),
-                                   price=productForm.cleaned_data.get('price'),
+            Product.objects.create(name=request.POST.get('productName'),
+                                   description=request.POST.get('productDescription'),
+                                   price=request.POST.get('productPrice'),
                                    image=uploaded_file_url,
-                                   salesman_id=request.user.salesman.id,
+                                   salesman_id=request.user.salesman.id
                                    )
             return HttpResponseRedirect(reverse('food:index'))
-    else:
-        productForm = AddProductForm()
-    return render(request, 'food/add_product.html', {'productForm': productForm})
+    return render(request, 'food/add_product.html')
 
 
 @unauthenticated_user
@@ -268,6 +262,7 @@ def deleteProductComment(request, product_id):
             Comment.objects.get(product_id=product_id, user_id=request.user.id).rating)
         Comment.objects.get(product=product_id, user_id=request.user).delete()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+
 
 @login_required
 @allowed_users(allowed_roles=['Salesman'])
