@@ -13,11 +13,45 @@ class Mensagem(models.Model):
 # Create your models here.
 class Salesman(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    rating = models.DecimalField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], max_digits=2,
+    rating = models.DecimalField(default=3, validators=[MinValueValidator(0.1), MaxValueValidator(5)], max_digits=2,
                                  decimal_places=1)
     profile_pic = models.ImageField()
     phone_number = models.IntegerField(blank=True,
                                        validators=[MinValueValidator(900000000), MaxValueValidator(999999999)])
+
+    def addRating(self, newRating):
+        stats = self.getRatingSum()
+        totalSum = stats[0]
+        totalRatings = stats[1]
+        Salesman.objects.filter(id=self.id).update(
+            rating=((float(totalSum) + float(newRating)) / (float(totalRatings) + 1)))
+
+    def deleteRating(self, oldRating):
+        stats = self.getRatingSum()
+        totalSum = stats[0]
+        totalRatings = stats[1]
+        if totalRatings != 1:
+            print((totalSum - float(self.rating)))
+            print(totalRatings - 1)
+            Salesman.objects.filter(id=self.id).update(rating=((totalSum - float(oldRating)) / (totalRatings - 1)))
+        else:
+            Salesman.objects.filter(id=self.id).update(rating=((totalSum - float(oldRating)) / totalRatings))
+
+    def updateRating(self, oldRating, newRating):
+        stats = self.getRatingSum()
+        totalSum = stats[0]
+        totalRatings = stats[1]
+        Salesman.objects.filter(id=self.id).update(
+            rating=(totalSum - float(oldRating) + float(newRating)) / totalRatings)
+
+    def getRatingSum(self):
+        totalSum = 0.0
+        totalRatings = 0
+        for p in Product.objects.all().filter(salesman_id=self.id):
+            if p.rating != 0:
+                totalSum = totalSum + float(p.rating)
+                totalRatings += 1
+        return totalSum, totalRatings
 
 
 class Customer(models.Model):

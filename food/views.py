@@ -19,6 +19,8 @@ from django.contrib.auth.models import Group, User
 
 def index(request):
     products = Product.objects.all()
+    if request.user.groups.filter(name='Salesman').exists():
+        products = products.filter(salesman_id=request.user.salesman.id)
     context = {'products_list': products}
     return render(request, 'food/index.html', context)
 
@@ -224,26 +226,37 @@ def commentOnItem(request, product_id):
         commentText = request.POST['commentInput']
         commentRating = request.POST['ratingInput']
         product = Product.objects.get(id=product_id)
-        # product.update(rating=calculateItemRating(product_id, commentRating))
+        Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
         product.addRating(newRating=commentRating)
         Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
                 product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-    # return productDetailPage(request, product_id)
+
+
+@login_required
+@allowed_users(allowed_roles=['Customer'])
+def deleteProductComment(request, product_id):
+    product = Product.objects.get(id=product_id)
+    comment = Comment.objects.get(product_id=product_id, user_id=request.user.id)
+    if request.method == 'POST':
+        Salesman.objects.get(id=product.salesman_id).deleteRating(comment.rating)
+        product.deleteRating(comment.rating)
+        comment.delete()
+    return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
 @login_required
 @allowed_users(allowed_roles=['Customer'])
 def updateProductComment(request, product_id):
-    print(request.method)
     product = get_object_or_404(Product, pk=product_id)
+    comment = Comment.objects.get(product_id=product_id, user_id=request.user.id)
     if request.method == 'POST':
         newText = request.POST['newCommentText']
         newRating = request.POST['newCommentRating']
-        product.updateRating(Comment.objects.get(product_id=product_id, user_id=request.user.id).rating, newRating)
+        product.updateRating(comment.rating, newRating)
+        Salesman.objects.get(id=product.salesman_id).updateRating(newRating=newRating, oldRating=newRating)
         Comment.objects.filter(user_id=request.user.id, product_id=product_id).update(text=newText, rating=newRating)
         return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-    comment = Comment.objects.get(user_id=request.user.id, product_id=product_id)
     context = {'product': product, 'comment': comment}
     return render(request, 'food/updateProductComment.html', context)
 
@@ -253,16 +266,6 @@ def updateProductComment(request, product_id):
 def deleteProduct(request, product_id):
     get_object_or_404(Product, pk=product_id).delete()
     return HttpResponseRedirect(reverse('food:index'))
-
-
-@login_required
-@allowed_users(allowed_roles=['Customer'])
-def deleteProductComment(request, product_id):
-    if request.method == 'POST':
-        Product.objects.get(id=product_id).deleteRating(
-            Comment.objects.get(product_id=product_id, user_id=request.user.id).rating)
-        Comment.objects.get(product=product_id, user_id=request.user).delete()
-    return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
 @login_required
