@@ -182,9 +182,10 @@ footer {
 
 .button-link {
     display: inline-block;
-    padding: 4px 6px 4px 6px;
+    padding: 8px 10px;
     background-color: #087f5b;
     color: #eeeeee;
+    font: 16px sans-serif;
     cursor: pointer;
 }
 
@@ -194,7 +195,7 @@ input[type=submit] {
     cursor: pointer;
     padding: 6px 8px 6px 8px;
     text-decoration: none;
-    font-family: "Inter", sans-serif;
+    font: 16px sans-serif;
     border:none;
 }
 
@@ -272,3 +273,22 @@ input[type=submit] {
 .product_button:hover{
     background-color: #f38888;
 }
+
+.item-cestoCompras {
+    padding: 20px;
+    background-color: #045039;
+    color: #eeeeee;
+    margin: 20px 300px;
+}
+
+.item-titulo {
+    text-decoration: none;
+    font: 20px sans-serif;
+    color: #eeeeee;
+}
+
+.checkOut {
+    float: right;
+    text-align: left;
+}
+

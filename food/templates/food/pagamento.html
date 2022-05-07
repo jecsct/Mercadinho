@@ -14,7 +14,7 @@
       <label>Codigo Postal:</label>
       <input type="text" name="ZipCode"> <br>
       <label> {{ price }} lanterninhas serão descontadas da sua conta. Deseja confirmar a transação?</label><br>
-      <input type="submit" value="Cancelar" formaction="{% url 'food:cestoCompras' %}">
+      <input type="submit" value="Cancelar" formaction="cestoCompras">
       <input type="submit" value="Sim" formaction="{% url 'food:checkOut' %}">
         {% if error_message %}
             <p>{{ error_message }}</p>
