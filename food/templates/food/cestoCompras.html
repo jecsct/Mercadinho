@@ -9,30 +9,35 @@
 </head>
 <body>
 {% block content %}
-    <h1>Os seu Produtos</h1>
-    <ul>
-        <form method="POST">
-        {% csrf_token %}
-        {% for item in cesto_compras %}
-        <li>
-          <img src="{{ item.image }}" />
-          <a href="#">{{ item.name }}</a>
-          <img src="{{ item.product.image }}" />
-          <a href="{% url 'food:productDetailPage' item.product.id %}">{{ item.product.name }}</a>
-          <p>{{ item.price }} laterninhas</p>
-          <input
-            type="submit"
-            value="Remover"
-            formaction="{% url 'food:removeFromCart' item.id %}"
-          />
-        </li>
-        {% endfor %}
-    </ul>
-    <div class="left-down-corner">
-        <p>Deseja fazer o checkout?</p><br/>
-        <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
-        <a href="{% url 'food:pagamento' %}" class="button-link">Sim</a>
-    </div>
+    <h1>Os seus Produtos</h1>
+    {% if cesto_compras %}
+        <ul>
+            <form method="POST">
+                {% csrf_token %}
+                {% for item in cesto_compras %}
+                    <li>
+                        <img src="{{ item.image }}" />
+                        <a href="#">{{ item.name }}</a>
+                        <img src="{{ item.product.image }}" />
+                        <a href="{% url 'food:productDetailPage' item.product.id %}">{{ item.product.name }}</a>
+                        <p>{{ item.price }} laterninhas</p>
+                        <input
+                                type="submit"
+                                value="Remover"
+                                formaction="{% url 'food:removeFromCart' item.id %}"
+                        />
+                    </li>
+                {% endfor %}
+            </form>
+        </ul>
+        <div class="left-down-corner">
+            <p>Deseja fazer o checkout?</p><br/>
+            <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
+            <a href="{% url 'food:pagamento' %}" class="button-link">Sim</a>
+        </div>
+    {% else %}
+        <p>Ainda não colocou nenhum produto no seu carrinho!</p>
+    {% endif %}
 {% endblock %}
 </body>
 </html>

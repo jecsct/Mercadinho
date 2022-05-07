@@ -17,9 +17,9 @@
         {#        {% else %}#}
         {#            <img src="{{ request.user.salesman.profile_pic }}" style="height: 150px" class="nav_pic">#}
         {#        {% endif %}#}
-        <h3>Olá {{ request.user }}!</h3>
+        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;">  Olá {{ request.user }}!</h3>
     {% else %}
-        <h3>Ainda não está logado!</h3>
+        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;"> Ainda não está logado!</h3>
     {% endif %}
     {% if products_list %}
         <br/>

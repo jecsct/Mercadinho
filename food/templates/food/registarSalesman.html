@@ -7,16 +7,16 @@
 </head>
 <body>
 {% block content %}
-    <h2>Registar Salesman</h2>
+    <h2>Registar Vendedor</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <p> Username: {{ userForm.username }} </p><br/>
-        <p> Email: {{ userForm.email }} </p><br/>
-        <p> Password: {{ userForm.password1 }} </p><br/>
-        <p hidden> Rating: {{ salesmanForm.rating }} </p>
-        <p> Profile picture: {{ salesmanForm.profile_pic }} </p><br/>
-        <p> Phone Number: {{ salesmanForm.phone_number }} </p><br/>
-        <input type="submit" value="Gravar novo Utilizador"/>
+        <p>Username: {{ userForm.username }} </p><br/>
+        <p>Email: {{ userForm.email }} </p><br/>
+        <p>Password: {{ userForm.password1 }} </p><br/>
+        <p hidden>Classificação: {{ salesmanForm.rating }} </p>
+        <p>Fotografia: {{ salesmanForm.profile_pic }} </p><br/>
+        <p>Número de telefone: {{ salesmanForm.phone_number }} </p><br/>
+        <input type="submit" value="Gravar novo Vendedor"/>
     </form><br/>
 {% endblock %}
 </body>
