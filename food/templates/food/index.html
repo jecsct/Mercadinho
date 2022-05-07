@@ -26,7 +26,7 @@
                         <p class="product_text">{{ product.name }}</p>
                         <p class="lanterna product_price">Preço: {{ product.price }}</p>
                         <div class="center_button"><a class="product_button" href="{% url 'food:addToCart' product.id %}">Add to Cart</a></div>
-                        {% if confirmation %}
+                        {% if confirmation and product.id == p.id %}
                             <p>{{ confirmation }}</p>
                         {% endif %}
                     </a>

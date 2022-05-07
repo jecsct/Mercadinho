@@ -77,8 +77,8 @@ def addToCart(request, product_id):
             product = Product.objects.get(id=product_id)
             shoppingCart = CestoCompras(customer=customer, product=product)
             shoppingCart.save()
-            products = Product.objects.all()
-            context = {'products_list': products,'confirmation':'Produto adicionado'}
+            products_list = Product.objects.all()
+            context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
             return render(request, 'food/index.html', context)
     else:
         return HttpResponseRedirect(reverse('food:loginutilizador'))
