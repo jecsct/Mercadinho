@@ -8,6 +8,7 @@ FONT SIZE SYSTEM (px)
 
 
 /* General styles */
+
 * {
     margin: 0;
     padding: 0;
@@ -181,9 +182,10 @@ li:hover ul.dropdown {
 
 .button-link {
     display: inline-block;
-    padding: 4px 6px 4px 6px;
+    padding: 8px 10px;
     background-color: #087f5b;
     color: #eeeeee;
+    font: 16px sans-serif;
     cursor: pointer;
 }
 
@@ -194,7 +196,7 @@ input[type=submit] {
     padding: 6px 8px 6px 8px;
     text-decoration: none;
     font-family: "Inter", sans-serif;
-    border: none;
+    border:none;
 }
 
 /* Produto INDEX */
@@ -343,3 +345,21 @@ a {
     height: auto;
     overflow: auto;
 }
+.item-cestoCompras {
+    padding: 20px;
+    background-color: #045039;
+    color: #eeeeee;
+    margin: 20px 300px;
+}
+
+.item-titulo {
+    text-decoration: none;
+    font: 20px sans-serif;
+    color: #eeeeee;
+}
+
+.checkOut {
+    float: right;
+    text-align: left;
+}
+

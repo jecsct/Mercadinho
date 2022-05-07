@@ -1,13 +1,16 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
+
+#from .views import redirect_view
 
 app_name = 'food'
 urlpatterns = [
     path("", views.index, name="index"),
     path("contactos/", views.contactos, name="contactos"),
     path("caixaMensagens/", views.caixaMensagens, name="caixamensagens"),
-    path("cestoCompras/", views.cestoCompras, name="cestocompras"),
+    path("cestoCompras", views.cestoCompras, name="cestocompras"),
     path("perfil", views.perfil, name="perfil"),
+    #path('', redirect_view),
     path('registerCustomer', views.registarCustomer, name='registarCustomer'),
     path('registerSalesman', views.registarSalesman, name='registarSalesman'),
     path('loginUser', views.loginutilizador, name='loginutilizador'),
@@ -25,4 +28,5 @@ urlpatterns = [
     path('<int:cestoCompras_id>/removeFromCart', views.removeFromCart, name='removeFromCart'),
     path('pagamento/cestoCompras', views.cestoCompras, name="cesto compras"),
     path('<int:product_id>/deleteProduct/', views.deleteProduct, name='deleteProduct'),
+    path('checkOut', views.checkOut, name='checkOut')
 ]

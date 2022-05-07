@@ -8,48 +8,56 @@
 </head>
 <body>
 {% block content %}
-    <div class="detail_contents">
-        <div>
-            <h1 class="product_title">{{ product.name }}</h1><br/>
-            <div class="center_grid">
-                <div class="grid">
-                    <div class="grid_item item1">
-                        <img alt="Imagem do produto. {{ product.name }}"
-                                {#                         src="https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Kiwi-fruits-582a07b.jpg?quality=90&resize=661%2C600"#}
-                             src="{{ product.image }}"
-                             style="height: 250px;width: 250px">
-                    </div>
-                    <div class="grid_item item2">
-                        <ul>
-                            <li class="lanterna">Preço: {{ product.price }}</li>
-                            <li class="lanterna">Descrição: {{ product.description }}</li>
-                            <li class="lanterna">Vendedor: {{ product.salesman.user.username }}</li>
-                            <li class="lanterna">Classificação: {{ product.rating }}</li>
-                            <li class="lanterna">Vendas: {{ product.sales }}</li>
-                        </ul>
-                    </div>
-                    <div class="grid_item item3">
-                        {% if request.user|has_group:'Salesman' %}
-                            {% if request.user|has_group:'Salesman' %}
-                                <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
-                            {% else %}
-                                <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao
-                                    Cesto</a>
-                            {% endif %}
-                            </div>
-                            <div class="column3">
-                        {% else %}
-                            <form action="{% url 'food:addToCart'  product.id %}" method="post">
-                                {% csrf_token %}
-                                <label>Quantity: <input type="number" name="quant"></label>
-                                <input type="submit" value="Adicionar ao cesto"/>
-                            </form>
-                        {% endif %}
-                        </div>
+<div>
+    <div class="product_title">
+        <h1>{{ product.name }}</h1>
+    </div>
+    <div>
+        <div class="product_details_zone">
+            <div class="image_details">
+                <div>
+                    {# <img alt="Imagem do produto. {{ product.name }}" src="{{ product.image }}">#}
+                    <img alt="Imagem do produto. {{ product.name }}"
+                            {#                         src="https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Kiwi-fruits-582a07b.jpg?quality=90&resize=661%2C600"#}
+                         src="{{ product.image }}"
+                         style="height: 250px;width: 250px">
+                </div>
+                <div>
+                    <ul class="specs">
+                        <li>Price: {{ product.price }}</li>
+                        <li>Description: {{ product.description }}</li>
+                        <li>Salesman: {{ product.salesman.user.username }}</li>
+                        <li>Rating: {{ product.rating }}</li>
+                        <li>Sales: {{ product.sales }}</li>
+                    </ul>
                 </div>
             </div>
-            <br>
-            <h3>Comentários</h3>
+            {% if request.user|has_group:'Salesman' %}
+                <div>
+{#                    <input type="submit" value="Eliminar">#}
+                    <button type="submit" onclick="location.href='{% url 'food:deleteProduct' product.id %}'" name='mybtn2'>Eliminar</button>
+                </div>
+            {% else %}
+                <div>
+                    <form action="{% url 'food:addToCart'  product.id %}" method="post">
+                        {% csrf_token %}
+                        <label>Quantity<input type="number" name="quant" value="1"></label>
+                        <!--a href="{% url 'food:addToCart'  product.id %}" class="button-link">Adicionar ao cesto</a-->
+                        <input type="submit" value="Adicionar ao cesto"/>
+                        {% if confirmation %}
+                            <p>{{ confirmation }}</p>
+                        {% endif %}
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <div>
+        <div class="comments_header">
+            <h3>Comments</h3>
+        </div>
+        <div>
             <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
                   method="post">
                 {% csrf_token %}
