@@ -291,13 +291,6 @@ def addProduct(request):
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
 
-
-def send_confirmation(morada, zipCode):
-    texto_mensagem = "A sua encomenda está confirmada! Será enviada para a " + str(
-        morada) + "com o codigo postal " + str(zipCode)
-    mensagem = Mensagem(email="service@mercadinho.pt", texto_mensagem=texto_mensagem, dataHora=timezone.now())
-    mensagem.save()
-
 def get_price(customer):
     shopping_cart = CestoCompras.objects.filter(customer=customer)
     price = 0
@@ -321,16 +314,27 @@ def checkOut(request):
     if customer.credit - price < 0:
         return render(request, 'food/pagamento.html', {'price': price,'error_message': "Não tem laterninhas suficientes para esta compra. Vá investir na crypto"})
     else:
-        customer.credit = customer.credit - price
-        customer.save()
-        CestoCompras.objects.filter(customer=customer).delete()
-        return HttpResponseRedirect(reverse('food:index'))
+        if request.method == 'POST':
+            morada = request.POST['morada']
+            zipCode = request.POST['ZipCode']
+            if morada and zipCode:
+                customer.credit = customer.credit - price
+                customer.save()
+                CestoCompras.objects.filter(customer=customer).delete()
+                products = Product.objects.all()
+                enviado = "A sua encomenda está confirmada! Será enviada para a " + str(morada) + " com o codigo postal " + str(zipCode)
+                context = {'products_list': products, 'enviado':enviado }
+                return render(request, 'food/index.html', context)
+            else:
+                return render(request, 'food/pagamento.html', {'price': price,
+                                                               'error_message': "Preencha a Morada e o Código Postal"})
+    return render(request, 'food/pagamento.html',{'price':price})
 
 @login_required
 @allowed_users(allowed_roles=['Customer'])
 def investCrypto(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
-    customer.credit = random.randint(1,1000000)
+    customer.credit = random.randint(1,100000)
     customer.save()
     return HttpResponseRedirect(reverse('food:about'))

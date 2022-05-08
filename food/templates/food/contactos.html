@@ -21,7 +21,7 @@
             {{ error_message }}<br/><br/>
         {% endif %}
         <p>Email a contactar: {{ contactForm.email }} </p><br/>
-        <p>Texto da mensagem: {{ contactForm.texto_mensagem }} </p><br/>
+        <p>Texto da mensagem: <br>{{ contactForm.texto_mensagem }} </p><br/>
         <p hidden>Data e hora de envio: {{ contactForm.dataHora }}</p>
         <input type="submit" value="Enviar Mensagem" />
     </form>
