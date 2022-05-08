@@ -1,3 +1,4 @@
+import random
 from time import timezone
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
@@ -302,7 +303,6 @@ def get_price(customer):
     return price
 
 @login_required
-
 def pagamento(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
@@ -322,3 +322,12 @@ def checkOut(request):
         customer.save()
         CestoCompras.objects.filter(customer=customer).delete()
         return HttpResponseRedirect(reverse('food:index'))
+
+@login_required
+@allowed_users(allowed_roles=['Customer'])
+def investCrypto(request):
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(user=user)
+    customer.credit = random.randint(1,1000000)
+    customer.save()
+    return HttpResponseRedirect(reverse('food:about'))

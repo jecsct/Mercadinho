@@ -193,9 +193,9 @@ input[type=submit] {
     background-color: #087f5b;
     color: #eeeeee;
     cursor: pointer;
-    padding: 6px 8px 6px 8px;
+    padding: 8px 10px 8px 10px;
     text-decoration: none;
-    font-family: "Inter", sans-serif;
+    font: 18px sans-serif;
     border:none;
 }
 
@@ -363,3 +363,17 @@ a {
     text-align: left;
 }
 
+.pagamento{
+    position: absolute;
+    top: 32%;
+    left: 32%;
+    text-align: center;
+    background-color: #045039;
+    color: #eeeeee;
+    padding: 40px;
+}
+
+.texto-pagamento {
+    width: 50%;
+    font: 18px sans-serif;
+}

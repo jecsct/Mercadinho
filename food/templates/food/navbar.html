@@ -17,7 +17,8 @@
     <ul>
         <li>
             <div>
-                {% if request.user|has_group:'Customer' %}<a class="mercadinho" href="{% url 'food:index' %}"> Mercadinho | Créditos: {{ request.user.customer.credit }}</a>
+                {% if request.user|has_group:'Customer' %}
+                    <a class="mercadinho" href="{% url 'food:index' %}"> Mercadinho | Créditos: {{ request.user.customer.credit }}</a>
                 {% else %}
                     <a class="mercadinho" href="{% url 'food:index' %}">Mercadinho</a>
                 {% endif %}
