@@ -14,7 +14,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import ContactForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -107,13 +107,11 @@ def registarCustomer(request):
             fs = FileSystemStorage()
             filename = fs.save(image.name, image)
             uploaded_file_url = fs.url(filename)
-
             user = User.objects.create(
                 username=request.POST["username"],
                 password=request.POST["password"],
                 email=request.POST["email"]
             )
-
             Customer.objects.create(
                 profile_pic=uploaded_file_url,
                 gender=request.POST["gender"],
@@ -121,9 +119,7 @@ def registarCustomer(request):
                 credit=request.POST["credits"],
                 user_id=user.id
             )
-
             login(request, user)
-
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/registarCustomer.html')
 
@@ -136,22 +132,18 @@ def registarSalesman(request):
             fs = FileSystemStorage()
             filename = fs.save(image.name, image)
             uploaded_file_url = fs.url(filename)
-
             user = User.objects.create(
                 username=request.POST["username"],
                 password=request.POST["password"],
                 email=request.POST["email"]
             )
-
             Salesman.objects.create(
                 profile_pic=uploaded_file_url,
                 rating=0,
                 phone_number=request.POST["telephone"],
                 user_id=user.id
             )
-
             login(request, user)
-
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/registarSalesman.html')
 
