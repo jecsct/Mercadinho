@@ -14,11 +14,28 @@
         <img src="{{ request.user.salesman.profile_pic }}" style="width: 150px;"><br/><br/>
     {% endif %}
     <p><strong>Username: </strong>{{ request.user.username }}</p><br/>
+    <p><strong>Email: </strong> {{ request.user.email }}</p><br/>
     {% if request.user.customer %}
         <p><strong>Tipo de utilizador: </strong>Cliente</p><br/>
         <p class="lanterna_after"><strong>Créditos: </strong>{{ request.user.customer.credit }}</p><br/>
         <p><strong>Género: </strong>{{ request.user.customer.gender }}</p><br/>
         <p><strong>Aniversário: </strong>{{ request.user.customer.birthday }}</p>
+        {% if comments %}
+            <br/><h3>Comentários feitos pelo utilizador:</h3>
+            {% for comment in comments %}
+                <li>
+                    <p class="lanterna">Username: {{ comment.user.username }}</p>
+                    <p class="lanterna">Avaliação: {{ comment.rating }}</p>
+                    <p class="lanterna">Comentário: {{ comment.text }}</p>
+                    <br/>
+                    <form action="{% url 'food:deleteProductComment' comment.product.id %}" method="post">
+                        {% csrf_token %}
+                        <a href="{% url 'food:updateProductComment' comment.product.id %}"> Update</a>
+                        <input type="submit" value="Delete">
+                    </form>
+                </li>
+            {% endfor %}
+        {% endif %}
     {% else %}
         <p><strong>Tipo de utilizador: </strong>Vendedor</p><br/>
         <p><strong>Classificação: </strong>{{ request.user.salesman.rating }}</p><br/>

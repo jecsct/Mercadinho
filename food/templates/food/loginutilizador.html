@@ -14,11 +14,11 @@
         <p>{{ error_message }}</p>
         <br/>
     {% endif %}
-    <form method="post">
-      {% csrf_token %}
-      <p> Username: {{ loginform.username }} </p><br/>
-      <p> Password: {{ loginform.password }} </p><br/>
-      <input type="submit" value="Entrar"/>
+    <form method="post" action="{% url 'food:loginutilizador' %}">
+        {% csrf_token %}
+        Username: <input type="username" name="username" /><br /><br />
+        Password: <input type="password" name="password" /><br /><br />
+        <input type="submit" value="Login" />
     </form>
 {% endblock %}
 </body>

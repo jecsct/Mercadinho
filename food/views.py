@@ -1,5 +1,5 @@
+import random
 from time import timezone
-from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -10,10 +10,10 @@ from food.models import Mensagem, Customer, Salesman
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
+from .forms import CustomerForm, UserForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import User, Group
 
 
 def index(request):
@@ -27,17 +27,14 @@ def index(request):
 def contactos(request):
     error_message = False
     if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            if not form.cleaned_data.get("email") == request.user.email:
-                mensagem = form.save(commit=False)
-                mensagem.save()
-                return HttpResponseRedirect(reverse('food:contactos'))
-            else:
-                error_message = "Não pode enviar emails para si próprio"
-    else:
-        form = ContactForm()
-    return render(request, 'food/contactos.html', {'contactForm': form, 'error_message': error_message})
+        if not request.POST.get("email") == request.user.email:
+            Mensagem(email=request.POST.get("email"),
+                     texto_mensagem=request.POST.get("message"),
+                     dataHora=datetime.datetime.now()).save()
+            return HttpResponseRedirect(reverse('food:contactos'))
+        else:
+            error_message = 'Não pode enviar emails para si próprio';
+    return render(request, 'food/contactos.html', {'error_message': error_message})
 
 
 @login_required
@@ -71,7 +68,7 @@ def addToCart(request, product_id):
                 shoppingCart.save()
             comments = Comment.objects.all().filter(product_id=product_id)
             product.addView()
-            context = {'product': product, 'comments': comments, 'confirmation' : 'Produto adicionado'}
+            context = {'product': product, 'comments': comments, 'confirmation': 'Produto adicionado'}
             return render(request, 'food/detalhe.html', context)
         except:
             user = request.user
@@ -80,7 +77,7 @@ def addToCart(request, product_id):
             shoppingCart = CestoCompras(customer=customer, product=product)
             shoppingCart.save()
             products_list = Product.objects.all()
-            context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
+            context = {'products_list': products_list, 'confirmation': 'Produto adicionado', 'p': product}
             return render(request, 'food/index.html', context)
     else:
         return HttpResponseRedirect(reverse('food:loginutilizador'))
@@ -95,64 +92,108 @@ def removeFromCart(request, cestoCompras_id):
 
 @login_required
 def perfil(request):
-    return render(request, "food/perfil.html")
+    comments = Comment.objects.all().filter(user=request.user)
+    return render(request, "food/perfil.html", {'comments': comments})
 
 
 @unauthenticated_user
 def registarCustomer(request):
     if request.method == "POST":
-        customerForm = CustomerForm(request.POST, request.FILES)
-        userForm = UserForm(request.POST)
-        if customerForm.is_valid() and userForm.is_valid():
-            user = userForm.save(commit=False)
-            user.save()
-            group = Group.objects.get(name='Customer')
-            group.user_set.add(user)
-
+        if request.FILES['photo']:
+            image = request.FILES['photo']
             fs = FileSystemStorage()
-            filename = fs.save(customerForm.cleaned_data.get("profile_pic"),
-                               customerForm.cleaned_data.get("profile_pic"))
+            filename = fs.save(image.name, image)
             uploaded_file_url = fs.url(filename)
-
-            customer = Customer.objects.create(
-                profile_pic=uploaded_file_url,
-                gender=customerForm.cleaned_data.get("gender"),
-                birthday=customerForm.cleaned_data.get("birthday"),
-                credit=customerForm.cleaned_data.get("credit"),
-                user_id=user.id
+            user = User.objects.create_user(
+                username=request.POST["username"],
+                password=request.POST["password"],
+                email=request.POST["email"]
             )
-
-            customer.user = user
-            customer.save()
+            Group.objects.get(name='Customer').user_set.add(user)
+            Customer(
+                profile_pic=uploaded_file_url,
+                gender=request.POST["gender"],
+                birthday=request.POST["birthday"],
+                credit=request.POST["credits"],
+                user_id=user.id
+            ).save()
             login(request, user)
             return HttpResponseRedirect(reverse('food:index'))
             # return render(request, 'food/index.html')
-    customerForm = CustomerForm()
-    userForm = UserForm()
-    return render(request, 'food/registarCustomer.html', {'userForm': userForm, 'customerForm': customerForm})
+        customerForm = CustomerForm()
+        userForm = UserForm()
+        return render(request, 'food/registarCustomer.html', {'userForm': userForm, 'customerForm': customerForm})
+
+
+@unauthenticated_user
+def registarSalesman(request):
+    if request.method == "POST" and request.FILES['photo']:
+        image = request.FILES['photo']
+        fs = FileSystemStorage()
+        filename = fs.save(image.name, image)
+        uploaded_file_url = fs.url(filename)
+        user = User.objects.create_user(
+            username=request.POST["username"],
+            password=request.POST["password"],
+            email=request.POST["email"]
+        )
+        Group.objects.get(name='Salesman').user_set.add(user)
+        Salesman(
+            profile_pic=uploaded_file_url,
+            rating=0,
+            phone_number=request.POST["telephone"],
+            user_id=user.id
+        ).save()
+        login(request, user)
+        return HttpResponseRedirect(reverse('food:index'))
+    return render(request, 'food/registarSalesman.html')
+
+
+@login_required
+@allowed_users(allowed_roles=['Salesman'])
+def addProduct(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        productImage = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(productImage.name, productImage)
+        uploaded_file_url = fs.url(filename)
+        Product.objects.create(name=request.POST.get('productName'),
+                               description=request.POST.get('productDescription'),
+                               price=request.POST.get('productPrice'),
+                               image=uploaded_file_url,
+                               salesman_id=request.user.salesman.id
+                               )
+        return HttpResponseRedirect(reverse('food:index'))
+    return render(request, 'food/add_product.html')
 
 
 @unauthenticated_user
 def loginutilizador(request):
-    error_message = False
     if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
+        try:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+        except KeyError:
+            return render(request, 'food/loginutilizador.html')
+        if username and password:
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 return HttpResponseRedirect(reverse('food:index'))
-        error_message = 'Utilizador não existe ou a password está incorreta'
-    form = AuthenticationForm()
-    return render(request, "food/loginutilizador.html", {"loginform": form, 'error_message': error_message})
+            else:
+                return render('food/loginutilizador.html',
+                              {'error_message': 'Utilizador não existe ou a password está incorreta'})
+        else:
+            return render(request, 'food/loginutilizador.html')
+    else:
+        return render(request, 'food/loginutilizador.html')
 
 
 @login_required
 def logoututilizador(request):
     logout(request)
     return HttpResponseRedirect(reverse('food:index'))
+
 
 @unauthenticated_user
 def registarSalesman(request):
@@ -209,6 +250,7 @@ def addProduct(request):
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
 
+
 def mapPage(request):
     return render(request, 'food/mercadinhos_map.html')
 
@@ -249,7 +291,8 @@ def deleteProductComment(request, product_id):
         Salesman.objects.get(id=product.salesman_id).deleteRating(comment.rating)
         product.deleteRating(comment.rating)
         comment.delete()
-    return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+    return HttpResponseRedirect(
+        request.META.get('HTTP_REFERER', '/'))  # volta para a página anterior. necessário por causa do perfil
 
 
 @login_required
@@ -300,6 +343,7 @@ def send_confirmation(morada, zipCode):
     mensagem = Mensagem(email="service@mercadinho.pt", texto_mensagem=texto_mensagem, dataHora=timezone.now())
     mensagem.save()
 
+
 def get_price(customer):
     shopping_cart = CestoCompras.objects.filter(customer=customer)
     price = 0
@@ -307,24 +351,36 @@ def get_price(customer):
         price += item.product.price
     return price
 
-@login_required
 
+@login_required
 def pagamento(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
     price = get_price(customer)
     if price == 0:
-        return render(request, 'food/cestoCompras.html', {'error_message' : "O seu carrinho está vazio"})
-    return render(request, 'food/pagamento.html', {'price':price})
+        return render(request, 'food/cestoCompras.html', {'error_message': "O seu carrinho está vazio"})
+    return render(request, 'food/pagamento.html', {'price': price})
+
 
 def checkOut(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
     price = get_price(customer)
     if customer.credit - price < 0:
-        return render(request, 'food/pagamento.html', {'price': price,'error_message': "Não tem laterninhas suficientes para esta compra. Vá investir na crypto"})
+        return render(request, 'food/pagamento.html', {'price': price,
+                                                       'error_message': "Não tem laterninhas suficientes para esta compra. Vá investir na crypto"})
     else:
         customer.credit = customer.credit - price
         customer.save()
         CestoCompras.objects.filter(customer=customer).delete()
         return HttpResponseRedirect(reverse('food:index'))
+
+
+@login_required
+@allowed_users(allowed_roles=['Customer'])
+def investCrypto(request):
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(user=user)
+    customer.credit = random.randint(1, 1000000)
+    customer.save()
+    return HttpResponseRedirect(reverse('food:about'))

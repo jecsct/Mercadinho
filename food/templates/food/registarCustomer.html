@@ -10,29 +10,48 @@
 <body>
 {% block content %}
     <h2>Registar Utilizador</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" action="{% url 'food:registarCustomer' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="exampleInputEmail1">Username</label>
-            <input type="text" class="form-control" aria-describedby="emailHelp"
-                   placeholder="Enter Username" style="max-width: 500px">
-        </div>
-        <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                   placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-        </div>
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+{#<<<<<<< HEAD#}
+{#        <div class="form-group">#}
+{#            <label for="exampleInputEmail1">Username</label>#}
+{#            <input type="text" class="form-control" aria-describedby="emailHelp"#}
+{#                   placeholder="Enter Username" style="max-width: 500px">#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <label for="exampleInputEmail1">Email address</label>#}
+{#            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"#}
+{#                   placeholder="Enter email">#}
+{#            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <label for="exampleInputPassword1">Password</label>#}
+{#            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">#}
+{#        </div>#}
+{#        <div class="form-group form-check">#}
+{#            <input type="checkbox" class="form-check-input" id="exampleCheck1">#}
+{#            <label class="form-check-label" for="exampleCheck1">Check me out</label>#}
+{#        </div>#}
+{#        <button type="submit" class="btn btn-primary">Submit</button>#}
+{#    </form>#}
+{#=======#}
+        <p>Username: <input name="username" type="username" required></p><br/>
+        <p>Email: <input name="email" type="email" required></p><br/>
+        <p>Password: <input name="password" type="password" required></p><br/>
+        <p>Género: <input list="gender" name="gender"></p><br/>
+        <datalist id="gender">
+            <option value="Male">
+            <option value="Female">
+            <option value="Other">
+        </datalist>
+        <p>Fotografia: <input name="photo" type="file" required></p><br/>
+        <p>Aniversário: <input name="birthday" type="date" required></p><br/>
+        <p>Créditos: <input name="credits" type="number" required></p><br>
+        <input type="submit" value="Gravar novo Utilizador"/>
     </form>
+    <br/>
+    <p>É um vendedor? Registe-se <a href="{% url 'food:registarSalesman' %}">aqui</a>!</p>
+{#>>>>>>> 979f825b63d8ede0ce006dd4a794a70f85f9edcd#}
 {% endblock %}
 </body>
 </html>
