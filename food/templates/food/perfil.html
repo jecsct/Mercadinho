@@ -14,6 +14,7 @@
         <img src="{{ request.user.salesman.profile_pic }}" style="width: 150px;"><br/><br/>
     {% endif %}
     <p><strong>Username: </strong>{{ request.user.username }}</p><br/>
+    <p><strong>Email: </strong> {{ request.user.email }}</p><br/>
     {% if request.user.customer %}
         <p><strong>Tipo de utilizador: </strong>Cliente</p><br/>
         <p class="lanterna_after"><strong>Créditos: </strong>{{ request.user.customer.credit }}</p><br/>

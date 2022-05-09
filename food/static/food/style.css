@@ -139,10 +139,17 @@ nav p {
     font-size: 18px;
 }
 
+.nav-logo{
+    float: left;
+    margin: 0;
+    padding: 0 12px;
+    height: 44px;
+}
+
 .mercadinho {
     float: left;
     color: #fff;
-    padding: 12px 12px;
+    padding: 12px 12px 12px 0;
 }
 
 .navOption {
@@ -159,8 +166,8 @@ nav p {
 .nav-profile-pic {
     margin: 0;
     padding: 0;
-    height: 44.2px;
-    width: 44.2px;
+    height: 44px;
+    width: 44px;
     object-fit: cover;
 }
 
@@ -169,7 +176,7 @@ ul.dropdown {
     display: none;
     position: absolute;
     right: 0;
-    top: 42.4px;
+    top: 42px;
     margin: 0;
 }
 
