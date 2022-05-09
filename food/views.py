@@ -91,7 +91,8 @@ def removeFromCart(request, cestoCompras_id):
 
 @login_required
 def perfil(request):
-    return render(request, "food/perfil.html")
+    comments = Comment.objects.all().filter(user=request.user)
+    return render(request, "food/perfil.html", {'comments': comments})
 
 
 @unauthenticated_user
@@ -230,7 +231,7 @@ def deleteProductComment(request, product_id):
         Salesman.objects.get(id=product.salesman_id).deleteRating(comment.rating)
         product.deleteRating(comment.rating)
         comment.delete()
-    return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))  # volta para a página anterior. necessário por causa do perfil
 
 
 @login_required

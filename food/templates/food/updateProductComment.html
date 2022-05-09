@@ -9,10 +9,13 @@
 {% block content %}
     <form action="{% url 'food:updateProductComment' product.id %}" method="post">
         {% csrf_token %}
-        <label>Text: <input type="text" value="{{ comment.text }}" name="newCommentText"></label><br>
-        <label>Rating: <input type="number" value="{{ comment.rating }}" step="0.1" max="5" min="0"
-                              name="newCommentRating"></label><br>
-        <input type="submit" value="Update Comment"/>
+        <br/>
+        <label>Comentário: </label><br>
+        <input type="text" value="{{ comment.text }}" name="newCommentText"><br/><br/>
+        <label>Avaliação: </label><br>
+        <input type="number" value="{{ comment.rating }}" step="0.1" max="5" min="0" name="newCommentRating"><br/><br/>
+        <input hidden name="profile">
+        <input type="submit" value="Atualizar Comentário"/>
     </form>
 {% endblock %}
 </body>

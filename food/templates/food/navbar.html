@@ -17,7 +17,9 @@
     <ul>
         <li>
             <div>
-                <img src="/static/media/logo.png" class="nav-logo">
+                <a href="{% url 'food:index' %}">
+                    <img src="/static/media/logo.png" class="nav-logo">
+                </a>
                 {% if request.user|has_group:'Customer' %}
                     <a class="mercadinho" href="{% url 'food:index' %}"> Mercadinho | Créditos: {{ request.user.customer.credit }}</a>
                 {% else %}
