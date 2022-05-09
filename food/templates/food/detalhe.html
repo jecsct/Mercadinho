@@ -13,10 +13,7 @@
         <div class="center_grid">
             <div class="grid">
                 <div class="grid_item item1">
-                    <img alt="Imagem do produto. {{ product.name }}"
-                            {#                         src="https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Kiwi-fruits-582a07b.jpg?quality=90&resize=661%2C600"#}
-                         src="{{ product.image }}"
-                         style="height: 250px;width: 250px">
+                    <img alt="Imagem do produto. {{ product.name }}" src="{{ product.image }}" style="height: 250px;width: 250px">
                 </div>
                 <div class = "grid_item item2">
                     <ul>
@@ -31,7 +28,7 @@
                     <div class="grid_item item3">
                         {% if request.user|has_group:'Salesman' %}
                             {% if request.user|has_group:'Salesman' %}
-                                <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
+                                <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar produto</a>
                             {% else %}
                                 <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao Cesto</a>
                             {% endif %}
@@ -81,7 +78,6 @@
             </div
         {% endif %}
     </div>
-
 {% endblock %}
 </body>
 </html>
