@@ -1,6 +1,5 @@
 import random
 from time import timezone
-from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -11,7 +10,6 @@ from food.models import Mensagem, Customer, Salesman
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import ContactForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import User, Group
@@ -28,17 +26,14 @@ def index(request):
 def contactos(request):
     error_message = False
     if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            if not form.cleaned_data.get("email") == request.user.email:
-                mensagem = form.save(commit=False)
-                mensagem.save()
-                return HttpResponseRedirect(reverse('food:contactos'))
-            else:
-                error_message = "Não pode enviar emails para si próprio"
-    else:
-        form = ContactForm()
-    return render(request, 'food/contactos.html', {'contactForm': form, 'error_message': error_message})
+        if not request.POST.get("email") == request.user.email:
+            Mensagem(email=request.POST.get("email"),
+                     texto_mensagem=request.POST.get("message"),
+                     dataHora=datetime.datetime.now()).save()
+            return HttpResponseRedirect(reverse('food:contactos'))
+        else:
+            error_message = 'Não pode enviar emails para si próprio';
+    return render(request, 'food/contactos.html', {'error_message': error_message})
 
 
 @login_required
@@ -72,7 +67,7 @@ def addToCart(request, product_id):
                 shoppingCart.save()
             comments = Comment.objects.all().filter(product_id=product_id)
             product.addView()
-            context = {'product': product, 'comments': comments, 'confirmation' : 'Produto adicionado'}
+            context = {'product': product, 'comments': comments, 'confirmation': 'Produto adicionado'}
             return render(request, 'food/detalhe.html', context)
         except:
             user = request.user
@@ -81,7 +76,7 @@ def addToCart(request, product_id):
             shoppingCart = CestoCompras(customer=customer, product=product)
             shoppingCart.save()
             products_list = Product.objects.all()
-            context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
+            context = {'products_list': products_list, 'confirmation': 'Produto adicionado', 'p': product}
             return render(request, 'food/index.html', context)
     else:
         return HttpResponseRedirect(reverse('food:loginutilizador'))
@@ -181,7 +176,8 @@ def loginutilizador(request):
                 login(request, user)
                 return HttpResponseRedirect(reverse('food:index'))
             else:
-                return render('food/loginutilizador.html', {'error_message': 'Utilizador não existe ou a password está incorreta'})
+                return render('food/loginutilizador.html',
+                              {'error_message': 'Utilizador não existe ou a password está incorreta'})
         else:
             return render(request, 'food/loginutilizador.html')
     else:
@@ -285,6 +281,7 @@ def send_confirmation(morada, zipCode):
     mensagem = Mensagem(email="service@mercadinho.pt", texto_mensagem=texto_mensagem, dataHora=timezone.now())
     mensagem.save()
 
+
 def get_price(customer):
     shopping_cart = CestoCompras.objects.filter(customer=customer)
     price = 0
@@ -292,32 +289,36 @@ def get_price(customer):
         price += item.product.price
     return price
 
+
 @login_required
 def pagamento(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
     price = get_price(customer)
     if price == 0:
-        return render(request, 'food/cestoCompras.html', {'error_message' : "O seu carrinho está vazio"})
-    return render(request, 'food/pagamento.html', {'price':price})
+        return render(request, 'food/cestoCompras.html', {'error_message': "O seu carrinho está vazio"})
+    return render(request, 'food/pagamento.html', {'price': price})
+
 
 def checkOut(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
     price = get_price(customer)
     if customer.credit - price < 0:
-        return render(request, 'food/pagamento.html', {'price': price,'error_message': "Não tem laterninhas suficientes para esta compra. Vá investir na crypto"})
+        return render(request, 'food/pagamento.html', {'price': price,
+                                                       'error_message': "Não tem laterninhas suficientes para esta compra. Vá investir na crypto"})
     else:
         customer.credit = customer.credit - price
         customer.save()
         CestoCompras.objects.filter(customer=customer).delete()
         return HttpResponseRedirect(reverse('food:index'))
 
+
 @login_required
 @allowed_users(allowed_roles=['Customer'])
 def investCrypto(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
-    customer.credit = random.randint(1,1000000)
+    customer.credit = random.randint(1, 1000000)
     customer.save()
     return HttpResponseRedirect(reverse('food:about'))
