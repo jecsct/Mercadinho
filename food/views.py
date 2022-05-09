@@ -329,7 +329,7 @@ def checkOut(request):
 
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
-def investCrypt(request):
+def investCrypto(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
     customer.credit = random.randint(1,100000)
