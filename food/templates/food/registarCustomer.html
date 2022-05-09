@@ -10,15 +10,20 @@
 <body>
 {% block content %}
     <h2>Registar Utilizador</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" action="{% url 'food:registarCustomer' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <p> Username: {{ userForm.username }} </p><br/>
-        <p> Email: {{ userForm.email }} </p><br/>
-        <p> Password: {{ userForm.password1 }} </p><br/>
-        <p> Género: {{ customerForm.gender }} </p><br/>
-        <p> Fotografia: {{ customerForm.profile_pic }} </p><br/>
-        <p> Aniversário: {{ customerForm.birthday }} </p><br/>
-        <p> Créditos: {{ customerForm.credit }} </p><br>
+        <p>Username: <input name="username" type="username" required></p><br/>
+        <p>Email: <input name="email" type="email" required></p><br/>
+        <p>Password: <input name="password" type="password" required></p><br/>
+        <p>Género: <input list="gender" name="gender"></p><br/>
+        <datalist id="gender">
+            <option value="Male">
+            <option value="Female">
+            <option value="Other">
+        </datalist>
+        <p>Fotografia: <input name="photo" type="file" required></p><br/>
+        <p>Aniversário: <input name="birthday" type="date" required></p><br/>
+        <p>Créditos: <input name="credits" type="number" required></p><br>
         <input type="submit" value="Gravar novo Utilizador"/>
     </form>
     <br/>

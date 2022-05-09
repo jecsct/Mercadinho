@@ -9,12 +9,11 @@
 </head>
 <body>
 {% block content %}
-    <img src="{{ request.user.Customer.profile_pic }}">
-    {% if request.user.is_authenticated %}
-        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;">  Olá {{ request.user }}!</h3>
-    {% else %}
-        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;"> Ainda não está logado!</h3>
-    {% endif %}
+{#    {% if request.user.is_authenticated %}#}
+{#        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;">  Olá {{ request.user }}!</h3>#}
+{#    {% else %}#}
+{#        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;"> Ainda não está logado!</h3>#}
+{#    {% endif %}#}
     <br/>
     {% if products_list %}
         <br/>

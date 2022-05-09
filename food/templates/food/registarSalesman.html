@@ -8,14 +8,13 @@
 <body>
 {% block content %}
     <h2>Registar Vendedor</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form action="{% url 'food:registarSalesman' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>Username: {{ userForm.username }} </p><br/>
-        <p>Email: {{ userForm.email }} </p><br/>
-        <p>Password: {{ userForm.password1 }} </p><br/>
-        <p hidden>Classificação: {{ salesmanForm.rating }} </p>
-        <p>Fotografia: {{ salesmanForm.profile_pic }} </p><br/>
-        <p>Número de telefone: {{ salesmanForm.phone_number }} </p><br/>
+        <p>Username: <input name="username" type="username" required></p><br/>
+        <p>Email: <input name="email" type="email" required></p><br/>
+        <p>Password: <input name="password" type="password" required></p><br/>
+        <p>Fotografia: <input name="photo" type="file" required></p><br/>
+        <p>Número de telefone: <input name="telephone" type="tel" required></p><br/>
         <input type="submit" value="Gravar novo Vendedor"/>
     </form><br/>
 {% endblock %}
