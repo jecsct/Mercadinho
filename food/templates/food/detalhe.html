@@ -9,115 +9,99 @@
 <body>
 {% block content %}
     <div>
-        <div class="product_title">
-            <h1>{{ product.name }}</h1>
-        </div>
-        <div>
-            <div class="product_details_zone">
-                <div class="image_details">
-                    <div>
-                        {# <img alt="Imagem do produto. {{ product.name }}" src="{{ product.image }}">#}
+        <div class="center_grid">
+            <div class="grid">
+                <div class="grid2">
+                    <div class="item0"><h1 class="product_title">{{ product.name }}</h1></div>
+                    <div class="grid_item item1">
                         <img alt="Imagem do produto. {{ product.name }}"
-                                {#                         src="https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Kiwi-fruits-582a07b.jpg?quality=90&resize=661%2C600"#}
                              src="{{ product.image }}"
                              style="height: 250px;width: 250px">
                     </div>
-                    <div>
-                        <ul class="specs">
-                            <li>Price: {{ product.price }}</li>
-                            <li>Description: {{ product.description }}</li>
-                            <li>Salesman: {{ product.salesman.user.username }}</li>
-                            <li>Rating: {{ product.rating }}</li>
-                            <li>Sales: {{ product.sales }}</li>
+                    <div class = "grid_item item2">
+                        <ul>
+                            <li class="lanterna_after"><strong>Preço</strong>: {{ product.price }}</li>
+                            <li><strong>Descrição</strong>: {{ product.description }}</li>
+                            <li><strong>Vendedor</strong>: {{ product.salesman.user.username }}</li>
+                            <li><strong>Classificação</strong>: {{ product.rating }}</li>
+                            <li><strong>Vendas</strong>: {{ product.sales }}</li>
                         </ul>
                     </div>
                 </div>
-                {% if request.user|has_group:'Salesman' %}
-                    <div>
-                        {#                    <input type="submit" value="Eliminar">#}
-                        <button type="submit" onclick="location.href='{% url 'food:deleteProduct' product.id %}'" name='mybtn2'>Eliminar</button>
-                    </div>
-                {% else %}
-                    <div>
-                        <form action="{% url 'food:addToCart'  product.id %}" method="post">
-                            {% csrf_token %}
-                            <label>Quantity<input type="number" name="quant" value="1"></label>
-                            <!--a href="{% url 'food:addToCart'  product.id %}" class="button-link">Adicionar ao cesto</a-->
-                            <input type="submit" value="Adicionar ao cesto"/>
-                            {% if confirmation %}
-                                <p>{{ confirmation }}</p>
+                {% if request.user.is_authenticated %}
+                    <div class="grid_item item3">
+                        {% if request.user|has_group:'Salesman' %}
+                            {% if request.user|has_group:'Salesman' %}
+                                <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
+                            {% else %}
+                                <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao Cesto</a>
                             {% endif %}
-                        </form>
-                    </div>
+                            </div>
+                            <div class="column3">
+                        {% else %}
+                            <form action="{% url 'food:addToCart'  product.id %}" method="post">
+                                {% csrf_token %}
+                                <label>Quantidade: <input type="number" name="quant"></label><br/><br/>
+                                <input type="submit" value="Adicionar ao cesto"/>
+                            </form>
+                        {% endif %}
+                        </div>
                 {% endif %}
-            </div>
-        </div>
-        <br>
-        <div>
-            <div class="comments_header">
-                <h3>Comments</h3>
-            </div>
-            <div>
-                <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
-                      method="post">
-                    {% csrf_token %}
-                    <p>Comentário: </p>
-                    <input id="txtFldComment" name="commentInput" type="text" required><br/><br/>
-                    <p>Avaliação: </p>
-                    <input id="nmbrFldRating" max="5.0" min="0.0" name="ratingInput" step="0.1" type="number"
-                           required><br/><br/>
-                    <input type="submit" value="Comentar"/><br/><br/>
-                </form>
-                <div>
-                    <ul>
-                        {% for comment in comments %}
-                            <li>
-                                <div class="review_section">
-                                    <div>
-                                        <img src="{{ comment.user.customer.profile_pic }}" alt="profile_pic do user">
-                                    </div>
-                                    <div>
-                                        <p class="lanterna">Username: {{ comment.user.username }}</p>
-                                        <p class="lanterna">Avaliação: {{ comment.rating }}</p>
-                                        <p class="lanterna">Comentário: {{ comment.text }}</p>
-                                    </div>
-                                    {% if request.user.is_authenticated and comment.user.username == request.user.username %}
-                                        <br/>
-                                        <form action="{% url 'food:deleteProductComment' product.id %}" method="post">
-                                            {% csrf_token %}
-                                            <a href="{% url 'food:updateProductComment' product.id %}"> Update</a>
-                                            <input type="submit" value="Delete">
-                                        </form>
-                                    {% endif %}
+                <div class="grid_item item4">
+                    <h3>Outros Produtos:</h3>
+                    {% for p in products %}
+                        <a href="{% url 'food:productDetailPage' p.id %}">
+                            <div class="product_suggestion">
+                                <img src="{{ p.image }}" alt="imagem de um produto">
+                                <div class="text-details">
+                                    <p>Nome: {{ p.name }}</p>
+                                    <p class="lanterna_after">Preço: {{ p.price }}</p>
+                                    <p>Rating: {{ p.rating }}</p>
                                 </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="item5">
+                    {% if request.user.is_authenticated %}
+                        <br>
+                        <h3>Inserir comentário:</h3>
+                        <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
+                              method="post">
+                            {% csrf_token %}
+                            <p>Comentário: </p>
+                            <input id="txtFldComment" name="commentInput" type="text" required><br/><br/>
+                            <p>Avaliação: </p>
+                            <input id="nmbrFldRating" max="5.0" min="0.0" name="ratingInput" step="0.1" type="number" required><br/><br/>
+                            <input type="submit" value="Comentar"/><br/><br/>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
-            <div>
-                <h3>Outros Produtos:</h3>
-                {% for p in products %}
-                    <a href="{% url 'food:productDetailPage' p.id %}">
-                        <div class="product_suggestion">
-                            <div>
-                                <img src="{{ p.image }}" alt="imagem de um produto">
-                            </div>
-                            <div id="text-details">
-                                <div>
-                                    Nome: {{ p.name }}
-                                </div>
-                                <div>
-                                    Preço: {{ p.price }}
-                                </div>
-                                <div>
-                                    Rating: {{ p.rating }}
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
+        </div>
+        <h3>Comentários:</h3>
+        <div class="comments">
+            {% if comments %}
+                <ul class="specs">
+                    {% for comment in comments %}
+                        <li>
+                            <p class="lanterna">Username: {{ comment.user.username }}</p>
+                            <p class="lanterna">Avaliação: {{ comment.rating }}</p>
+                            <p class="lanterna">Comentário: {{ comment.text }}</p>
+                            {% if request.user.is_authenticated and comment.user.username == request.user.username %}
+                                <br/>
+                                <form action="{% url 'food:deleteProductComment' product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <a href="{% url 'food:updateProductComment' product.id %}"> Update</a>
+                                    <input type="submit" value="Delete">
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Ainda não existem comentários!</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
