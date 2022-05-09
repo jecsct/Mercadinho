@@ -57,23 +57,14 @@
                             {% if request.user|has_group:'Salesman' %}
                                 <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
                             {% else %}
-{#<<<<<<< HEAD#}
-{#                                <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao#}
-{#                                    Cesto</a>#}
-{#=======#}
                                 <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao Cesto</a>
-{#>>>>>>> 979f825b63d8ede0ce006dd4a794a70f85f9edcd#}
                             {% endif %}
                             </div>
                             <div class="column3">
                         {% else %}
                             <form action="{% url 'food:addToCart'  product.id %}" method="post">
                                 {% csrf_token %}
-{#<<<<<<< HEAD#}
-{#                                <label>Quantity: <input type="number" name="quant"></label>#}
-{#=======#}
                                 <label>Quantidade: <input type="number" name="quant"></label><br/><br/>
-{#>>>>>>> 979f825b63d8ede0ce006dd4a794a70f85f9edcd#}
                                 <input type="submit" value="Adicionar ao cesto"/>
                             </form>
                         {% endif %}
