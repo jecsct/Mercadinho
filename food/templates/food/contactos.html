@@ -10,9 +10,9 @@
     <h1>Contactos</h1>
     <ul>
         <li><strong>Facebook</strong>: Mercadinho Portugal</li>
-        <li><strong>Instagram</strong>: mercadinho.pt</li>
+        <li><strong>Instagram</strong>: 127.0.0.1:8000/food</li>
         <li><strong>Telefone</strong>: +351 888 888 888</li>
-        <li><strong>Email</strong>: ajuda@mercadinho.pt</li>
+        <li><strong>Email</strong>: mercadinho@email.com</li>
     </ul>
     <h1>Contacte-nos!</h1>
     <form action="{% url 'food:contactos' %}" method="post">
@@ -20,9 +20,10 @@
         {% if error_message %}
             {{ error_message }}<br/><br/>
         {% endif %}
-        <p>Email a contactar: {{ contactForm.email }} </p><br/>
-        <p>Texto da mensagem: {{ contactForm.texto_mensagem }} </p><br/>
-        <p hidden>Data e hora de envio: {{ contactForm.dataHora }}</p>
+        <label>Email a contactar: </label><br/>
+        <input name="email" type="email" required><br/><br/>
+        <label for="message" required>Texto da mensagem: </label><br/>
+        <textarea id="message" name="message" rows="4" cols="38"></textarea><br/><br/>
         <input type="submit" value="Enviar Mensagem" />
     </form>
 {% endblock %}
