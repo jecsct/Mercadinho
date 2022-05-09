@@ -1,5 +1,5 @@
+import random
 from time import timezone
-
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
@@ -19,6 +19,8 @@ from django.contrib.auth.models import Group, User
 
 def index(request):
     products = Product.objects.all()
+    if request.user.groups.filter(name='Salesman').exists():
+        products = products.filter(salesman_id=request.user.salesman.id)
     context = {'products_list': products}
     return render(request, 'food/index.html', context)
 
@@ -36,7 +38,7 @@ def contactos(request):
                 error_message = "Não pode enviar emails para si próprio"
     else:
         form = ContactForm()
-    return render(request, 'food/contactos.html', {'contactForm': form, 'error_message':error_message})
+    return render(request, 'food/contactos.html', {'contactForm': form, 'error_message': error_message})
 
 
 @login_required
@@ -68,14 +70,19 @@ def addToCart(request, product_id):
                 product = Product.objects.get(id=product_id)
                 shoppingCart = CestoCompras(customer=customer, product=product)
                 shoppingCart.save()
-            return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+            comments = Comment.objects.all().filter(product_id=product_id)
+            product.addView()
+            context = {'product': product, 'comments': comments, 'confirmation' : 'Produto adicionado'}
+            return render(request, 'food/detalhe.html', context)
         except:
             user = request.user
             customer = Customer.objects.get(user=user)
             product = Product.objects.get(id=product_id)
             shoppingCart = CestoCompras(customer=customer, product=product)
             shoppingCart.save()
-            return HttpResponseRedirect(reverse('food:index'))
+            products_list = Product.objects.all()
+            context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
+            return render(request, 'food/index.html', context)
     else:
         return HttpResponseRedirect(reverse('food:loginutilizador'))
 
@@ -212,7 +219,8 @@ def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     comments = Comment.objects.all().filter(product_id=product_id)
     product.addView()
-    context = {'product': product, 'comments': comments}
+    products = Product.objects.all().exclude(id=product_id)
+    context = {'product': product, 'comments': comments, "products": products}
     return render(request, 'food/detalhe.html', context)
 
 
@@ -223,26 +231,37 @@ def commentOnItem(request, product_id):
         commentText = request.POST['commentInput']
         commentRating = request.POST['ratingInput']
         product = Product.objects.get(id=product_id)
-        # product.update(rating=calculateItemRating(product_id, commentRating))
+        Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
         product.addRating(newRating=commentRating)
         Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
                 product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-    # return productDetailPage(request, product_id)
+
+
+@login_required
+@allowed_users(allowed_roles=['Customer'])
+def deleteProductComment(request, product_id):
+    product = Product.objects.get(id=product_id)
+    comment = Comment.objects.get(product_id=product_id, user_id=request.user.id)
+    if request.method == 'POST':
+        Salesman.objects.get(id=product.salesman_id).deleteRating(comment.rating)
+        product.deleteRating(comment.rating)
+        comment.delete()
+    return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
 @login_required
 @allowed_users(allowed_roles=['Customer'])
 def updateProductComment(request, product_id):
-    print(request.method)
     product = get_object_or_404(Product, pk=product_id)
+    comment = Comment.objects.get(product_id=product_id, user_id=request.user.id)
     if request.method == 'POST':
         newText = request.POST['newCommentText']
         newRating = request.POST['newCommentRating']
-        product.updateRating(Comment.objects.get(product_id=product_id, user_id=request.user.id).rating, newRating)
+        product.updateRating(comment.rating, newRating)
+        Salesman.objects.get(id=product.salesman_id).updateRating(newRating=newRating, oldRating=newRating)
         Comment.objects.filter(user_id=request.user.id, product_id=product_id).update(text=newText, rating=newRating)
         return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-    comment = Comment.objects.get(user_id=request.user.id, product_id=product_id)
     context = {'product': product, 'comment': comment}
     return render(request, 'food/updateProductComment.html', context)
 
@@ -252,16 +271,6 @@ def updateProductComment(request, product_id):
 def deleteProduct(request, product_id):
     get_object_or_404(Product, pk=product_id).delete()
     return HttpResponseRedirect(reverse('food:index'))
-
-
-@login_required
-@allowed_users(allowed_roles=['Customer'])
-def deleteProductComment(request, product_id):
-    if request.method == 'POST':
-        Product.objects.get(id=product_id).deleteRating(
-            Comment.objects.get(product_id=product_id, user_id=request.user.id).rating)
-        Comment.objects.get(product=product_id, user_id=request.user).delete()
-    return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
 @login_required
@@ -289,17 +298,39 @@ def send_confirmation(morada, zipCode):
     mensagem = Mensagem(email="service@mercadinho.pt", texto_mensagem=texto_mensagem, dataHora=timezone.now())
     mensagem.save()
 
+def get_price(customer):
+    shopping_cart = CestoCompras.objects.filter(customer=customer)
+    price = 0
+    for item in shopping_cart:
+        price += item.product.price
+    return price
+
+@login_required
+def pagamento(request):
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(user=user)
+    price = get_price(customer)
+    if price == 0:
+        return render(request, 'food/cestoCompras.html', {'error_message' : "O seu carrinho está vazio"})
+    return render(request, 'food/pagamento.html', {'price':price})
+
+def checkOut(request):
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(user=user)
+    price = get_price(customer)
+    if customer.credit - price < 0:
+        return render(request, 'food/pagamento.html', {'price': price,'error_message': "Não tem laterninhas suficientes para esta compra. Vá investir na crypto"})
+    else:
+        customer.credit = customer.credit - price
+        customer.save()
+        CestoCompras.objects.filter(customer=customer).delete()
+        return HttpResponseRedirect(reverse('food:index'))
 
 @login_required
 @allowed_users(allowed_roles=['Customer'])
-def pagamento(request):
-    #    if request.method == 'POST':
-    #        form = PaymentForm(request.POST)
-    #        if form.is_valid():
-    #            send_confirmation(morada, zipCode)
-    #            print("reduzir laterninhas")
-    #            return HttpResponseRedirect(reverse('food:index'))
-    #        else:
-    #            return HttpResponseRedirect(reverse('food:pagamento'))
-    #    else:
-    return render(request, 'food/pagamento.html')
+def investCrypto(request):
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(user=user)
+    customer.credit = random.randint(1,1000000)
+    customer.save()
+    return HttpResponseRedirect(reverse('food:about'))

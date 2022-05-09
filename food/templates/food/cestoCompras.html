@@ -9,33 +9,37 @@
 </head>
 <body>
 {% block content %}
-    <h1>Os seus Produtos</h1>
-    {% if cesto_compras %}
-        <ul>
-            <form method="POST">
-                {% csrf_token %}
-            <div class="product_list">
-                {% for item in cesto_compras %}
-                    <li>
-                        <img style="width:150px; height:150px; object-fit: cover;" src="{{ item.product.image }}" /><br/><br/>
-                        <a href="{% url 'food:productDetailPage' item.product.id %}">{{ item.product.name }}</a>
-                        <p class="lanterna_after">Preço: {{ item.product.price }}</p><br/>
-                        <input type="submit" value="Remover" formaction="{% url 'food:removeFromCart' item.id %}"
-                        />
-                    </li>
-                {% endfor %}
-            <div/>
-            </form>
-        </ul>
-        <div>
-            <br/>
-            <p>Deseja fazer o checkout?</p><br/>
-            <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
-            <a href="{% url 'food:pagamento' %}" class="button-link">Sim</a>
-        </div>
-    {% else %}
-        <p>O seu carrinho encontra-se vazio de momento!</p>
-    {% endif %}
+    <h1>Os seu Produtos</h1>
+    <ul>
+        <form method="POST">
+        {% csrf_token %}
+        {% for item in cesto_compras %}
+        <li class="item-cestoCompras">
+          <img src="{{ item.product.image }}" width="150px" style="object-fit:cover;
+    border-radius: 50%;"/>
+            <div style="display:inline-block;vertical-align:top;padding: 10px">
+            <a href="{% url 'food:productDetailPage' item.product.id %}" class="item-titulo">{{ item.product.name }}</a>
+            <p class="lanterna">{{ item.product.price }}</p>
+            </div>
+          <input
+            type="submit"
+            value="Remover"
+            formaction="{% url 'food:removeFromCart' item.id %}"
+            class="mensagem-Hora"
+          />
+        </li>
+        {% endfor %}
+        </form>
+    </ul>
+    <div class="checkOut">
+        <p style="font:20px sans-serif">Deseja fazer o checkout?</p><br/>
+        <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
+        <a href="{% url 'food:pagamento' %}" class="button-link">Sim</a>
+        {% if error_message %}
+            <p>{{ error_message }}</p>
+        {% endif %}
+        <br> <br>
+    </div>
 {% endblock %}
 </body>
 </html>
