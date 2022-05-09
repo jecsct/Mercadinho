@@ -31,10 +31,10 @@
                 </a>
             {% else %}
                 <a>
-                    {% if request.user.customer %}
-                        <img src="{{ request.user.customer.profile_pic }}" class="nav-profile-pic"><br/><br/>
+                    {% if request.user|has_group:'Customer' %}
+                        <img src="{{ request.user.customer.profile_pic }}" class="nav-profile-pic">
                     {% else %}
-                        <img src="{{ request.user.salesman.profile_pic }}" class="nav-profile-pic"><br/><br/>
+                        <img src="{{ request.user.salesman.profile_pic }}" class="nav-profile-pic">
                     {% endif %}
                 </a>
             {% endif %}

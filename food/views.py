@@ -14,7 +14,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import ContactForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 
 def index(request):
@@ -112,6 +112,7 @@ def registarCustomer(request):
                 password=request.POST["password"],
                 email=request.POST["email"]
             )
+            Group.objects.get(name='Customer').user_set.add(user)
             Customer.objects.create(
                 profile_pic=uploaded_file_url,
                 gender=request.POST["gender"],
@@ -137,6 +138,7 @@ def registarSalesman(request):
                 password=request.POST["password"],
                 email=request.POST["email"]
             )
+            Group.objects.get(name='Salesman').user_set.add(user)
             Salesman.objects.create(
                 profile_pic=uploaded_file_url,
                 rating=0,
