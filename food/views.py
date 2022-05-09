@@ -59,32 +59,29 @@ def cestoCompras(request):
     return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras})
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def addToCart(request, product_id):
-    if request.user.is_authenticated:
-        try:
-            for x in range(int(request.POST.get('quant'))):
-                user = request.user
-                customer = Customer.objects.get(user=user)
-                product = Product.objects.get(id=product_id)
-                shoppingCart = CestoCompras(customer=customer, product=product)
-                shoppingCart.save()
-            comments = Comment.objects.all().filter(product_id=product_id)
-            product.addView()
-            context = {'product': product, 'comments': comments, 'confirmation' : 'Produto adicionado'}
-            return render(request, 'food/detalhe.html', context)
-        except:
+    try:
+        for x in range(int(request.POST.get('quant'))):
             user = request.user
             customer = Customer.objects.get(user=user)
             product = Product.objects.get(id=product_id)
             shoppingCart = CestoCompras(customer=customer, product=product)
             shoppingCart.save()
-            products_list = Product.objects.all()
-            context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
-            return render(request, 'food/index.html', context)
-    else:
-        return HttpResponseRedirect(reverse('food:loginutilizador'))
+        comments = Comment.objects.all().filter(product_id=product_id)
+        product.addView()
+        context = {'product': product, 'comments': comments, 'confirmation' : 'Produto adicionado'}
+        return render(request, 'food/detalhe.html', context)
+    except:
+        user = request.user
+        customer = Customer.objects.get(user=user)
+        product = Product.objects.get(id=product_id)
+        shoppingCart = CestoCompras(customer=customer, product=product)
+        shoppingCart.save()
+        products_list = Product.objects.all()
+        context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
+        return render(request, 'food/index.html', context)
 
 
 @login_required
@@ -330,9 +327,9 @@ def checkOut(request):
                                                                'error_message': "Preencha a Morada e o Código Postal"})
     return render(request, 'food/pagamento.html',{'price':price})
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
-def investCrypto(request):
+def investCrypt(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
     customer.credit = random.randint(1,100000)
