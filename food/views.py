@@ -307,6 +307,10 @@ def pagamento(request):
 def checkOut(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
+    shopping_cart = CestoCompras.objects.filter(customer=customer)
+    for item in shopping_cart:
+        item.product.sales += 1
+        item.product.save()
     price = get_price(customer)
     if customer.credit - price < 0:
         return render(request, 'food/pagamento.html', {'price': price,'error_message': "Não tem laterninhas suficientes para esta compra. Vá investir na crypto"})
