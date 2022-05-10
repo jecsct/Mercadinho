@@ -73,8 +73,8 @@ li {
     grid-gap: 12px;
 }
 
-.grid2{
-    display:inline-grid;
+.grid2 {
+    display: inline-grid;
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 10px;
 }
@@ -88,7 +88,7 @@ li {
     text-align: left;
     grid-column-start: 2;
     grid-row-start: 2;
-    grid-column-end:4;
+    grid-column-end: 4;
 }
 
 .item3 {
@@ -98,13 +98,13 @@ li {
     grid-column-end: 3;
 }
 
-.item4{
+.item4 {
     display: inline;
     grid-row-start: 1;
     grid-column-start: 3;
 }
 
-.item5{
+.item5 {
     display: inline;
     grid-column-start: 2;
 }
@@ -139,7 +139,7 @@ nav p {
     font-size: 18px;
 }
 
-.nav-logo{
+.nav-logo {
     float: left;
     margin: 0;
     padding: 0 12px;
@@ -223,7 +223,7 @@ input[type=submit] {
     padding: 8px 10px 8px 10px;
     text-decoration: none;
     font-size: 16px;
-    border:none;
+    border: none;
 }
 
 /* Produto INDEX */
@@ -246,7 +246,7 @@ input[type=submit] {
     border-radius: 50%;
 }
 
-.product_text, .product_price, .product_added{
+.product_text, .product_price, .product_added {
     display: block;
     text-align: center;
     color: #000;
@@ -257,7 +257,7 @@ input[type=submit] {
     margin-top: 32px;
 }
 
-.product_added{
+.product_added {
     font-size: 12px;
 }
 
@@ -290,20 +290,30 @@ input[type=submit] {
 }
 
 .about_header {
-    height: auto;
+    height: 225px;
     width: auto;
-
     color: #ffffff;
-    background-image: url("https://i.pinimg.com/originals/c4/d8/d7/c4d8d7f9e12230e974cb918678b161b4.gif");
-    image-rendering: inherit;
-    /*background-image: url("{% static 'media/blockChainGif.gif' %}");*/
-    /*display: inline-block;*/
-    object-fit: cover;
+    background-image: url("/food/static/media/About-DIAM.gif");
+    object-fit: fill;
+}
+
+.container_info_header {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.container_info_header h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Hiragino Kaku Gothic Pro', serif;
+
 }
 
 .about_header h1 {
     transform: translate(0%, 75%);
-
 }
 
 .about_info {
@@ -370,6 +380,7 @@ input[type=submit] {
     height: auto;
     overflow: auto;
 }
+
 .item-cestoCompras {
     padding: 20px;
     background-color: #045039;
@@ -388,7 +399,7 @@ input[type=submit] {
     text-align: left;
 }
 
-.pagamento{
+.pagamento {
     position: absolute;
     top: 32%;
     left: 32%;

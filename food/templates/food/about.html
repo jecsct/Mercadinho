@@ -4,29 +4,37 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Sobre nós</title>
+    {% load custom_filters %}
 </head>
 <body>
 {% block content %}
     <div class="about_general">
-        <div class="about_header">
+        <div class="container_info_header">
+            <img src="/food/static/media/About-DIAM%20(1).gif" alt="Snow" style="width:100%;">
             <h1>Connosco seguem o plano</h1>
         </div>
         <div class="about_info">
             <p>
                 Somos uma marca de comida oriental que se foca em ter sempre os melhores e
-                mais frescos produtos
+                mais frescos produtos.
             </p>
             <p>
                 Para alem de nos focarmos em termos a melhor qualidade de produtos
                 orientais, tambem nos focamos no desenvolvimento da nossa propria
-                criptomoeda, o <strong>Lanterninha</strong>
+                criptomoeda, a <strong>Lanterninha</strong>.
             </p>
             <p>
-                O <i><strong>Lanterninha</strong></i>, e uma criptomoeda desenvolvida especificamente para ser usada nas nossas lojas.<br/>
-                Desenvolvida com tecnologia de <a href="https://pt.wikipedia.org/wiki/Blockchain" target="_blank"><i>Blockchain</i></a>, o <i>Lanterninha</i>
-                vai nos permitir criar um melhor ambiente para os nossos clientes
+                A <i><strong>Lanterninha</strong></i>, e uma criptomoeda desenvolvida especificamente para ser usada nas
+                nossas lojas.<br/>
+                Desenvolvida com tecnologia de <a href="https://pt.wikipedia.org/wiki/Blockchain" target="_blank"><i>Blockchain</i></a>,
+                a <i>Lanterninha</i>
+                vai nos permitir criar um melhor ambiente para os nossos clientes.
             </p>
-            <a href="{% url 'food:investCrypto' %}" class="button-link">Investir na Crypto</a>
+            {% if not request.user.is_authenticated %}
+                <a href="{% url 'food:loginutilizador' %}" class="button-link">Investir na Crypto</a>
+            {% elif  request.user|has_group:'Customer' %}
+                <a href="{% url 'food:investCrypto' %}" class="button-link">Investir na Crypto</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
