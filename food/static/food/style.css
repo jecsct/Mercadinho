@@ -399,14 +399,14 @@ input[type=submit] {
     text-align: left;
 }
 
-.pagamento {
+.pagamento{
     position: absolute;
-    top: 32%;
-    left: 32%;
+    top: 30%;
+    left: 30%;
     text-align: center;
     background-color: #045039;
     color: #eeeeee;
-    padding: 40px;
+    padding: 80px;
 }
 
 .texto-pagamento {
