@@ -1,5 +1,6 @@
 import random
 from time import timezone
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -10,6 +11,7 @@ from food.models import Mensagem, Customer, Salesman
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 
+from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import User, Group
@@ -54,32 +56,29 @@ def cestoCompras(request):
     return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras})
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def addToCart(request, product_id):
-    if request.user.is_authenticated:
-        try:
-            for x in range(int(request.POST.get('quant'))):
-                user = request.user
-                customer = Customer.objects.get(user=user)
-                product = Product.objects.get(id=product_id)
-                shoppingCart = CestoCompras(customer=customer, product=product)
-                shoppingCart.save()
-            comments = Comment.objects.all().filter(product_id=product_id)
-            product.addView()
-            context = {'product': product, 'comments': comments, 'confirmation': 'Produto adicionado'}
-            return render(request, 'food/detalhe.html', context)
-        except:
+    try:
+        for x in range(int(request.POST.get('quant'))):
             user = request.user
             customer = Customer.objects.get(user=user)
             product = Product.objects.get(id=product_id)
             shoppingCart = CestoCompras(customer=customer, product=product)
             shoppingCart.save()
-            products_list = Product.objects.all()
-            context = {'products_list': products_list, 'confirmation': 'Produto adicionado', 'p': product}
-            return render(request, 'food/index.html', context)
-    else:
-        return HttpResponseRedirect(reverse('food:loginutilizador'))
+        comments = Comment.objects.all().filter(product_id=product_id)
+        product.addView()
+        context = {'product': product, 'comments': comments, 'confirmation' : 'Produto adicionado'}
+        return render(request, 'food/detalhe.html', context)
+    except:
+        user = request.user
+        customer = Customer.objects.get(user=user)
+        product = Product.objects.get(id=product_id)
+        shoppingCart = CestoCompras(customer=customer, product=product)
+        shoppingCart.save()
+        products_list = Product.objects.all()
+        context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
+        return render(request, 'food/index.html', context)
 
 
 @login_required
@@ -275,21 +274,12 @@ def addProduct(request):
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
 
-
-def send_confirmation(morada, zipCode):
-    texto_mensagem = "A sua encomenda está confirmada! Será enviada para a " + str(
-        morada) + "com o codigo postal " + str(zipCode)
-    mensagem = Mensagem(email="service@mercadinho.pt", texto_mensagem=texto_mensagem, dataHora=timezone.now())
-    mensagem.save()
-
-
 def get_price(customer):
     shopping_cart = CestoCompras.objects.filter(customer=customer)
     price = 0
     for item in shopping_cart:
         price += item.product.price
     return price
-
 
 @login_required
 def pagamento(request):
@@ -300,26 +290,39 @@ def pagamento(request):
         return render(request, 'food/cestoCompras.html', {'error_message': "O seu carrinho está vazio"})
     return render(request, 'food/pagamento.html', {'price': price})
 
-
 def checkOut(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
+    shopping_cart = CestoCompras.objects.filter(customer=customer)
+    for item in shopping_cart:
+        item.product.sales += 1
+        item.product.save()
     price = get_price(customer)
     if customer.credit - price < 0:
         return render(request, 'food/pagamento.html', {'price': price,
                                                        'error_message': "Não tem laterninhas suficientes para esta compra. Vá investir na crypto"})
     else:
-        customer.credit = customer.credit - price
-        customer.save()
-        CestoCompras.objects.filter(customer=customer).delete()
-        return HttpResponseRedirect(reverse('food:index'))
+        if request.method == 'POST':
+            morada = request.POST['morada']
+            zipCode = request.POST['ZipCode']
+            if morada and zipCode:
+                customer.credit = customer.credit - price
+                customer.save()
+                CestoCompras.objects.filter(customer=customer).delete()
+                products = Product.objects.all()
+                enviado = "A sua encomenda está confirmada! Será enviada para a " + str(morada) + " com o codigo postal " + str(zipCode)
+                context = {'products_list': products, 'enviado':enviado }
+                return render(request, 'food/index.html', context)
+            else:
+                return render(request, 'food/pagamento.html', {'price': price,
+                                                               'error_message': "Preencha a Morada e o Código Postal"})
+    return render(request, 'food/pagamento.html',{'price':price})
 
-
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def investCrypto(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
-    customer.credit = random.randint(1, 1000000)
+    customer.credit = random.randint(1,1000000)
     customer.save()
     return HttpResponseRedirect(reverse('food:about'))
