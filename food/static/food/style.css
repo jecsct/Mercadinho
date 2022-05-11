@@ -38,11 +38,6 @@ h3 {
     margin: 12px 0;
 }
 
-a {
-    text-decoration: none;
-    color: black;
-}
-
 li {
     margin-bottom: 12px;
     list-style-type: none;
@@ -159,7 +154,7 @@ nav p {
     float: left;
     margin: 0;
     padding: 0 12px;
-    height: 44px;
+    height: 44.2px;
 }
 
 .mercadinho {
@@ -192,6 +187,7 @@ ul.dropdown {
     display: none;
     position: absolute;
     right: 0;
+    top: 42px;
     top: 42px;
     margin: 0;
 }
@@ -314,8 +310,8 @@ input[type=submit] {
 }
 
 .container_info_header {
-    position: relative;
-    text-align: center;
+    /*position: relative;*/
+    margin-top: 12px;
     color: white;
 }
 
@@ -429,4 +425,9 @@ input[type=submit] {
 .texto-pagamento {
     width: 50%;
     font: 18px sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: black;
 }
