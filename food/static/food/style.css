@@ -329,12 +329,8 @@ input[type=submit] {
 /*}*/
 
 .about_info {
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    width: inherit;
-    height: auto;
-    max-width: 600px;
+    margin: auto;
+    width: 50%;
 }
 
 .about_info p {

@@ -97,25 +97,25 @@ def perfil(request):
 @unauthenticated_user
 def registarCustomer(request):
     if request.method == "POST" and request.FILES['photo']:
-            image = request.FILES['photo']
-            fs = FileSystemStorage()
-            filename = fs.save(image.name, image)
-            uploaded_file_url = fs.url(filename)
-            user = User.objects.create_user(
-                username=request.POST["username"],
-                password=request.POST["password"],
-                email=request.POST["email"]
-            )
-            Group.objects.get(name='Customer').user_set.add(user)
-            Customer(
-                profile_pic=uploaded_file_url,
-                gender=request.POST["gender"],
-                birthday=request.POST["birthday"],
-                credit=request.POST["credits"],
-                user_id=user.id
-            ).save()
-            login(request, user)
-            return HttpResponseRedirect(reverse('food:index'))
+        image = request.FILES['photo']
+        fs = FileSystemStorage()
+        filename = fs.save(image.name, image)
+        uploaded_file_url = fs.url(filename)
+        user = User.objects.create_user(
+            username=request.POST["username"],
+            password=request.POST["password"],
+            email=request.POST["email"]
+        )
+        Group.objects.get(name='Customer').user_set.add(user)
+        Customer(
+            profile_pic=uploaded_file_url,
+            gender=request.POST["gender"],
+            birthday=request.POST["birthday"],
+            credit=request.POST["credits"],
+            user_id=user.id
+        ).save()
+        login(request, user)
+        return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/registarCustomer.html')
 
 
@@ -187,44 +187,6 @@ def loginutilizador(request):
 def logoututilizador(request):
     logout(request)
     return HttpResponseRedirect(reverse('food:index'))
-
-
-@unauthenticated_user
-def registarSalesman(request):
-    print("Inicio")
-    if request.method == "POST":
-        salesmanForm = SalesmanForm(request.POST, request.FILES)
-        userForm = UserForm(request.POST)
-        print(salesmanForm.is_valid())
-        print(userForm.is_valid())
-        if salesmanForm.is_valid() and userForm.is_valid():
-            print("valido")
-            user = userForm.save(commit=False)
-            user.save()
-            group = Group.objects.get(name='Salesman')
-            group.user_set.add(user)
-
-            fs = FileSystemStorage()
-            filename = fs.save(salesmanForm.cleaned_data.get("profile_pic"),
-                               salesmanForm.cleaned_data.get("profile_pic"))
-            uploaded_file_url = fs.url(filename)
-
-            salesman = Salesman.objects.create(
-                profile_pic=uploaded_file_url,
-                rating=salesmanForm.cleaned_data.get("rating"),
-                phone_number=salesmanForm.cleaned_data.get("phone_number"),
-                user_id=user.id
-            )
-
-            salesman.user = user
-            salesman.save()
-            print("save")
-            login(request, user)
-            return render(request, 'food/index.html')
-    salesmanForm = SalesmanForm()
-    userForm = UserForm()
-    return render(request, 'food/registarSalesman.html', {'userForm': userForm, 'salesmanForm': salesmanForm})
-
 
 @login_required
 @allowed_users(allowed_roles=['Salesman'])
