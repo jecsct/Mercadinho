@@ -22,9 +22,9 @@
                 a <strong>Lanterninha</strong> vai permitir criar um ambiente mais suscentável para os nossos clientes.</p>
             <br/>
             {% if not request.user.is_authenticated %}
-                <a href="{% url 'food:loginutilizador' %}" class="button-link">Apostar na Lanterninha</a>
+                <a href="{% url 'food:loginutilizador' %}" class="button-link">Investir na Lanterninha</a>
             {% elif  request.user|has_group:'Customer' %}
-                <a href="{% url 'food:investCrypto' %}" class="button-link">Apostar na Lanterninha</a>
+                <a href="{% url 'food:investCrypto' %}" class="button-link">Investir na Lanterninha</a>
             {% endif %}
             <p style="font-size: 12px">*não nos responsabilizamos por quaisquer perdas monetárias</p>
         </div>
