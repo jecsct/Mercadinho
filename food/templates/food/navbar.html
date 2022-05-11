@@ -17,7 +17,7 @@
     <ul>
         <li>
             <div>
-                <a href="{% url 'food:index' %}">
+                <a href="{% url 'food:index' %}" style="text-decoration: none;">
                     <img src="/static/media/logo.png" class="nav-logo">
                 </a>
                 {% if request.user|has_group:'Customer' %}

@@ -96,8 +96,7 @@ def perfil(request):
 
 @unauthenticated_user
 def registarCustomer(request):
-    if request.method == "POST":
-        if request.FILES['photo']:
+    if request.method == "POST" and request.FILES['photo']:
             image = request.FILES['photo']
             fs = FileSystemStorage()
             filename = fs.save(image.name, image)
@@ -117,10 +116,7 @@ def registarCustomer(request):
             ).save()
             login(request, user)
             return HttpResponseRedirect(reverse('food:index'))
-            # return render(request, 'food/index.html')
-        customerForm = CustomerForm()
-        userForm = UserForm()
-        return render(request, 'food/registarCustomer.html', {'userForm': userForm, 'customerForm': customerForm})
+    return render(request, 'food/registarCustomer.html')
 
 
 @unauthenticated_user
@@ -370,8 +366,8 @@ def checkOut(request):
                 customer.save()
                 CestoCompras.objects.filter(customer=customer).delete()
                 products = Product.objects.all()
-                enviado = "A sua encomenda está confirmada! Será enviada para a " + str(morada) + " com o codigo postal " + str(zipCode)
-                context = {'products_list': products, 'enviado':enviado }
+                enviado = "A sua encomenda está confirmada! Será enviada para " + str(morada) + ", " + str(zipCode) + "."
+                context = {'products_list': products, 'enviado': enviado}
                 return render(request, 'food/index.html', context)
             else:
                 return render(request, 'food/pagamento.html', {'price': price,
