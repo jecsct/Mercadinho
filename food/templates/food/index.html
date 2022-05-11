@@ -7,9 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Mercadinho</title>
+    {% load custom_filters %}
 </head>
 <body>
 {% block content %}
+    {#    {% if request.user.is_authenticated %}#}
+    {#        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;">  Olá {{ request.user }}!</h3>#}
+    {#    {% else %}#}
+    {#        <h3><img src="/static/media/logo.png" style="height:100px; vertical-align: middle;"> Ainda não está logado!</h3>#}
+    {#    {% endif %}#}
     {% if enviado %}
         <p>{{ enviado }}</p>
     {% endif %}
@@ -22,9 +28,13 @@
                         <img class="product_image" src="{{ product.image }}"/>
                         <p class="product_text">{{ product.name }}</p>
                         <p class="lanterna product_price">Preço: {{ product.price }}</p>
-                        <div class="center_button"><a class="product_button" href="{% url 'food:addToCart' product.id %}">Adicionar ao cesto</a></div>
-                        {% if confirmation and product.id == p.id %}
-                            <p class="product_added">{{ confirmation }}</p>
+                        {% if not request.user|has_group:'Salesman' %}
+                            <div class="center_button"><a class="product_button"
+                                                          href="{% url 'food:addToCart' product.id %}">Adicionar ao
+                                cesto</a></div>
+                            {% if confirmation and product.id == p.id %}
+                                <p class="product_added">{{ confirmation }}</p>
+                            {% endif %}
                         {% endif %}
                     </a>
                 </div>
