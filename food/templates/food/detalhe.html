@@ -23,6 +23,7 @@
                             <li class="lanterna_after"><strong>Preço</strong>: {{ product.price }}</li>
                             <li><strong>Descrição</strong>: {{ product.description }}</li>
                             <li><strong>Vendedor</strong>: {{ product.salesman.user.username }}</li>
+                            <li><strong>Visualizações</strong>: {{ product.views }}</li>
                             <li><strong>Classificação</strong>: {{ product.rating }}</li>
                             <li><strong>Vendas</strong>: {{ product.sales }}</li>
                         </ul>
@@ -52,7 +53,7 @@
                                 <div class="text-details">
                                     <p>Nome: {{ p.name }}</p>
                                     <p class="lanterna_after">Preço: {{ p.price }}</p>
-                                    <p>Rating: {{ p.rating }}</p>
+                                    <p>Classificação: {{ p.rating }}</p>
                                 </div>
                             </div>
                         </a>
