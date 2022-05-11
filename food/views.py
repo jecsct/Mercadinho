@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 
 from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
-from .decorators import unauthenticated_user, allowed_users
+from .decorators import unauthenticated_user, allowed_users, canComment
 from django.contrib.auth.models import User, Group
 
 
@@ -68,7 +68,7 @@ def addToCart(request, product_id):
             shoppingCart.save()
         comments = Comment.objects.all().filter(product_id=product_id)
         product.addView()
-        context = {'product': product, 'comments': comments, 'confirmation' : 'Produto adicionado'}
+        context = {'product': product, 'comments': comments, 'confirmation': 'Produto adicionado'}
         return render(request, 'food/detalhe.html', context)
     except:
         user = request.user
@@ -77,7 +77,7 @@ def addToCart(request, product_id):
         shoppingCart = CestoCompras(customer=customer, product=product)
         shoppingCart.save()
         products_list = Product.objects.all()
-        context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
+        context = {'products_list': products_list, 'confirmation': 'Produto adicionado', 'p': product}
         return render(request, 'food/index.html', context)
 
 
@@ -97,25 +97,25 @@ def perfil(request):
 @unauthenticated_user
 def registarCustomer(request):
     if request.method == "POST" and request.FILES['photo']:
-            image = request.FILES['photo']
-            fs = FileSystemStorage()
-            filename = fs.save(image.name, image)
-            uploaded_file_url = fs.url(filename)
-            user = User.objects.create_user(
-                username=request.POST["username"],
-                password=request.POST["password"],
-                email=request.POST["email"]
-            )
-            Group.objects.get(name='Customer').user_set.add(user)
-            Customer(
-                profile_pic=uploaded_file_url,
-                gender=request.POST["gender"],
-                birthday=request.POST["birthday"],
-                credit=request.POST["credits"],
-                user_id=user.id
-            ).save()
-            login(request, user)
-            return HttpResponseRedirect(reverse('food:index'))
+        image = request.FILES['photo']
+        fs = FileSystemStorage()
+        filename = fs.save(image.name, image)
+        uploaded_file_url = fs.url(filename)
+        user = User.objects.create_user(
+            username=request.POST["username"],
+            password=request.POST["password"],
+            email=request.POST["email"]
+        )
+        Group.objects.get(name='Customer').user_set.add(user)
+        Customer(
+            profile_pic=uploaded_file_url,
+            gender=request.POST["gender"],
+            birthday=request.POST["birthday"],
+            credit=request.POST["credits"],
+            user_id=user.id
+        ).save()
+        login(request, user)
+        return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/registarCustomer.html')
 
 
@@ -175,7 +175,8 @@ def loginutilizador(request):
                 login(request, user)
                 return HttpResponseRedirect(reverse('food:index'))
             else:
-                return render('food/loginutilizador.html',
+                print("asdasdas")
+                return render(request, 'food/loginutilizador.html',
                               {'error_message': 'Utilizador não existe ou a password está incorreta'})
         else:
             return render(request, 'food/loginutilizador.html')
@@ -258,7 +259,14 @@ def productDetailPage(request, product_id):
     comments = Comment.objects.all().filter(product_id=product_id)
     product.addView()
     products = Product.objects.all().exclude(id=product_id)
+    if request.user.groups.filter(name='Salesman').exists():
+        products = products.filter(salesman_id=request.user.salesman.id)
     context = {'product': product, 'comments': comments, "products": products}
+    print(request.session.get('doubleComment'))
+    if request.session.get('doubleComment'):
+        context = {'product': product, 'comments': comments, "products": products,
+                   "doubleCommentWarning": request.session['doubleComment']}
+        del request.session['doubleComment']
     return render(request, 'food/detalhe.html', context)
 
 
@@ -266,13 +274,16 @@ def productDetailPage(request, product_id):
 @allowed_users(allowed_roles=['Customer'])
 def commentOnItem(request, product_id):
     if request.method == 'POST':
-        commentText = request.POST['commentInput']
-        commentRating = request.POST['ratingInput']
-        product = Product.objects.get(id=product_id)
-        Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
-        product.addRating(newRating=commentRating)
-        Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
-                product=product).save()
+        if Comment.objects.all().filter(user_id=request.user, product_id=product_id).exists():
+            request.session['doubleComment'] = "Não pode comentar duas vezes!"
+        else:
+            commentText = request.POST['commentInput']
+            commentRating = request.POST['ratingInput']
+            product = Product.objects.get(id=product_id)
+            Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
+            product.addRating(newRating=commentRating)
+            Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
+                    product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
@@ -330,12 +341,14 @@ def addProduct(request):
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
 
+
 def get_price(customer):
     shopping_cart = CestoCompras.objects.filter(customer=customer)
     price = 0
     for item in shopping_cart:
         price += item.product.price
     return price
+
 
 @login_required
 def pagamento(request):
@@ -345,6 +358,7 @@ def pagamento(request):
     if price == 0:
         return render(request, 'food/cestoCompras.html', {'error_message': "O seu carrinho está vazio"})
     return render(request, 'food/pagamento.html', {'price': price})
+
 
 def checkOut(request):
     user = User.objects.get(id=request.user.id)
@@ -366,19 +380,21 @@ def checkOut(request):
                 customer.save()
                 CestoCompras.objects.filter(customer=customer).delete()
                 products = Product.objects.all()
-                enviado = "A sua encomenda está confirmada! Será enviada para " + str(morada) + ", " + str(zipCode) + "."
+                enviado = "A sua encomenda está confirmada! Será enviada para " + str(morada) + ", " + str(
+                    zipCode) + "."
                 context = {'products_list': products, 'enviado': enviado}
                 return render(request, 'food/index.html', context)
             else:
                 return render(request, 'food/pagamento.html', {'price': price,
                                                                'error_message': "Preencha a Morada e o Código Postal"})
-    return render(request, 'food/pagamento.html',{'price':price})
+    return render(request, 'food/pagamento.html', {'price': price})
+
 
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def investCrypto(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
-    customer.credit = random.randint(1,1000000)
+    customer.credit = random.randint(1, 1000000)
     customer.save()
     return HttpResponseRedirect(reverse('food:about'))
