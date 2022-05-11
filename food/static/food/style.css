@@ -55,6 +55,22 @@ li {
     overflow: hidden;
     height: 100%;
     margin: 12px auto;
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*overflow: hidden;*/
+}
+
+/*.mapa iframe {*/
+/*    !*margin-top:-200px;*!*/
+/*    border: 0;*/
+/*    margin-top: -150px;*/
+/*}*/
+
+#map {
+  height: 400px;
+  /* The height is 400 pixels */
+  width: 100%;
+  /* The width is the width of the web page */
 }
 
 /* Sobre o produto */
@@ -293,7 +309,7 @@ input[type=submit] {
     height: 225px;
     width: auto;
     color: #ffffff;
-    background-image: url("/food/static/media/About-DIAM.gif");
+    background-image: url("/food/static/media/about_header.gif");
     object-fit: fill;
 }
 
@@ -303,25 +319,26 @@ input[type=submit] {
     color: white;
 }
 
-.container_info_header h1 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Hiragino Kaku Gothic Pro', serif;
+/*.container_info_header h1 {*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    left: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+/*    font-family: 'Hiragino Kaku Gothic Pro', serif;*/
 
-}
+/*}*/
 
-.about_header h1 {
-    transform: translate(0%, 75%);
-}
+/*.about_header h1 {*/
+/*    transform: translate(0%, 75%);*/
+/*}*/
 
 .about_info {
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
-    width: 600px;
+    width: inherit;
     height: auto;
+    max-width: 600px;
 }
 
 .about_info p {
@@ -399,7 +416,7 @@ input[type=submit] {
     text-align: left;
 }
 
-.pagamento{
+.pagamento {
     position: absolute;
     top: 30%;
     left: 30%;
