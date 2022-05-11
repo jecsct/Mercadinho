@@ -28,24 +28,22 @@
                         </ul>
                     </div>
                 </div>
-                <div class="grid_item item3">
+                <div class="item3">
                     {% if request.user|has_group:'Salesman' %}
                         <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
-                        </div>
+                    {% else %}
                         <div class="column3">
-                            {% else %}
-                            <a href="{% url 'food:addToCart'  product.id %}" class="button-link"> Adicionar ao
-                                Cesto</a>
+                            <div>
+                                <form action="{% url 'food:addToCart'  product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <label>Quantidade: <input type="number" name="quant"></label>
+                                    <input type="submit" value="Adicionar ao cesto"/>
+                                </form>
+                            </div>
                         </div>
-                        <div class="column3">
-                        <form action="{% url 'food:addToCart'  product.id %}" method="post">
-                            {% csrf_token %}
-                            <label>Quantidade: <input type="number" name="quant"></label><br/><br/>
-                            <input type="submit" value="Adicionar ao cesto"/>
-                        </form>
                     {% endif %}
-                    </div>
-                <div class="grid_item item4">
+                </div>
+                <div class="item4">
                     <h3>Outros Produtos:</h3>
                     {% for p in products %}
                         <a href="{% url 'food:productDetailPage' p.id %}">
