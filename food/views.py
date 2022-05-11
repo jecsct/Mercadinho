@@ -38,13 +38,13 @@ def contactos(request):
     return render(request, 'food/contactos.html', {'error_message': error_message})
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 def caixaMensagens(request):
     lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(email=request.user.email)
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def cestoCompras(request):
     user = User.objects.get(id=request.user.id)
@@ -59,18 +59,7 @@ def cestoCompras(request):
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def addToCart(request, product_id):
-    try:
-        for x in range(int(request.POST.get('quant'))):
-            user = request.user
-            customer = Customer.objects.get(user=user)
-            product = Product.objects.get(id=product_id)
-            shoppingCart = CestoCompras(customer=customer, product=product)
-            shoppingCart.save()
-        comments = Comment.objects.all().filter(product_id=product_id)
-        product.addView()
-        context = {'product': product, 'comments': comments, 'confirmation': 'Produto adicionado'}
-        return render(request, 'food/detalhe.html', context)
-    except:
+    if request.POST.get('quant') is None:
         user = request.user
         customer = Customer.objects.get(user=user)
         product = Product.objects.get(id=product_id)
@@ -79,16 +68,28 @@ def addToCart(request, product_id):
         products_list = Product.objects.all()
         context = {'products_list': products_list, 'confirmation': 'Produto adicionado', 'p': product}
         return render(request, 'food/index.html', context)
+    if int(request.POST.get('quant')) > 0:
+        for x in range(int(request.POST.get('quant'))):
+            user = request.user
+            customer = Customer.objects.get(user=user)
+            product = Product.objects.get(id=product_id)
+            shoppingCart = CestoCompras(customer=customer, product=product)
+            shoppingCart.save()
+        Comment.objects.all().filter(product_id=product_id)
+        product.addView()
+        return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+    if int(request.POST.get('quant')) == 0:
+        return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def removeFromCart(request, cestoCompras_id):
     get_object_or_404(CestoCompras, pk=cestoCompras_id).delete()
     return HttpResponseRedirect(reverse('food:cestocompras'))
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 def perfil(request):
     comments = Comment.objects.all().filter(user=request.user)
     return render(request, "food/perfil.html", {'comments': comments})
@@ -143,7 +144,7 @@ def registarSalesman(request):
     return render(request, 'food/registarSalesman.html')
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Salesman'])
 def addProduct(request):
     if request.method == 'POST' and request.FILES['myfile']:
@@ -184,28 +185,10 @@ def loginutilizador(request):
         return render(request, 'food/loginutilizador.html')
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 def logoututilizador(request):
     logout(request)
     return HttpResponseRedirect(reverse('food:index'))
-
-@login_required
-@allowed_users(allowed_roles=['Salesman'])
-def addProduct(request):
-    if request.method == 'POST':
-        if request.FILES['myfile']:
-            productImage = request.FILES['myfile']
-            fs = FileSystemStorage()
-            filename = fs.save(productImage.name, productImage)
-            uploaded_file_url = fs.url(filename)
-            Product.objects.create(name=request.POST.get('productName'),
-                                   description=request.POST.get('productDescription'),
-                                   price=request.POST.get('productPrice'),
-                                   image=uploaded_file_url,
-                                   salesman_id=request.user.salesman.id
-                                   )
-            return HttpResponseRedirect(reverse('food:index'))
-    return render(request, 'food/add_product.html')
 
 
 def mapPage(request):
@@ -232,7 +215,7 @@ def productDetailPage(request, product_id):
     return render(request, 'food/detalhe.html', context)
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def commentOnItem(request, product_id):
     if request.method == 'POST':
@@ -249,7 +232,7 @@ def commentOnItem(request, product_id):
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def deleteProductComment(request, product_id):
     product = Product.objects.get(id=product_id)
@@ -262,7 +245,7 @@ def deleteProductComment(request, product_id):
         request.META.get('HTTP_REFERER', '/'))  # volta para a página anterior. necessário por causa do perfil
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def updateProductComment(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -278,14 +261,14 @@ def updateProductComment(request, product_id):
     return render(request, 'food/updateProductComment.html', context)
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Salesman'])
 def deleteProduct(request, product_id):
     get_object_or_404(Product, pk=product_id).delete()
     return HttpResponseRedirect(reverse('food:index'))
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Salesman'])
 def addProduct(request):
     if request.method == 'POST':
@@ -311,8 +294,7 @@ def get_price(customer):
         price += item.product.price
     return price
 
-
-@login_required
+@login_required(login_url="food:loginutilizador")
 def pagamento(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
