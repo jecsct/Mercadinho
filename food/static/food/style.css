@@ -1,14 +1,4 @@
-/*
-SPACING SYSTEM (px)
-2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
-
-FONT SIZE SYSTEM (px)
-10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
-*/
-
-
 /* General styles */
-
 * {
     margin: 0;
     padding: 0;
@@ -19,7 +9,6 @@ body {
     font-family: "Inter", sans-serif;
     color: #343a40;
     margin: 0 12px;
-    /*background: #ACE1AF;*/
     background-color: #D1FFD6;
 }
 
@@ -43,33 +32,20 @@ li {
     list-style-type: none;
 }
 
-/* Mapa dos mercadinhos */
+a {
+    text-decoration: none;
+    color: black;
+}
 
+/* Mapa dos mercadinhos */
 .mapa {
-    width: 50%;
+    width: 100%;
     overflow: hidden;
     height: 100%;
     margin: 12px auto;
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*overflow: hidden;*/
-}
-
-/*.mapa iframe {*/
-/*    !*margin-top:-200px;*!*/
-/*    border: 0;*/
-/*    margin-top: -150px;*/
-/*}*/
-
-#map {
-  height: 400px;
-  /* The height is 400 pixels */
-  width: 100%;
-  /* The width is the width of the web page */
 }
 
 /* Sobre o produto */
-
 .product_title {
     margin-top: 12px;
     padding: 12px;
@@ -78,16 +54,21 @@ li {
 }
 
 .grid {
+    margin-top: 24px;
     display: inline-grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(8, 1fr);
     margin-bottom: 12px;
     grid-gap: 12px;
+    grid-row-gap: 44px;
 }
 
 .grid2 {
     display: inline-grid;
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 10px;
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-gap: 12px;
 }
 
 .item1 {
@@ -103,21 +84,39 @@ li {
 }
 
 .item3 {
-    display: inline;
-    grid-row-start: 2;
+    grid-row-start: 3;
     grid-column-start: 1;
-    grid-column-end: 3;
+    grid-column-end: -1;
 }
 
 .item4 {
-    display: inline;
     grid-row-start: 1;
-    grid-column-start: 3;
+    grid-column-start: 6;
+    grid-column-end: -2;
 }
 
-.item5 {
-    display: inline;
+.item5{
+    grid-row-start: 2;
     grid-column-start: 2;
+    grid-column-end: 4;
+}
+
+.slider-produtos{
+    width: auto;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.item6{
+    grid-row-start: 2;
+    grid-column-start: 4;
+    grid-column-end: -2;
+}
+
+.slider-comment{
+    width: auto;
+    height: 200px;
+    overflow-y: auto;
 }
 
 .lanterna::before {
@@ -154,7 +153,7 @@ nav p {
     float: left;
     margin: 0;
     padding: 0 12px;
-    height: 44.2px;
+    height: 44px;
 }
 
 .mercadinho {
@@ -188,7 +187,6 @@ ul.dropdown {
     position: absolute;
     right: 0;
     top: 42px;
-    top: 42px;
     margin: 0;
 }
 
@@ -213,10 +211,6 @@ li:hover ul.dropdown {
 
 .mensagem-Hora {
     float: right;
-}
-
-.mensagem-Email {
-    color: gray;
 }
 
 .button-link {
@@ -301,32 +295,10 @@ input[type=submit] {
     text-align: center;
 }
 
-.about_header {
-    height: 225px;
-    width: auto;
-    color: #ffffff;
-    background-image: url("/food/static/media/about_header.gif");
-    object-fit: fill;
-}
-
 .container_info_header {
-    /*position: relative;*/
     margin-top: 12px;
     color: white;
 }
-
-/*.container_info_header h1 {*/
-/*    position: absolute;*/
-/*    top: 50%;*/
-/*    left: 50%;*/
-/*    transform: translate(-50%, -50%);*/
-/*    font-family: 'Hiragino Kaku Gothic Pro', serif;*/
-
-/*}*/
-
-/*.about_header h1 {*/
-/*    transform: translate(0%, 75%);*/
-/*}*/
 
 .about_info {
     margin: auto;
@@ -349,14 +321,9 @@ input[type=submit] {
     padding: 4px;
 }
 
-.detail_contents {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-}
-
 .product_suggestion {
-    display: grid;
-    grid-template-columns: 0.5fr 1fr;
+    display: inline-grid;
+    grid-template-columns: auto auto;
 }
 
 .product_suggestion img {
@@ -367,27 +334,27 @@ input[type=submit] {
 }
 
 .text-details {
-    margin: 6px;
+    margin: auto;
+    padding: 6px;
 }
 
 .review_section {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    width: 500px;
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    grid-gap: 16px;
+    margin: 12px;
 }
 
 .review_section img {
-    height: auto;
-    width: auto;
-    max-width: 100px;
-    max-height: 100px;
-    border-radius: 25px;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
 }
 
-.review_section p {
-    width: 500px;
-    height: auto;
-    overflow: auto;
+.review-section-text{
+    margin: 4px;
+    width: 570px;
+    overflow-wrap: break-word;
 }
 
 .item-cestoCompras {
@@ -423,7 +390,21 @@ input[type=submit] {
     font: 18px sans-serif;
 }
 
-a {
-    text-decoration: none;
-    color: black;
+/*Perfil do utilizador*/
+.slider {
+    width: 350px;
+    height: auto;
+    display: flex;
+    overflow-x: auto;
+}
+.slide {
+    width: auto;
+    flex-shrink: 0;
+    height: 100%;
+    margin-right: 48px;
+}
+
+.slide p{
+    width: 300px;
+    overflow-wrap: break-word;
 }
