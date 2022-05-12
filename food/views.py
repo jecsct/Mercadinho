@@ -1,6 +1,4 @@
 import random
-from time import timezone
-from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -25,21 +23,17 @@ def index(request):
 
 
 def contactos(request):
-    error_message = False
     if request.method == 'POST':
-        if not request.POST.get("email") == request.user.email:
-            Mensagem(email=request.POST.get("email"),
-                     texto_mensagem=request.POST.get("message"),
-                     dataHora=datetime.datetime.now()).save()
-            return HttpResponseRedirect(reverse('food:contactos'))
-        else:
-            error_message = 'Não pode enviar emails para si próprio';
-    return render(request, 'food/contactos.html', {'error_message': error_message})
+        Mensagem(email=request.POST.get("email"),
+                 texto_mensagem=request.POST.get("message"),
+                 dataHora=datetime.datetime.now()).save()
+        return HttpResponseRedirect(reverse('food:contactos'))
+    return render(request, 'food/contactos.html')
 
 
 @login_required(login_url="food:loginutilizador")
 def caixaMensagens(request):
-    lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(email=request.user.email)
+    lista_mensagens = Mensagem.objects.order_by('-dataHora')
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
 

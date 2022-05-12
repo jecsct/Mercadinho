@@ -66,7 +66,7 @@
                         <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
                               method="post">
                             {% csrf_token %}
-                            <textarea id="message" name="message" rows="4" cols="38"></textarea><br/><br/>
+                            <textarea name="commentInput" rows="4" cols="38"></textarea><br/><br/>
                             <label>Avaliação: </label>
                             <input max="5.0" min="0.0" name="ratingInput" step="0.1" type="number"
                                    style="width: 124px;" required>
