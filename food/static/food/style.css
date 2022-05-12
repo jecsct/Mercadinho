@@ -214,7 +214,7 @@ nav p {
 }
 
 .navOption:hover {
-    background-color: #da3232;
+    background-color: #cc0000;
 }
 
 .nav-profile-pic {
@@ -227,7 +227,7 @@ nav p {
 
 .dropdown{
     float: right;
-    min-width: 150px;
+    min-width: 150pxHoover
 }
 
 ul.dropdown {
@@ -427,6 +427,7 @@ input[type=submit] {
     text-decoration: none;
     font: 20px sans-serif;
     color: #eeeeee;
+}
 
 .pagamento {
     position: absolute;
