@@ -15,6 +15,7 @@ from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users, canComment
 from django.contrib.auth.models import User, Group
+import random
 
 
 def index(request):
@@ -293,6 +294,7 @@ def get_price(customer):
     for item in shopping_cart:
         price += item.product.price
     return price
+
 
 @login_required(login_url="food:loginutilizador")
 def pagamento(request):

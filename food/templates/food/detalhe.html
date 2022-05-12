@@ -78,21 +78,21 @@
                 </div>
                 <div class="item6 slider-comment">
                     {% for comment in comments %}
-                        <div class="review_section slide-comment">
-                                <img src="{{ comment.user.customer.profile_pic }}" alt="profile_pic do user">
+                        <div class="review_section">
+                            <img src="{{ comment.user.customer.profile_pic }}" alt="profile_pic do user">
                             <div>
                                 <p class="lanterna review-section-text">Username: {{ comment.user.username }}</p>
                                 <p class="lanterna review-section-text">Avaliação: {{ comment.rating }}</p>
                                 <p class="lanterna review-section-text">Comentário: {{ comment.text }}</p>
                             </div>
-{#                            {% if request.user.is_authenticated and comment.user.username == request.user.username %}#}
-{#                                <form action="{% url 'food:deleteProductComment' product.id %}" method="post">#}
-{#                                    {% csrf_token %}#}
-{#                                    <br/>#}
-{#                                    <a href="{% url 'food:updateProductComment' product.id %}"> Update</a>#}
-{#                                    <input type="submit" value="Delete">#}
-{#                                </form>#}
-{#                            {% endif %}#}
+                            {#                            {% if request.user.is_authenticated and comment.user.username == request.user.username %}#}
+                            {#                                <form action="{% url 'food:deleteProductComment' product.id %}" method="post">#}
+                            {#                                    {% csrf_token %}#}
+                            {#                                    <br/>#}
+                            {#                                    <a href="{% url 'food:updateProductComment' product.id %}"> Update</a>#}
+                            {#                                    <input type="submit" value="Delete">#}
+                            {#                                </form>#}
+                            {#                            {% endif %}#}
                         </div>
                         <br/>
                     {% endfor %}

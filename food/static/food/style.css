@@ -39,10 +39,28 @@ a {
 
 /* Mapa dos mercadinhos */
 .mapa {
-    width: 100%;
+    width: 1000px;
     overflow: hidden;
     height: 100%;
     margin: 12px auto;
+    /*position: relative;*/
+    /*transform: translate(50%, 0%);*/
+    float: right;
+}
+
+.mercadinhos_list {
+    float: left;
+    padding-top: 12px;
+    text-align: justify;
+    font-size: 25px;
+    position: relative;
+    width: 500px;
+}
+
+.mercadinhos_list ul {
+    margin: 0;
+    position: absolute;
+    top: 100px;
 }
 
 /* Sobre o produto */
@@ -95,25 +113,25 @@ a {
     grid-column-end: -2;
 }
 
-.item5{
+.item5 {
     grid-row-start: 2;
     grid-column-start: 2;
     grid-column-end: 4;
 }
 
-.slider-produtos{
+.slider-produtos {
     width: auto;
     height: 400px;
     overflow-y: auto;
 }
 
-.item6{
+.item6 {
     grid-row-start: 2;
     grid-column-start: 4;
     grid-column-end: -2;
 }
 
-.slider-comment{
+.slider-comment {
     width: auto;
     height: 200px;
     overflow-y: auto;
@@ -301,12 +319,14 @@ input[type=submit] {
 }
 
 .about_info {
+    padding-top: 20px;
     margin: auto;
-    width: 50%;
+    width: 700px;
 }
 
 .about_info p {
-    padding: 7px;
+    padding: 10px;
+    font-size: 18px;
 }
 
 /* Footer */
@@ -351,7 +371,7 @@ input[type=submit] {
     object-fit: cover;
 }
 
-.review-section-text{
+.review-section-text {
     margin: 4px;
     width: 570px;
     overflow-wrap: break-word;
@@ -397,6 +417,7 @@ input[type=submit] {
     display: flex;
     overflow-x: auto;
 }
+
 .slide {
     width: auto;
     flex-shrink: 0;
@@ -404,7 +425,7 @@ input[type=submit] {
     margin-right: 48px;
 }
 
-.slide p{
+.slide p {
     width: 300px;
     overflow-wrap: break-word;
 }
