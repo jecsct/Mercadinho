@@ -209,16 +209,14 @@ li:hover ul.dropdown {
 
 /* Caixa de mensagens */
 .mensagem {
-    background-color: #eeeeee;
-    padding: 30px 30px 30px 30px;
+    box-sizing: border-box;
+    border:solid #da3232;
+    padding: 30px;
+    margin: 5px 40px;
 }
 
 .mensagem-Hora {
     float: right;
-}
-
-.mensagem-Email {
-    color: gray;
 }
 
 .button-link {

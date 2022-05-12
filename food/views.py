@@ -26,20 +26,24 @@ def index(request):
 
 
 def contactos(request):
-    error_message = False
     if request.method == 'POST':
             Mensagem(email=request.POST.get("email"),
                      texto_mensagem=request.POST.get("message"),
-                     dataHora=datetime.datetime.now()).save()
+                     dataHora=datetime.datetime.now(), tratada=False).save()
             return HttpResponseRedirect(reverse('food:contactos'))
     return render(request, 'food/contactos.html')
 
 
 @login_required
 def caixaMensagens(request):
-    lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(email=request.user.email)
+    lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=False)
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
+def tratarMensagem(request, mensagem_id):
+    mensagem = Mensagem.objects.get(mensagem_id)
+    mensagem.tratada = True
+    mensagem.save()
+    return HttpResponseRedirect(reverse('food:caixamensagens'))
 
 @login_required
 @allowed_users(allowed_roles=['Customer'])

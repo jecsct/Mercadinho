@@ -11,6 +11,8 @@
     {% if lista_mensagens %}
         {% for mensagem in lista_mensagens %}
             <div class="mensagem">
+                <a href="{% url "food:tratarMensagem" %}"></a>
+                <p>De: {{ mensagem.email }}</p> <br>
                 <p>Mensagem: {{ mensagem.texto_mensagem }}</p>
                 <p class="mensagem-Hora">{{ mensagem.dataHora }}</p>
             </div>
