@@ -19,7 +19,6 @@ body {
     font-family: "Inter", sans-serif;
     color: #343a40;
     margin: 0 12px;
-    /*background: #ACE1AF;*/
     background-color: #eeeee0;
 }
 
@@ -54,9 +53,6 @@ a {
     overflow: hidden;
     height: 100%;
     margin: 12px auto;
-    /*position: relative;*/
-    /*transform: translate(50%, 0%);*/
-    /*float: right;*/
 }
 
 /* Sobre o produto */
@@ -111,30 +107,6 @@ a {
     grid-column-end: -2;
 }
 
-/*<<<<<<< HEAD*/
-/*.item5 {*/
-/*    grid-row-start: 2;*/
-/*    grid-column-start: 2;*/
-/*    grid-column-end: 4;*/
-/*}*/
-
-/*.slider-produtos {*/
-/*    width: auto;*/
-/*    height: 400px;*/
-/*    overflow-y: auto;*/
-/*}*/
-
-/*.item6 {*/
-/*    grid-row-start: 2;*/
-/*    grid-column-start: 4;*/
-/*    grid-column-end: -2;*/
-/*}*/
-
-/*.slider-comment {*/
-/*    width: auto;*/
-/*    height: 200px;*/
-/*    overflow-y: auto;*/
-/*=======*/
 .item5 {
     margin-top: 64px;
     grid-row-start: 2;
@@ -145,7 +117,6 @@ a {
 .item6 {
     grid-column-start: 2;
     grid-column-end: -2;
-    /*>>>>>>> 84a9ef7c1ca6cba0e1f3da0cc33c772db9eb9ba3*/
 }
 
 .lanterna::before {
@@ -199,7 +170,7 @@ nav p {
 }
 
 .navOption:hover {
-    background-color: #da3232;
+    background-color: #cc0000;
 }
 
 .nav-profile-pic {
@@ -212,7 +183,7 @@ nav p {
 
 .dropdown {
     float: right;
-    min-width: 150px;
+    min-width: 150px
 }
 
 ul.dropdown {
@@ -227,6 +198,7 @@ ul.dropdown {
 li:hover ul.dropdown {
     display: block; /* Display the dropdown */
     min-width: 130px;
+    background-color: #da3232;
 }
 
 .dropdown li {
@@ -241,7 +213,7 @@ li:hover ul.dropdown {
 /* Caixa de mensagens */
 .mensagem {
     box-sizing: border-box;
-    border: solid;
+    border:solid 1px;
     background-color: #ffffff;
     padding: 30px;
     margin: 3px 60px;
@@ -385,18 +357,13 @@ input[type=submit] {
     grid-gap: 16px;
 }
 
-.review_section img {
+.review_section img{
     width: 100px;
     height: 100px;
     object-fit: cover;
 }
 
-/*<<<<<<< HEAD*/
-/*.review-section-text {*/
-/*    margin: 4px;*/
-/*=======*/
-.review-section-text {
-    /*>>>>>>> 84a9ef7c1ca6cba0e1f3da0cc33c772db9eb9ba3*/
+.review-section-text{
     width: 570px;
     overflow-wrap: break-word;
 }
@@ -419,11 +386,6 @@ input[type=submit] {
     grid-template-rows: auto auto auto;
 }
 
-.checkOut {
-    /*float: right;*/
-    padding-left: inherit;
-    text-align: center;
-}
 
 .pagamento {
     position: absolute;
