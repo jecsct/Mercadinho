@@ -427,12 +427,6 @@ input[type=submit] {
     text-decoration: none;
     font: 20px sans-serif;
     color: #eeeeee;
-}
-
-.checkOut {
-    float: right;
-    text-align: left;
-}
 
 .pagamento {
     position: absolute;

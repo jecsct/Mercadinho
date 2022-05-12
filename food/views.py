@@ -55,11 +55,12 @@ def tratarMensagem(request, mensagem_id):
 def cestoCompras(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
-    try:
-        cesto_compras = CestoCompras.objects.filter(customer=customer)
-    except CestoCompras.DoesNotExist:
-        cesto_compras = None
-    return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras})
+    cesto_compras = CestoCompras.objects.filter(customer=customer)
+    if cesto_compras:
+        return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras,'error_message':False})
+    else:
+        return render(request, 'food/cestoCompras.html',{'error_message':True})
+
 
 
 @login_required(login_url="food:loginutilizador")
@@ -94,6 +95,10 @@ def removeFromCart(request, cestoCompras_id):
     get_object_or_404(CestoCompras, pk=cestoCompras_id).delete()
     return HttpResponseRedirect(reverse('food:cestocompras'))
 
+def limparCesto(request):
+    customer = Customer.objects.get(user=request.user)
+    CestoCompras.objects.filter(customer=customer).delete()
+    return HttpResponseRedirect(reverse('food:cestocompras'))
 
 @login_required(login_url="food:loginutilizador")
 def perfil(request):
@@ -308,7 +313,7 @@ def pagamento(request):
     customer = Customer.objects.get(user=user)
     price = get_price(customer)
     if price == 0:
-        return render(request, 'food/cestoCompras.html', {'error_message': "O seu carrinho está vazio"})
+        return render(request, 'food/cestoCompras.html', {'error_message': True})
     return render(request, 'food/pagamento.html', {'price': price})
 
 

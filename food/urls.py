@@ -30,5 +30,6 @@ urlpatterns = [
     path('<int:product_id>/deleteProduct/', views.deleteProduct, name='deleteProduct'),
     path('checkOut', views.checkOut, name='checkOut'),
     path('investCrypto', views.investCrypto, name='investCrypto'),
-    path('<int:mensagem_id>/tratarMensagem', views.tratarMensagem, name='tratarMensagem')
+    path('<int:mensagem_id>/tratarMensagem', views.tratarMensagem, name='tratarMensagem'),
+    path('limparCesto',views.limparCesto,name='limparCesto')
 ]
