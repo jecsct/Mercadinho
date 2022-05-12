@@ -381,12 +381,6 @@ input[type=submit] {
     color: #eeeeee;
 }
 
-.cart-checkout-structure {
-    display: grid;
-    grid-template-rows: auto auto auto;
-}
-
-
 .pagamento {
     position: absolute;
     top: 25%;
@@ -420,6 +414,20 @@ input[type=submit] {
     overflow-wrap: break-word;
 }
 
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+}
+
+.textarea-contatos {
+    resize: none;
+    width: 500px;
+    height: 300px;
+    font: 16px sans-serif;
+}
 .login-structure {
     display: grid;
     grid-template-columns: 450px 300px;
