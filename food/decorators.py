@@ -1,5 +1,6 @@
-from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, reverse
+from .models import Comment
 
 
 # decoradores recebem como parametro outra funcao, permitem adicionar funcionalidades antes de chamar a funcao a serio
@@ -26,3 +27,12 @@ def allowed_users(allowed_roles=[]):
         return wrapper_func
     return decorator
 
+
+def canComment(view_func):
+    def wrapper_func(request, *args, **kwargs):
+        if not Comment.objects.all().filter(user_id=request.user):
+            return view_func(request, *args, **kwargs)
+        else:
+            # return redirect('food:index')
+            return HttpResponseRedirect(reverse())
+    return wrapper_func

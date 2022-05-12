@@ -23,10 +23,11 @@
             <br/>
             {% if not request.user.is_authenticated %}
                 <a href="{% url 'food:loginutilizador' %}" class="button-link">Investir na Lanterninha</a>
+                <p style="font-size: 12px">*não nos responsabilizamos por quaisquer perdas monetárias</p>
             {% elif  request.user|has_group:'Customer' %}
                 <a href="{% url 'food:investCrypto' %}" class="button-link">Investir na Lanterninha</a>
+                <p style="font-size: 12px">*não nos responsabilizamos por quaisquer perdas monetárias</p>
             {% endif %}
-            <p style="font-size: 12px">*não nos responsabilizamos por quaisquer perdas monetárias</p>
         </div>
     </div>
 {% endblock %}
