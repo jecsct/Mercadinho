@@ -9,73 +9,72 @@
 <body>
 {% block content %}
     <div>
-        <div class="center_grid">
-            <div class="grid">
-                <div class="grid2">
-                    <div class="item0"><h1 class="product_title">{{ product.name }}</h1></div>
-                    <div class="item1">
-                        <img alt="Imagem do produto. {{ product.name }}"
-                             src="{{ product.image }}"
-                             style="height: 250px;width: 250px">
-                    </div>
-                    <div class="item2">
-                        <ul>
-                            <li class="lanterna_after"><strong>Preço</strong>: {{ product.price }}</li>
-                            <li><strong>Descrição</strong>: {{ product.description }}</li>
-                            <li><strong>Vendedor</strong>: {{ product.salesman.user.username }}</li>
-                            <li><strong>Visualizações</strong>: {{ product.views }}</li>
-                            <li><strong>Classificação</strong>: {{ product.rating }}</li>
-                            <li><strong>Vendas</strong>: {{ product.sales }}</li>
-                        </ul>
-                    </div>
-                    <div class="item3">
-                        {% if request.user|has_group:'Salesman' %}
-                            <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
-                        {% else %}
-                            <div class="column3">
-                                <div>
-                                    <form action="{% url 'food:addToCart'  product.id %}" method="post">
-                                        {% csrf_token %}
-                                        <label>Quantidade: <input type="number" name="quant" value="0"></label>
-                                        <input type="submit" value="Adicionar ao cesto"/>
-                                    </form>
-                                </div>
+    <div class="center_grid">
+        <div class="grid">
+            <div class="grid2">
+                <div class="item0"><h1 class="product_title">{{ product.name }}</h1></div>
+                <div class="item1">
+                    <img alt="Imagem do produto. {{ product.name }}"
+                         src="{{ product.image }}"
+                         style="height: 250px;width: 250px">
+                </div>
+                <div class="item2">
+                    <ul>
+                        <li class="lanterna_after"><strong>Preço</strong>: {{ product.price }}</li>
+                        <li><strong>Descrição</strong>: {{ product.description }}</li>
+                        <li><strong>Vendedor</strong>: {{ product.salesman.user.username }}</li>
+                        <li><strong>Visualizações</strong>: {{ product.views }}</li>
+                        <li><strong>Classificação</strong>: {{ product.rating }}</li>
+                        <li><strong>Vendas</strong>: {{ product.sales }}</li>
+                    </ul>
+                </div>
+                <div class="item3">
+                    {% if request.user|has_group:'Salesman' %}
+                        <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
+                    {% else %}
+                        <div class="column3">
+                            <div>
+                                <form action="{% url 'food:addToCart'  product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <label>Quantidade: <input type="number" name="quant" value="0"></label>
+                                    <input type="submit" value="Adicionar ao cesto"/>
+                                </form>
                             </div>
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
                 </div>
-                <div class="item4 slider-produtos">
-                    <div class="slide-produtos">
-                        <h3>Outros Produtos:</h3>
-                        {% for p in products %}
-                            <a href="{% url 'food:productDetailPage' p.id %}">
-                                <div class="product_suggestion">
-                                    <img src="{{ p.image }}" alt="imagem de um produto">
-                                    <div class="text-details">
-                                        <li>Nome: {{ p.name }}</li>
-                                        <li class="lanterna_after">Preço: {{ p.price }}</li>
-                                        <li>Classificação: {{ p.rating }}</li>
-                                    </div>
-                                </div>
-                            </a>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="item5">
+            </div>
+            <div class="item4">
+                <h3>Outros Produtos:</h3>
+                {% for p in products %}
+                    <a href="{% url 'food:productDetailPage' p.id %}">
+                        <div class="product_suggestion">
+                            <img src="{{ p.image }}" alt="imagem de um produto">
+                            <div class="text-details">
+                                <li>Nome: {{ p.name }}</li>
+                                <li class="lanterna_after">Preço: {{ p.price }}</li>
+                                <li>Classificação: {{ p.rating }}</li>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="item5">
+                <div>
                     {% if request.user|has_group:'Customer' %}
                         <h3>Inserir comentário:</h3>
                         <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
                               method="post">
                             {% csrf_token %}
-                            <p>Comentário: </p>
-                            <input id="txtFldComment" name="commentInput" type="text" required><br/><br/>
-                            <p>Avaliação: </p>
-                            <input id="nmbrFldRating" max="5.0" min="0.0" name="ratingInput" step="0.1" type="number"
-                                   required><br/><br/>
+                            <textarea name="commentInput" rows="4" cols="38"></textarea><br/><br/>
+                            <label>Avaliação: </label>
+                            <input max="5.0" min="0.0" name="ratingInput" step="0.1" type="number"
+                                   style="width: 124px;" required>
                             <input type="submit" value="Comentar"/><br/><br/>
                         </form>
                     {% endif %}
                 </div>
+<<<<<<< HEAD
                 <div class="item6 slider-comment">
                     {% for comment in comments %}
                         <div class="review_section">
@@ -96,7 +95,26 @@
                         </div>
                         <br/>
                     {% endfor %}
+=======
+            </div>
+            {% if request.user|has_group:'Customer' %}
+                <div class="item6" style="grid-row-start: 3;">
+            {% else %}
+                <div class="item6" style="grid-row-start: 2; margin-top: 64px;">
+            {% endif %}
+            {% for comment in comments %}
+                <div class="review_section">
+                    <img src="{{ comment.user.customer.profile_pic }}" alt="profile_pic do user">
+                    <div>
+                        <p class="lanterna review-section-text">Username: {{ comment.user.username }}</p>
+                        <p class="lanterna review-section-text">Avaliação: {{ comment.rating }}</p>
+                        <p class="lanterna review-section-text">Comentário: {{ comment.text }}</p>
+                    </div>
+>>>>>>> 84a9ef7c1ca6cba0e1f3da0cc33c772db9eb9ba3
                 </div>
+                <br/>
+            {% endfor %}
+            </div>
             </div>
         </div>
     </div>

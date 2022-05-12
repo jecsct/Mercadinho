@@ -1,6 +1,4 @@
 import random
-from time import timezone
-from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -11,9 +9,8 @@ from food.models import Mensagem, Customer, Salesman
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
-from .decorators import unauthenticated_user, allowed_users, canComment
+from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import User, Group
 import random
 
@@ -27,21 +24,17 @@ def index(request):
 
 
 def contactos(request):
-    error_message = False
     if request.method == 'POST':
-        if not request.POST.get("email") == request.user.email:
-            Mensagem(email=request.POST.get("email"),
-                     texto_mensagem=request.POST.get("message"),
-                     dataHora=datetime.datetime.now()).save()
-            return HttpResponseRedirect(reverse('food:contactos'))
-        else:
-            error_message = 'Não pode enviar emails para si próprio';
-    return render(request, 'food/contactos.html', {'error_message': error_message})
+        Mensagem(email=request.POST.get("email"),
+                 texto_mensagem=request.POST.get("message"),
+                 dataHora=datetime.datetime.now()).save()
+        return HttpResponseRedirect(reverse('food:contactos'))
+    return render(request, 'food/contactos.html')
 
 
 @login_required(login_url="food:loginutilizador")
 def caixaMensagens(request):
-    lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(email=request.user.email)
+    lista_mensagens = Mensagem.objects.order_by('-dataHora')
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
 
@@ -67,7 +60,7 @@ def addToCart(request, product_id):
         shoppingCart = CestoCompras(customer=customer, product=product)
         shoppingCart.save()
         products_list = Product.objects.all()
-        context = {'products_list': products_list, 'confirmation': 'Produto adicionado', 'p': product}
+        context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
         return render(request, 'food/index.html', context)
     if int(request.POST.get('quant')) > 0:
         for x in range(int(request.POST.get('quant'))):
@@ -177,8 +170,7 @@ def loginutilizador(request):
                 login(request, user)
                 return HttpResponseRedirect(reverse('food:index'))
             else:
-                print("asdasdas")
-                return render(request, 'food/loginutilizador.html',
+                return render('food/loginutilizador.html',
                               {'error_message': 'Utilizador não existe ou a password está incorreta'})
         else:
             return render(request, 'food/loginutilizador.html')
@@ -205,14 +197,7 @@ def productDetailPage(request, product_id):
     comments = Comment.objects.all().filter(product_id=product_id)
     product.addView()
     products = Product.objects.all().exclude(id=product_id)
-    if request.user.groups.filter(name='Salesman').exists():
-        products = products.filter(salesman_id=request.user.salesman.id)
-    context = {'product': product, 'comments': comments, "products": products}
-    print(request.session.get('doubleComment'))
-    if request.session.get('doubleComment'):
-        context = {'product': product, 'comments': comments, "products": products,
-                   "doubleCommentWarning": request.session['doubleComment']}
-        del request.session['doubleComment']
+    context = {'product': product, 'comments': comments, "products": products[0:4]}
     return render(request, 'food/detalhe.html', context)
 
 
@@ -220,16 +205,13 @@ def productDetailPage(request, product_id):
 @allowed_users(allowed_roles=['Customer'])
 def commentOnItem(request, product_id):
     if request.method == 'POST':
-        if Comment.objects.all().filter(user_id=request.user, product_id=product_id).exists():
-            request.session['doubleComment'] = "Não pode comentar duas vezes!"
-        else:
-            commentText = request.POST['commentInput']
-            commentRating = request.POST['ratingInput']
-            product = Product.objects.get(id=product_id)
-            Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
-            product.addRating(newRating=commentRating)
-            Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
-                    product=product).save()
+        commentText = request.POST['commentInput']
+        commentRating = request.POST['ratingInput']
+        product = Product.objects.get(id=product_id)
+        Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
+        product.addRating(newRating=commentRating)
+        Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
+                product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
@@ -287,7 +269,6 @@ def addProduct(request):
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
 
-
 def get_price(customer):
     shopping_cart = CestoCompras.objects.filter(customer=customer)
     price = 0
@@ -304,7 +285,6 @@ def pagamento(request):
     if price == 0:
         return render(request, 'food/cestoCompras.html', {'error_message': "O seu carrinho está vazio"})
     return render(request, 'food/pagamento.html', {'price': price})
-
 
 def checkOut(request):
     user = User.objects.get(id=request.user.id)
@@ -326,21 +306,19 @@ def checkOut(request):
                 customer.save()
                 CestoCompras.objects.filter(customer=customer).delete()
                 products = Product.objects.all()
-                enviado = "A sua encomenda está confirmada! Será enviada para " + str(morada) + ", " + str(
-                    zipCode) + "."
+                enviado = "A sua encomenda está confirmada! Será enviada para " + str(morada) + ", " + str(zipCode) + "."
                 context = {'products_list': products, 'enviado': enviado}
                 return render(request, 'food/index.html', context)
             else:
                 return render(request, 'food/pagamento.html', {'price': price,
                                                                'error_message': "Preencha a Morada e o Código Postal"})
-    return render(request, 'food/pagamento.html', {'price': price})
-
+    return render(request, 'food/pagamento.html',{'price':price})
 
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def investCrypto(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
-    customer.credit = random.randint(1, 1000000)
+    customer.credit = random.randint(1,1000000)
     customer.save()
     return HttpResponseRedirect(reverse('food:about'))

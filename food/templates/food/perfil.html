@@ -1,4 +1,5 @@
 {% extends 'food/base.html' %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,9 +9,9 @@
 <body>
 {% block content %}
     <h1>Perfil do utilizador</h1>
-    {% if request.user.customer %}
+    {% if request.user|has_group:'Customer' %}
         <img src="{{ request.user.customer.profile_pic }}" style="width: 150px;"><br/><br/>
-    {% else %}
+    {% elif request.user|has_group:'Salesman' %}
         <img src="{{ request.user.salesman.profile_pic }}" style="width: 150px;"><br/><br/>
     {% endif %}
     <p><strong>Username: </strong>{{ request.user.username }}</p><br/>
@@ -39,7 +40,7 @@
                 {% endfor %}
             </div>
         {% endif %}
-    {% else %}
+    {% elif request.user|has_group:'Salesman' %}
         <p><strong>Tipo de utilizador: </strong>Vendedor</p><br/>
         <p><strong>Classificação: </strong>{{ request.user.salesman.rating }}</p><br/>
         <p><strong>Número de telefone: </strong>{{ request.user.salesman.phone_number }}</p>
