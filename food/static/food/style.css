@@ -193,6 +193,7 @@ ul.dropdown {
 
 li:hover ul.dropdown {
     display: block; /* Display the dropdown */
+    min-width: 130px;
 }
 
 .dropdown li {
