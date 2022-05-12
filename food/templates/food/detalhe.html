@@ -72,7 +72,7 @@
                             {% csrf_token %}
                             <textarea name="commentInput" rows="4" cols="38"></textarea><br/><br/>
                             <label>Avaliação: </label>
-                            <input max="5.0" min="0.0" name="ratingInput" step="0.1" type="number"
+                            <input max="5.0" min="0.1" name="ratingInput" step="0.1" type="number"
                                    style="width: 124px;" required>
                             <input type="submit" value="Comentar"/><br/><br/>
                         </form>
@@ -81,7 +81,6 @@
                         {% endif %}
                     {% endif %}
                 </div>
-{#<<<<<<< HEAD#}
                 <div class="item6 slider-comment">
                     {% for comment in comments %}
                         <div class="review_section">
@@ -102,25 +101,6 @@
                         </div>
                         <br/>
                     {% endfor %}
-{#=======#}
-{#            </div>#}
-{#            {% if request.user|has_group:'Customer' %}#}
-{#                <div class="item6" style="grid-row-start: 3;">#}
-{#            {% else %}#}
-{#                <div class="item6" style="grid-row-start: 2; margin-top: 64px;">#}
-{#            {% endif %}#}
-{#            {% for comment in comments %}#}
-{#                <div class="review_section">#}
-{#                    <img src="{{ comment.user.customer.profile_pic }}" alt="profile_pic do user">#}
-{#                    <div>#}
-{#                        <p class="lanterna review-section-text">Username: {{ comment.user.username }}</p>#}
-{#                        <p class="lanterna review-section-text">Avaliação: {{ comment.rating }}</p>#}
-{#                        <p class="lanterna review-section-text">Comentário: {{ comment.text }}</p>#}
-{#                    </div>#}
-{#>>>>>>> 84a9ef7c1ca6cba0e1f3da0cc33c772db9eb9ba3#}
-{#                </div>#}
-{#                <br/>#}
-{#            {% endfor %}#}
             </div>
             </div>
         </div>
