@@ -5,29 +5,65 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Registar Utilizador</title>
+    {% block head %}
+        <title>Mercadinho - Registar</title>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
-    <h2>Registar Utilizador</h2>
-    <form method="post" action="{% url 'food:registarCustomer' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        <p>Username: <input name="username" type="username" required></p><br/>
-        <p>Email: <input name="email" type="email" required></p><br/>
-        <p>Password: <input name="password" type="password" required></p><br/>
-        <p>Género: <input list="gender" name="gender"></p><br/>
-        <datalist id="gender">
-            <option value="Male">
-            <option value="Female">
-            <option value="Other">
-        </datalist>
-        <p>Fotografia: <input name="photo" type="file" required></p><br/>
-        <p>Aniversário: <input name="birthday" type="date" required></p><br/>
-        <p>Créditos: <input name="credits" type="number" required></p><br>
-        <input type="submit" value="Gravar novo Utilizador"/>
-    </form>
-    <br/>
-    <p>É um vendedor? Registe-se <a href="{% url 'food:registarSalesman' %}">aqui</a>!</p>
+    <div class="teste-container">
+        <div class="login-structure">
+            <div style="background-color: #0022FF; border-radius: 25px;">
+                <img src="/food/static/media/register-customer.jfif" alt="registar_customer_image"
+                     style="border-radius: 25px">
+            </div>
+            <div class="center-container">
+                <div>
+                    <h2>Registar Cliente</h2>
+                    <form action="{% url 'food:registarSalesman' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <p>Username: <input name="username" type="username" required></p><br/>
+                        <p>Email: <input name="email" type="email" required></p><br/>
+                        <p>Password: <input name="password" type="password" required></p><br/>
+                        <p>Género: <input list="gender" name="gender"></p><br/>
+                        <datalist id="gender">
+                            <option value="Male">
+                            <option value="Female">
+                            <option value="Other">
+                        </datalist>
+
+                        <p>Fotografia: <input name="photo" type="file" required></p><br/>
+                        <p>Aniversário: <input name="birthday" type="date" required></p><br/>
+                        <p>Créditos: <input name="credits" type="number" required></p><br>
+                        <input type="submit" value="Gravar novo Utilizador"/>
+                    </form>
+                    <br>
+                    <p>É um vendedor? Registe-se <a href="{% url 'food:registarSalesman' %}"
+                                                    style="color: blue">aqui</a>!</p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 </body>
 </html>
+
+{#    <h2>Registar Utilizador</h2>#}
+{#    <form method="post" action="{% url 'food:registarCustomer' %}" enctype="multipart/form-data">#}
+{#        {% csrf_token %}#}
+{#        <p>Username: <input name="username" type="username" required></p><br/>#}
+{#        <p>Email: <input name="email" type="email" required></p><br/>#}
+{#        <p>Password: <input name="password" type="password" required></p><br/>#}
+{#        <p>Género: <input list="gender" name="gender"></p><br/>#}
+{#        <datalist id="gender">#}
+{#            <option value="Male">#}
+{#            <option value="Female">#}
+{#            <option value="Other">#}
+{#        </datalist>#}
+{#        <p>Fotografia: <input name="photo" type="file" required></p><br/>#}
+{#        <p>Aniversário: <input name="birthday" type="date" required></p><br/>#}
+{#        <p>Créditos: <input name="credits" type="number" required></p><br>#}
+{#        <input type="submit" value="Gravar novo Utilizador"/>#}
+{#    </form>#}
+{#    <br/>#}
+{#    <p>É um vendedor? Registe-se <a href="{% url 'food:registarSalesman' %}">aqui</a>!</p>#}

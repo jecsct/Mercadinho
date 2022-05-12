@@ -5,23 +5,39 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Login Utilizador</title>
+    {% block head %}
+        <title>Mercadinho - Login</title>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
-    <h2>Entrar na conta</h2>
-    {% if error_message %}
-        <p>{{ error_message }}</p>
-        <br/>
-    {% endif %}
-    <form method="post" action="{% url 'food:loginutilizador' %}">
-        {% csrf_token %}
-        Username: <input type="username" name="username" /><br /><br />
-        Password: <input type="password" name="password" /><br /><br />
-        <input type="submit" value="Login" />
-    </form>
-    <br>
-    <p>Ainda não tem conta? Crie uma <a href="{% url 'food:registarCustomer' %}" style="color: blue">aqui</a>!</p>
+    <div class="teste-container">
+        <div class="login-structure">
+            <div style="background-color: #0022FF; border-radius: 25px;">
+                <img src="/food/static/media/panda_login.jfif" alt="login_panda_image" style="border-radius: 25px">
+            </div>
+            <div class="center-container">
+                <div>
+                    <h2>Entrar na conta</h2>
+                    {% if error_message %}
+                        <p>{{ error_message }}</p>
+                        <br/>
+                    {% endif %}
+                    <form method="post" action="{% url 'food:loginutilizador' %}">
+                        {% csrf_token %}
+                        Username: <input type="username" name="username"/><br/><br/>
+                        Password: <input type="password" name="password"/><br/><br/>
+                        <input type="submit" value="Login"/>
+                    </form>
+                    <br>
+                    <p>
+                        Ainda não tem conta? Crie uma <a href="{% url 'food:registarCustomer' %}"
+                                                         style="color: blue">aqui</a>!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 </body>
 </html>

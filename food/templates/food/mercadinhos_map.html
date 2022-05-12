@@ -3,7 +3,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>Mapa dos Mercadinhos</title>
+    {% block head %}
+        <title>Mercadinho - Mapa</title>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
@@ -14,25 +16,6 @@
             </h1>
         </div>
         <div>
-            <div class="mercadinhos_list">
-                <ul>
-                    <li>
-                        Mercadinho C607
-                    </li>
-                    <li>
-                        Mercadinho IBs
-                    </li>
-                    <li>
-                        Mercadinho Serviços Academicos
-                    </li>
-                    <li>
-                        Mercadinho Auditório Fancy
-                    </li>
-                    <li>
-                        Mercadinho Autónoma
-                    </li>
-                </ul>
-            </div>
             <div class="mapa">
                 <iframe
                         src="https://www.google.com/maps/d/embed?mid=1o5yFa05GFG-JgJPyU6hpEgJu1aTTAbfS&ehbc=2E312F"

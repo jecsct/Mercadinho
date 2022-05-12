@@ -6,8 +6,7 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Mercadinho</title>
-    {% load custom_filters %}
+    <title></title>
 </head>
 <body>
 {% block content %}
@@ -20,7 +19,7 @@
             {% for product in products_list %}
                 <div class="product">
                     <a href="{% url 'food:productDetailPage' product.id %}">
-                        <img class="product_image" src="{{ product.image }}"/>
+                        <img class="product_image" src="{{ product.image }}" alt="imagem do produto : {{ product.name }}"/>
                         <p class="product_text">{{ product.name }}</p>
                         <p class="lanterna product_price">Preço: {{ product.price }}</p>
                         {% if not request.user|has_group:'Salesman' %}

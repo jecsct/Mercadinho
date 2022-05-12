@@ -3,20 +3,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    {% block head %}
+        <title>Mercadinho - Registar</title>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
-    <h2>Registar Vendedor</h2>
-    <form action="{% url 'food:registarSalesman' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <p>Username: <input name="username" type="username" required></p><br/>
-        <p>Email: <input name="email" type="email" required></p><br/>
-        <p>Password: <input name="password" type="password" required></p><br/>
-        <p>Fotografia: <input name="photo" type="file" required></p><br/>
-        <p>Número de telefone: <input name="telephone" type="tel" required></p><br/>
-        <input type="submit" value="Gravar novo Vendedor"/>
-    </form><br/>
+    <div class="teste-container">
+        <div class="login-structure">
+            <div style="background-color: #0022FF; border-radius: 25px;">
+                <img src="/food/static/media/register_salesman.jfif" alt="login_panda_image" style="border-radius: 25px">
+            </div>
+            <div class="center-container">
+                <div>
+                    <h2>Registar Vendedor</h2>
+                    <form action="{% url 'food:registarSalesman' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <p>Username: <input name="username" type="username" required></p><br/>
+                        <p>Email: <input name="email" type="email" required></p><br/>
+                        <p>Password: <input name="password" type="password" required></p><br/>
+                        <p>Fotografia: <input name="photo" type="file" required></p><br/>
+                        <p>Número de telefone: <input name="telephone" type="tel" required></p><br/>
+                        <input type="submit" value="Gravar novo Vendedor"/>
+                    </form>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 </body>
 </html>

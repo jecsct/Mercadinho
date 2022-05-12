@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mercadinho</title>
+    {% block head %}
+        <title>Mercadinho</title>
+    {% endblock %}
     {% load static %}
-    <link rel = "icon" href ="static/media/logo.png" type = "image/x-icon">
+    <link rel="icon" href="static/media/logo.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}"/>
 </head>
 <body>
