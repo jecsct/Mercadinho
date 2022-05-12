@@ -7,14 +7,42 @@
 </head>
 <body>
 {% block content %}
-        <div class="mapa">
-                    <iframe
-                            src="https://www.google.com/maps/d/embed?mid=1o5yFa05GFG-JgJPyU6hpEgJu1aTTAbfS&ehbc=2E312F"
-                            width="100%"
-                            height="600"
-                            style="margin-top: -70px;"
-                    ></iframe>
+    <div>
+        <div>
+            <h1>
+                Mapa dos Mercadinhos
+            </h1>
         </div>
+        <div>
+            <div class="mercadinhos_list">
+                <ul>
+                    <li>
+                        Mercadinho C607
+                    </li>
+                    <li>
+                        Mercadinho IBs
+                    </li>
+                    <li>
+                        Mercadinho Serviços Academicos
+                    </li>
+                    <li>
+                        Mercadinho Auditório Fancy
+                    </li>
+                    <li>
+                        Mercadinho Autónoma
+                    </li>
+                </ul>
+            </div>
+            <div class="mapa">
+                <iframe
+                        src="https://www.google.com/maps/d/embed?mid=1o5yFa05GFG-JgJPyU6hpEgJu1aTTAbfS&ehbc=2E312F"
+                        width="100%"
+                        height="600"
+                        style="margin-top: -70px;"
+                ></iframe>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 </body>
 </html>

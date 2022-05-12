@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import User, Group
+import random
 
 
 def index(request):
@@ -181,7 +182,7 @@ def loginutilizador(request):
                 login(request, user)
                 return HttpResponseRedirect(reverse('food:index'))
             else:
-                return render('food/loginutilizador.html',
+                return render(request, 'food/loginutilizador.html',
                               {'error_message': 'Utilizador não existe ou a password está incorreta'})
         else:
             return render(request, 'food/loginutilizador.html')
@@ -208,7 +209,14 @@ def productDetailPage(request, product_id):
     comments = Comment.objects.all().filter(product_id=product_id)
     product.addView()
     products = Product.objects.all().exclude(id=product_id)
-    context = {'product': product, 'comments': comments, "products": products[0:4]}
+    if request.user.groups.filter(name='Salesman').exists():
+        products = products.filter(salesman_id=request.user.salesman.id)
+    context = {'product': product, 'comments': comments, "products": products}
+    print(request.session.get('doubleComment'))
+    if request.session.get('doubleComment'):
+        context = {'product': product, 'comments': comments, "products": products,
+                   "doubleCommentWarning": request.session['doubleComment']}
+        del request.session['doubleComment']
     return render(request, 'food/detalhe.html', context)
 
 
@@ -216,13 +224,16 @@ def productDetailPage(request, product_id):
 @allowed_users(allowed_roles=['Customer'])
 def commentOnItem(request, product_id):
     if request.method == 'POST':
-        commentText = request.POST['commentInput']
-        commentRating = request.POST['ratingInput']
-        product = Product.objects.get(id=product_id)
-        Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
-        product.addRating(newRating=commentRating)
-        Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
-                product=product).save()
+        if Comment.objects.all().filter(user_id=request.user, product_id=product_id).exists():
+            request.session['doubleComment'] = "Não pode comentar duas vezes!"
+        else:
+            commentText = request.POST['commentInput']
+            commentRating = request.POST['ratingInput']
+            product = Product.objects.get(id=product_id)
+            Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
+            product.addRating(newRating=commentRating)
+            Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
+                    product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
@@ -286,6 +297,7 @@ def get_price(customer):
     for item in shopping_cart:
         price += item.product.price
     return price
+
 
 @login_required(login_url="food:loginutilizador")
 def pagamento(request):

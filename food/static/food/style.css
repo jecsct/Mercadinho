@@ -50,10 +50,28 @@ a {
 
 /* Mapa dos mercadinhos */
 .mapa {
-    width: 100%;
+    width: 1000px;
     overflow: hidden;
     height: 100%;
     margin: 12px auto;
+    /*position: relative;*/
+    /*transform: translate(50%, 0%);*/
+    float: right;
+}
+
+.mercadinhos_list {
+    float: left;
+    padding-top: 12px;
+    text-align: justify;
+    font-size: 25px;
+    position: relative;
+    width: 500px;
+}
+
+.mercadinhos_list ul {
+    margin: 0;
+    position: absolute;
+    top: 100px;
 }
 
 /* Sobre o produto */
@@ -108,6 +126,30 @@ a {
     grid-column-end: -2;
 }
 
+/*<<<<<<< HEAD*/
+/*.item5 {*/
+/*    grid-row-start: 2;*/
+/*    grid-column-start: 2;*/
+/*    grid-column-end: 4;*/
+/*}*/
+
+/*.slider-produtos {*/
+/*    width: auto;*/
+/*    height: 400px;*/
+/*    overflow-y: auto;*/
+/*}*/
+
+/*.item6 {*/
+/*    grid-row-start: 2;*/
+/*    grid-column-start: 4;*/
+/*    grid-column-end: -2;*/
+/*}*/
+
+/*.slider-comment {*/
+/*    width: auto;*/
+/*    height: 200px;*/
+/*    overflow-y: auto;*/
+/*=======*/
 .item5{
     margin-top: 64px;
     grid-row-start: 2;
@@ -118,6 +160,7 @@ a {
 .item6{
     grid-column-start: 2;
     grid-column-end: -2;
+/*>>>>>>> 84a9ef7c1ca6cba0e1f3da0cc33c772db9eb9ba3*/
 }
 
 .lanterna::before {
@@ -311,12 +354,14 @@ input[type=submit] {
 }
 
 .about_info {
+    padding-top: 20px;
     margin: auto;
-    width: 50%;
+    width: 700px;
 }
 
 .about_info p {
-    padding: 7px;
+    padding: 10px;
+    font-size: 18px;
 }
 
 /* Footer */
@@ -361,7 +406,12 @@ input[type=submit] {
     object-fit: cover;
 }
 
+/*<<<<<<< HEAD*/
+/*.review-section-text {*/
+/*    margin: 4px;*/
+/*=======*/
 .review-section-text{
+/*>>>>>>> 84a9ef7c1ca6cba0e1f3da0cc33c772db9eb9ba3*/
     width: 570px;
     overflow-wrap: break-word;
 }
@@ -399,11 +449,12 @@ input[type=submit] {
 
 /*Perfil do utilizador*/
 .slider {
-    width: 350px;
+    width: auto;
     height: auto;
     display: flex;
     overflow-x: auto;
 }
+
 .slide {
     width: auto;
     flex-shrink: 0;
@@ -411,7 +462,12 @@ input[type=submit] {
     margin-right: 12px;
 }
 
+/*<<<<<<< HEAD*/
+/*.slide p {*/
+/*    width: 300px;*/
+/*=======*/
 .slide p{
     width: 340px;
+/*>>>>>>> 84a9ef7c1ca6cba0e1f3da0cc33c772db9eb9ba3*/
     overflow-wrap: break-word;
 }
