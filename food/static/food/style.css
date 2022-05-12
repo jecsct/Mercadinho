@@ -401,18 +401,13 @@ input[type=submit] {
     grid-gap: 16px;
 }
 
-.review_section img {
+.review_section img{
     width: 100px;
     height: 100px;
     object-fit: cover;
 }
 
-/*<<<<<<< HEAD*/
-/*.review-section-text {*/
-/*    margin: 4px;*/
-/*=======*/
 .review-section-text{
-/*>>>>>>> 84a9ef7c1ca6cba0e1f3da0cc33c772db9eb9ba3*/
     width: 570px;
     overflow-wrap: break-word;
 }
