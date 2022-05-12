@@ -8,7 +8,7 @@ class Mensagem(models.Model):
     email = models.CharField(max_length=50)
     texto_mensagem = models.CharField(max_length=500)
     dataHora = models.DateTimeField()
-
+    tratada = models.BooleanField()
 
 # Create your models here.
 class Salesman(models.Model):

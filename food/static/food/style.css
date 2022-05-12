@@ -255,8 +255,11 @@ li:hover ul.dropdown {
 
 /* Caixa de mensagens */
 .mensagem {
-    background-color: #eeeeee;
-    padding: 30px 30px 30px 30px;
+    box-sizing: border-box;
+    border:solid;
+    background-color: #ffffff;
+    padding: 30px;
+    margin: 3px 60px;
 }
 
 .mensagem-Hora {
