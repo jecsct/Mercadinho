@@ -60,7 +60,7 @@ def addToCart(request, product_id):
         shoppingCart = CestoCompras(customer=customer, product=product)
         shoppingCart.save()
         products_list = Product.objects.all()
-        context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
+        context = {'products_list': products_list, 'confirmation': 'Produto adicionado', 'p': product}
         return render(request, 'food/index.html', context)
     if int(request.POST.get('quant')) > 0:
         for x in range(int(request.POST.get('quant'))):
@@ -199,6 +199,8 @@ def productDetailPage(request, product_id):
     products = Product.objects.all().exclude(id=product_id)
     if request.user.groups.filter(name='Salesman').exists():
         products = products.filter(salesman_id=request.user.salesman.id)
+    products = list(products)[:10]
+    random.shuffle(products)
     context = {'product': product, 'comments': comments, "products": products}
     print(request.session.get('doubleComment'))
     if request.session.get('doubleComment'):
@@ -279,6 +281,7 @@ def addProduct(request):
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
 
+
 def get_price(customer):
     shopping_cart = CestoCompras.objects.filter(customer=customer)
     price = 0
@@ -295,6 +298,7 @@ def pagamento(request):
     if price == 0:
         return render(request, 'food/cestoCompras.html', {'error_message': "O seu carrinho está vazio"})
     return render(request, 'food/pagamento.html', {'price': price})
+
 
 def checkOut(request):
     user = User.objects.get(id=request.user.id)
@@ -316,19 +320,21 @@ def checkOut(request):
                 customer.save()
                 CestoCompras.objects.filter(customer=customer).delete()
                 products = Product.objects.all()
-                enviado = "A sua encomenda está confirmada! Será enviada para " + str(morada) + ", " + str(zipCode) + "."
+                enviado = "A sua encomenda está confirmada! Será enviada para " + str(morada) + ", " + str(
+                    zipCode) + "."
                 context = {'products_list': products, 'enviado': enviado}
                 return render(request, 'food/index.html', context)
             else:
                 return render(request, 'food/pagamento.html', {'price': price,
                                                                'error_message': "Preencha a Morada e o Código Postal"})
-    return render(request, 'food/pagamento.html',{'price':price})
+    return render(request, 'food/pagamento.html', {'price': price})
+
 
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def investCrypto(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)
-    customer.credit = random.randint(1,1000000)
+    customer.credit = random.randint(1, 1000000)
     customer.save()
     return HttpResponseRedirect(reverse('food:about'))
