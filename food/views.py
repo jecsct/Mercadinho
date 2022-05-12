@@ -36,11 +36,18 @@ def contactos(request):
 
 @login_required
 def caixaMensagens(request):
-    lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=False)
+    if request.method == "POST":
+        filtro = request.POST.get('filtro')
+        if filtro:
+            lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=filtro)
+        else:
+            lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=False)
+    else:
+        lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=False)
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
 def tratarMensagem(request, mensagem_id):
-    mensagem = Mensagem.objects.get(mensagem_id)
+    mensagem = Mensagem.objects.get(id=mensagem_id)
     mensagem.tratada = True
     mensagem.save()
     return HttpResponseRedirect(reverse('food:caixamensagens'))

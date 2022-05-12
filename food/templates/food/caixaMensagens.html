@@ -8,12 +8,24 @@
 <body>
 {% block content %}
     <h1>Caixa de Entrada</h1>
+    <div class="mensagem-Hora" style="margin-right: 60px">
+    <form action="{% url 'food:caixamensagens' %}" method="post">
+        {% csrf_token %}
+        <label>Filtrar:</label>
+        <select name="filtro">
+            <option value="none" selected disabled hidden>Select an Option</option>
+            <option value="False">Mensagens Novas</option>
+            <option value="True">Tratadas</option>
+        </select>
+        <input type="submit" value="Filtrar">
+    </form>
+    </div> <br> <br>
     {% if lista_mensagens %}
         {% for mensagem in lista_mensagens %}
             <div class="mensagem">
-                <a href="{% url "food:tratarMensagem" %}"></a>
+                <a href="{% url "food:tratarMensagem" mensagem.id %}" class="button-link" style="float:right">Marcar como resolvida</a> <br>
                 <p>De: {{ mensagem.email }}</p> <br>
-                <p>Mensagem: {{ mensagem.texto_mensagem }}</p>
+                <div>Mensagem: {{ mensagem.texto_mensagem }}</div>
                 <p class="mensagem-Hora">{{ mensagem.dataHora }}</p>
             </div>
             <br>
