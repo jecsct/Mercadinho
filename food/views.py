@@ -24,18 +24,30 @@ def index(request):
 
 def contactos(request):
     if request.method == 'POST':
-        Mensagem(email=request.POST.get("email"),
-                 texto_mensagem=request.POST.get("message"),
-                 dataHora=datetime.datetime.now()).save()
-        return HttpResponseRedirect(reverse('food:contactos'))
+            Mensagem(email=request.POST.get("email"),
+                     texto_mensagem=request.POST.get("message"),
+                     dataHora=datetime.datetime.now()).save()
+            return HttpResponseRedirect(reverse('food:contactos'))
     return render(request, 'food/contactos.html')
 
 
 @login_required(login_url="food:loginutilizador")
 def caixaMensagens(request):
-    lista_mensagens = Mensagem.objects.order_by('-dataHora')
+    if request.method == "POST":
+        filtro = request.POST.get('filtro')
+        if filtro:
+            lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=filtro)
+        else:
+            lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=False)
+    else:
+        lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=False)
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
+def tratarMensagem(request, mensagem_id):
+    mensagem = Mensagem.objects.get(id=mensagem_id)
+    mensagem.tratada = True
+    mensagem.save()
+    return HttpResponseRedirect(reverse('food:caixamensagens'))
 
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
