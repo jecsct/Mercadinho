@@ -17,10 +17,10 @@ FONT SIZE SYSTEM (px)
 
 body {
     font-family: "Inter", sans-serif;
-    color: #343a40;
+    color: #000000;
     margin: 0 12px;
     /*background: #ACE1AF;*/
-    background-color: #D1FFD6;
+    background-color: #eeeee0;
 }
 
 .page-container {
@@ -73,8 +73,10 @@ li {
 .product_title {
     margin-top: 12px;
     padding: 12px;
-    background-color: lightgreen;
+    background-color: #da3232 ;
+    color: #eeeeee;
     display: inline-block;
+
 }
 
 .grid {
@@ -130,7 +132,7 @@ li {
 
 /* Navigation */
 nav {
-    background-color: #087f5b;
+    background-color: #da3232;
     margin-top: 12px;
 }
 
@@ -171,7 +173,7 @@ nav p {
 }
 
 .navOption:hover {
-    background-color: #045039;
+    background-color: #da3232;
 }
 
 .nav-profile-pic {
@@ -183,7 +185,7 @@ nav p {
 }
 
 ul.dropdown {
-    background-color: rgba(51, 170, 51, 0.4);
+    background-color: #cc0000;
     display: none;
     position: absolute;
     right: 0;
@@ -222,14 +224,14 @@ li:hover ul.dropdown {
 .button-link {
     display: inline-block;
     padding: 8px 10px;
-    background-color: #087f5b;
+    background-color: #da3232;
     color: #eeeeee;
     font: 16px sans-serif;
     cursor: pointer;
 }
 
 input[type=submit] {
-    background-color: #087f5b;
+    background-color: #da3232;
     color: #eeeeee;
     cursor: pointer;
     padding: 8px 10px 8px 10px;
@@ -348,7 +350,8 @@ input[type=submit] {
     width: 100%;
     height: auto;
     text-align: center;
-    background: rgba(51, 170, 51, 0.4);
+    background: #da3232;
+    color: #eeeeee;
     margin: 32px 0 12px;
     padding: 4px;
 }
@@ -396,7 +399,7 @@ input[type=submit] {
 
 .item-cestoCompras {
     padding: 20px;
-    background-color: #045039;
+    background-color:  #cc0000;
     color: #eeeeee;
     margin: 20px 300px;
 }
@@ -414,11 +417,9 @@ input[type=submit] {
 
 .pagamento {
     position: absolute;
-    top: 30%;
-    left: 30%;
+    top: 25%;
+    left: 25%;
     text-align: center;
-    background-color: #045039;
-    color: #eeeeee;
     padding: 80px;
 }
 

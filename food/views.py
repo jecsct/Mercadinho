@@ -28,14 +28,11 @@ def index(request):
 def contactos(request):
     error_message = False
     if request.method == 'POST':
-        if not request.POST.get("email") == request.user.email:
             Mensagem(email=request.POST.get("email"),
                      texto_mensagem=request.POST.get("message"),
                      dataHora=datetime.datetime.now()).save()
             return HttpResponseRedirect(reverse('food:contactos'))
-        else:
-            error_message = 'Não pode enviar emails para si próprio';
-    return render(request, 'food/contactos.html', {'error_message': error_message})
+    return render(request, 'food/contactos.html')
 
 
 @login_required
