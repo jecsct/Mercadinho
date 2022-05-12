@@ -8,7 +8,7 @@
 </head>
 <body>
 {% block content %}
-    <div>
+<div>
     <div class="center_grid">
         <div class="grid">
             <div class="grid2">
@@ -30,81 +30,80 @@
                 </div>
                 <div class="item3">
                     {% if request.user|has_group:'Salesman' %}
-                        <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
+                    <a href="{% url 'food:deleteProduct' product.id %}" class="button-link">Eliminar</a>
                     {% else %}
-                        <div class="column3">
-                            <div>
-                                <form action="{% url 'food:addToCart'  product.id %}" method="post">
-                                    {% csrf_token %}
-                                    <label>Quantidade: <input type="number" name="quant" value="0"></label>
-                                    <input type="submit" value="Adicionar ao cesto"/>
-                                </form>
-                            </div>
+                    <div class="column3">
+                        <div>
+                            <form action="{% url 'food:addToCart'  product.id %}" method="post">
+                                {% csrf_token %}
+                                <label>Quantidade: <input type="number" name="quant" value="1"></label>
+                                <input type="submit" value="Adicionar ao cesto"/>
+                            </form>
                         </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
             <div class="item4">
                 <h3>Outros Produtos:</h3>
                 {% if products %}
-                        {% for p in products %}
-                            <a href="{% url 'food:productDetailPage' p.id %}">
-                                <div class="product_suggestion">
-                                    <img src="{{ p.image }}" alt="imagem de um produto">
-                                    <div class="text-details">
-                                        <p>Nome: {{ p.name }}</p>
-                                        <p class="lanterna_after">Preço: {{ p.price }}</p>
-                                        <p>Rating: {{ p.rating }}</p>
-                                    </div>
-                                </div>
-                            </a>
-                        {% endfor %}
-                    {% else %}
-                        Não exitem produtos para serem sugeridos
-                    {% endif %}
+                {% for p in products %}
+                <a href="{% url 'food:productDetailPage' p.id %}">
+                    <div class="product_suggestion">
+                        <img src="{{ p.image }}" alt="imagem de um produto">
+                        <div class="text-details">
+                            <p>Nome: {{ p.name }}</p>
+                            <p class="lanterna_after">Preço: {{ p.price }}</p>
+                            <p>Rating: {{ p.rating }}</p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+                {% else %}
+                Não exitem produtos para serem sugeridos
+                {% endif %}
             </div>
             <div class="item5">
                 <div>
                     {% if request.user|has_group:'Customer' %}
-                        <h3>Inserir comentário:</h3>
-                        <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
-                              method="post">
-                            {% csrf_token %}
-                            <textarea name="commentInput" rows="4" cols="38"></textarea><br/><br/>
-                            <label>Avaliação: </label>
-                            <input max="5.0" min="0.1" name="ratingInput" step="0.1" type="number"
-                                   style="width: 124px;" required>
-                            <input type="submit" value="Comentar"/><br/><br/>
-                        </form>
-                        {% if doubleCommentWarning %}
-                            {{ doubleCommentWarning }}
-                        {% endif %}
+                    <h3>Inserir comentário:</h3>
+                    <form action="{% url 'food:commentOnItem' product.id %}" enctype="multipart/form-data"
+                          method="post">
+                        {% csrf_token %}
+                        <textarea name="commentInput" rows="4" cols="38"></textarea><br/><br/>
+                        <label>Avaliação: </label>
+                        <input max="5.0" min="0.1" name="ratingInput" step="0.1" type="number"
+                               style="width: 124px;" required>
+                        <input type="submit" value="Comentar"/><br/><br/>
+                    </form>
+                    {% if doubleCommentWarning %}
+                    {{ doubleCommentWarning }}
+                    {% endif %}
                     {% endif %}
                 </div>
                 <div class="item6 slider-comment">
                     {% for comment in comments %}
-                        <div class="review_section">
-                            <img src="{{ comment.user.customer.profile_pic }}" alt="profile_pic do user">
-                            <div>
-                                <p class="lanterna review-section-text">Username: {{ comment.user.username }}</p>
-                                <p class="lanterna review-section-text">Avaliação: {{ comment.rating }}</p>
-                                <p class="lanterna review-section-text">Comentário: {{ comment.text }}</p>
-                            </div>
-                            {#                            {% if request.user.is_authenticated and comment.user.username == request.user.username %}#}
-                            {#                                <form action="{% url 'food:deleteProductComment' product.id %}" method="post">#}
-                            {#                                    {% csrf_token %}#}
-                            {#                                    <br/>#}
-                            {#                                    <a href="{% url 'food:updateProductComment' product.id %}"> Update</a>#}
-                            {#                                    <input type="submit" value="Delete">#}
-                            {#                                </form>#}
-                            {#                            {% endif %}#}
+                    <div class="review_section">
+                        <img src="{{ comment.user.customer.profile_pic }}" alt="profile_pic do user">
+                        <div>
+                            <p class="lanterna review-section-text">Username: {{ comment.user.username }}</p>
+                            <p class="lanterna review-section-text">Avaliação: {{ comment.rating }}</p>
+                            <p class="lanterna review-section-text">Comentário: {{ comment.text }}</p>
+                            {% if request.user.is_authenticated and comment.user.username == request.user.username %}
+                        <form action="{% url 'food:deleteProductComment' product.id %}" method="post">
+                            {% csrf_token %}
+                            <a href="{% url 'food:updateProductComment' product.id %}"> Update</a>
+                            <input type="submit" value="Delete" style="margin-top: 6px;">
+                        </form>
+                        {% endif %}
                         </div>
-                        <br/>
+                    </div>
+                    <br/>
                     {% endfor %}
-            </div>
+                </div>
             </div>
         </div>
     </div>
-{% endblock %}
+    {% endblock %}
 </body>
 </html>
