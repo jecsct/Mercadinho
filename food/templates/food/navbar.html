@@ -28,7 +28,7 @@
             </div>
         </li>
         <li class="navOption nav-profile-pic">
-            {% if not request.user.is_authenticated %}
+            {% if not request.user.is_authenticated or request.user.is_superuser %}
                 <a>
                     <img src="/static/media/default_logo.png" class="nav-profile-pic">
                 </a>
@@ -36,13 +36,13 @@
                 <a>
                     {% if request.user|has_group:'Customer' %}
                         <img src="{{ request.user.customer.profile_pic }}" class="nav-profile-pic">
-                    {% else %}
+                    {% elif request.user|has_group:'Salesman' %}
                         <img src="{{ request.user.salesman.profile_pic }}" class="nav-profile-pic">
                     {% endif %}
                 </a>
             {% endif %}
             {% if not request.user.is_authenticated %}
-                <ul class="dropdown" style="float: right">
+                <ul class="dropdown">
                     <li>
                         <a class="navOption" href="{% url 'food:registarCustomer' %}">Registar Utilizador</a>
                     </li>
@@ -51,7 +51,7 @@
                     </li>
                 </ul>
             {% else %}
-                <ul class="dropdown" style="float: right">
+                <ul class="dropdown">
                     <li>
                         <a href="{% url 'food:perfil' %}" class="navOption">Perfil</a>
                     </li>

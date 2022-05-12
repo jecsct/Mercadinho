@@ -12,9 +12,9 @@
     <h1>Adicionar produto</h1>
     <form action="{% url 'food:addProduct' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>Nome: <input name="productName" type="text" required></p><br/>
+        <p>Nome: <input name="productName" type="text" style="width: 195px;" required></p><br/>
         <p>Descrição: <input name="productDescription" type="text" required></p><br/>
-        <p>Preço: <input name="productPrice" type="number" step="0.01" min="0" required></p><br/>
+        <p>Preço: <input name="productPrice" type="number" step="0.01" min="0" style="width: 195px;" required></p><br/>
         <p>Imagem: <input name="myfile" type="file" required></p><br/>
         <input type="submit" value="Adicionar">
         <a href="{% url 'food:index' %}">Cancelar</a>

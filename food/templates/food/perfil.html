@@ -1,4 +1,5 @@
 {% extends 'food/base.html' %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,9 +9,9 @@
 <body>
 {% block content %}
     <h1>Perfil do utilizador</h1>
-    {% if request.user.customer %}
+    {% if request.user|has_group:'Customer' %}
         <img src="{{ request.user.customer.profile_pic }}" style="width: 150px;"><br/><br/>
-    {% else %}
+    {% elif request.user|has_group:'Salesman' %}
         <img src="{{ request.user.salesman.profile_pic }}" style="width: 150px;"><br/><br/>
     {% endif %}
     <p><strong>Username: </strong>{{ request.user.username }}</p><br/>
@@ -22,21 +23,24 @@
         <p><strong>Aniversário: </strong>{{ request.user.customer.birthday }}</p>
         {% if comments %}
             <br/><h3>Comentários feitos pelo utilizador:</h3>
-            {% for comment in comments %}
-                <li>
-                    <p class="lanterna">Username: {{ comment.user.username }}</p>
-                    <p class="lanterna">Avaliação: {{ comment.rating }}</p>
-                    <p class="lanterna">Comentário: {{ comment.text }}</p>
-                    <br/>
-                    <form action="{% url 'food:deleteProductComment' comment.product.id %}" method="post">
-                        {% csrf_token %}
-                        <a href="{% url 'food:updateProductComment' comment.product.id %}"> Update</a>
-                        <input type="submit" value="Delete">
-                    </form>
-                </li>
-            {% endfor %}
+            <div class="slider">
+                {% for comment in comments %}
+                    <li class="slide">
+                        <p class="lanterna">Produto: {{ comment.product.name }}</p>
+                        <p class="lanterna">Username: {{ comment.user.username }}</p>
+                        <p class="lanterna">Avaliação: {{ comment.rating }}</p>
+                        <p class="lanterna">Comentário: {{ comment.text }}</p>
+                        <br/>
+                        <form action="{% url 'food:deleteProductComment' comment.product.id %}" method="post">
+                            {% csrf_token %}
+                            <a href="{% url 'food:updateProductComment' comment.product.id %}"> Update</a>
+                            <input type="submit" value="Delete">
+                        </form>
+                    </li>
+                {% endfor %}
+            </div>
         {% endif %}
-    {% else %}
+    {% elif request.user|has_group:'Salesman' %}
         <p><strong>Tipo de utilizador: </strong>Vendedor</p><br/>
         <p><strong>Classificação: </strong>{{ request.user.salesman.rating }}</p><br/>
         <p><strong>Número de telefone: </strong>{{ request.user.salesman.phone_number }}</p>

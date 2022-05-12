@@ -1,6 +1,4 @@
 import random
-from time import timezone
-from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -11,10 +9,10 @@ from food.models import Mensagem, Customer, Salesman
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import User, Group
+import random
 
 
 def index(request):
@@ -29,12 +27,12 @@ def contactos(request):
     if request.method == 'POST':
             Mensagem(email=request.POST.get("email"),
                      texto_mensagem=request.POST.get("message"),
-                     dataHora=datetime.datetime.now(), tratada=False).save()
+                     dataHora=datetime.datetime.now()).save()
             return HttpResponseRedirect(reverse('food:contactos'))
     return render(request, 'food/contactos.html')
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 def caixaMensagens(request):
     if request.method == "POST":
         filtro = request.POST.get('filtro')
@@ -52,7 +50,7 @@ def tratarMensagem(request, mensagem_id):
     mensagem.save()
     return HttpResponseRedirect(reverse('food:caixamensagens'))
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def cestoCompras(request):
     user = User.objects.get(id=request.user.id)
@@ -67,18 +65,7 @@ def cestoCompras(request):
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def addToCart(request, product_id):
-    try:
-        for x in range(int(request.POST.get('quant'))):
-            user = request.user
-            customer = Customer.objects.get(user=user)
-            product = Product.objects.get(id=product_id)
-            shoppingCart = CestoCompras(customer=customer, product=product)
-            shoppingCart.save()
-        comments = Comment.objects.all().filter(product_id=product_id)
-        product.addView()
-        context = {'product': product, 'comments': comments, 'confirmation' : 'Produto adicionado'}
-        return render(request, 'food/detalhe.html', context)
-    except:
+    if request.POST.get('quant') is None:
         user = request.user
         customer = Customer.objects.get(user=user)
         product = Product.objects.get(id=product_id)
@@ -87,16 +74,28 @@ def addToCart(request, product_id):
         products_list = Product.objects.all()
         context = {'products_list': products_list,'confirmation':'Produto adicionado', 'p' : product}
         return render(request, 'food/index.html', context)
+    if int(request.POST.get('quant')) > 0:
+        for x in range(int(request.POST.get('quant'))):
+            user = request.user
+            customer = Customer.objects.get(user=user)
+            product = Product.objects.get(id=product_id)
+            shoppingCart = CestoCompras(customer=customer, product=product)
+            shoppingCart.save()
+        Comment.objects.all().filter(product_id=product_id)
+        product.addView()
+        return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
+    if int(request.POST.get('quant')) == 0:
+        return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def removeFromCart(request, cestoCompras_id):
     get_object_or_404(CestoCompras, pk=cestoCompras_id).delete()
     return HttpResponseRedirect(reverse('food:cestocompras'))
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 def perfil(request):
     comments = Comment.objects.all().filter(user=request.user)
     return render(request, "food/perfil.html", {'comments': comments})
@@ -105,25 +104,25 @@ def perfil(request):
 @unauthenticated_user
 def registarCustomer(request):
     if request.method == "POST" and request.FILES['photo']:
-            image = request.FILES['photo']
-            fs = FileSystemStorage()
-            filename = fs.save(image.name, image)
-            uploaded_file_url = fs.url(filename)
-            user = User.objects.create_user(
-                username=request.POST["username"],
-                password=request.POST["password"],
-                email=request.POST["email"]
-            )
-            Group.objects.get(name='Customer').user_set.add(user)
-            Customer(
-                profile_pic=uploaded_file_url,
-                gender=request.POST["gender"],
-                birthday=request.POST["birthday"],
-                credit=request.POST["credits"],
-                user_id=user.id
-            ).save()
-            login(request, user)
-            return HttpResponseRedirect(reverse('food:index'))
+        image = request.FILES['photo']
+        fs = FileSystemStorage()
+        filename = fs.save(image.name, image)
+        uploaded_file_url = fs.url(filename)
+        user = User.objects.create_user(
+            username=request.POST["username"],
+            password=request.POST["password"],
+            email=request.POST["email"]
+        )
+        Group.objects.get(name='Customer').user_set.add(user)
+        Customer(
+            profile_pic=uploaded_file_url,
+            gender=request.POST["gender"],
+            birthday=request.POST["birthday"],
+            credit=request.POST["credits"],
+            user_id=user.id
+        ).save()
+        login(request, user)
+        return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/registarCustomer.html')
 
 
@@ -151,7 +150,7 @@ def registarSalesman(request):
     return render(request, 'food/registarSalesman.html')
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Salesman'])
 def addProduct(request):
     if request.method == 'POST' and request.FILES['myfile']:
@@ -183,7 +182,7 @@ def loginutilizador(request):
                 login(request, user)
                 return HttpResponseRedirect(reverse('food:index'))
             else:
-                return render('food/loginutilizador.html',
+                return render(request, 'food/loginutilizador.html',
                               {'error_message': 'Utilizador não existe ou a password está incorreta'})
         else:
             return render(request, 'food/loginutilizador.html')
@@ -191,66 +190,10 @@ def loginutilizador(request):
         return render(request, 'food/loginutilizador.html')
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 def logoututilizador(request):
     logout(request)
     return HttpResponseRedirect(reverse('food:index'))
-
-
-@unauthenticated_user
-def registarSalesman(request):
-    print("Inicio")
-    if request.method == "POST":
-        salesmanForm = SalesmanForm(request.POST, request.FILES)
-        userForm = UserForm(request.POST)
-        print(salesmanForm.is_valid())
-        print(userForm.is_valid())
-        if salesmanForm.is_valid() and userForm.is_valid():
-            print("valido")
-            user = userForm.save(commit=False)
-            user.save()
-            group = Group.objects.get(name='Salesman')
-            group.user_set.add(user)
-
-            fs = FileSystemStorage()
-            filename = fs.save(salesmanForm.cleaned_data.get("profile_pic"),
-                               salesmanForm.cleaned_data.get("profile_pic"))
-            uploaded_file_url = fs.url(filename)
-
-            salesman = Salesman.objects.create(
-                profile_pic=uploaded_file_url,
-                rating=salesmanForm.cleaned_data.get("rating"),
-                phone_number=salesmanForm.cleaned_data.get("phone_number"),
-                user_id=user.id
-            )
-
-            salesman.user = user
-            salesman.save()
-            print("save")
-            login(request, user)
-            return render(request, 'food/index.html')
-    salesmanForm = SalesmanForm()
-    userForm = UserForm()
-    return render(request, 'food/registarSalesman.html', {'userForm': userForm, 'salesmanForm': salesmanForm})
-
-
-@login_required
-@allowed_users(allowed_roles=['Salesman'])
-def addProduct(request):
-    if request.method == 'POST':
-        if request.FILES['myfile']:
-            productImage = request.FILES['myfile']
-            fs = FileSystemStorage()
-            filename = fs.save(productImage.name, productImage)
-            uploaded_file_url = fs.url(filename)
-            Product.objects.create(name=request.POST.get('productName'),
-                                   description=request.POST.get('productDescription'),
-                                   price=request.POST.get('productPrice'),
-                                   image=uploaded_file_url,
-                                   salesman_id=request.user.salesman.id
-                                   )
-            return HttpResponseRedirect(reverse('food:index'))
-    return render(request, 'food/add_product.html')
 
 
 def mapPage(request):
@@ -266,25 +209,35 @@ def productDetailPage(request, product_id):
     comments = Comment.objects.all().filter(product_id=product_id)
     product.addView()
     products = Product.objects.all().exclude(id=product_id)
+    if request.user.groups.filter(name='Salesman').exists():
+        products = products.filter(salesman_id=request.user.salesman.id)
     context = {'product': product, 'comments': comments, "products": products}
+    print(request.session.get('doubleComment'))
+    if request.session.get('doubleComment'):
+        context = {'product': product, 'comments': comments, "products": products,
+                   "doubleCommentWarning": request.session['doubleComment']}
+        del request.session['doubleComment']
     return render(request, 'food/detalhe.html', context)
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def commentOnItem(request, product_id):
     if request.method == 'POST':
-        commentText = request.POST['commentInput']
-        commentRating = request.POST['ratingInput']
-        product = Product.objects.get(id=product_id)
-        Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
-        product.addRating(newRating=commentRating)
-        Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
-                product=product).save()
+        if Comment.objects.all().filter(user_id=request.user, product_id=product_id).exists():
+            request.session['doubleComment'] = "Não pode comentar duas vezes!"
+        else:
+            commentText = request.POST['commentInput']
+            commentRating = request.POST['ratingInput']
+            product = Product.objects.get(id=product_id)
+            Salesman.objects.get(id=product.salesman_id).addRating(newRating=commentRating)
+            product.addRating(newRating=commentRating)
+            Comment(user=request.user, text=commentText, dataHour=datetime.datetime.now(), rating=commentRating,
+                    product=product).save()
     return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def deleteProductComment(request, product_id):
     product = Product.objects.get(id=product_id)
@@ -297,7 +250,7 @@ def deleteProductComment(request, product_id):
         request.META.get('HTTP_REFERER', '/'))  # volta para a página anterior. necessário por causa do perfil
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def updateProductComment(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -313,14 +266,14 @@ def updateProductComment(request, product_id):
     return render(request, 'food/updateProductComment.html', context)
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Salesman'])
 def deleteProduct(request, product_id):
     get_object_or_404(Product, pk=product_id).delete()
     return HttpResponseRedirect(reverse('food:index'))
 
 
-@login_required
+@login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Salesman'])
 def addProduct(request):
     if request.method == 'POST':
@@ -345,7 +298,8 @@ def get_price(customer):
         price += item.product.price
     return price
 
-@login_required
+
+@login_required(login_url="food:loginutilizador")
 def pagamento(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user=user)

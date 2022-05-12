@@ -13,13 +13,21 @@
             <img src="/food/static/media/about_header.gif" alt="Connosco seguem o plano" style="width:100%;">
         </div>
         <div class="about_info">
-            <p>Somos um mercado de produtos alimentares importados, maioritariamente, do continente asiático, que se foca em ter sempre os melhores e
+            <p>Somos um mercado de produtos alimentares importados, maioritariamente, do continente asiático, que se
+                foca em ter sempre os melhores e
                 mais frescos produtos.</p>
-            <p>Para além de nos focarmos em termos a melhor qualidade de produtos, também nos focamos no desenvolvimento da nossa própria
+            <p>
+                Qualquer pessoa pode vender os seus produtos no nosso site desde que passe por uma rapida verificacao
+                para assegurar a qualidade dos seus produtos e poder se tornar em que a nossa marca confie
+            </p>
+            <p>Para além de nos focarmos em termos a melhor qualidade de produtos, também nos focamos no desenvolvimento
+                da nossa própria
                 criptomoeda, a <strong>Lanterninha</strong>.</p>
-            <p>A <strong>Lanterninha</strong> é uma criptomoeda desenvolvida especificamente para ser usada nas nossas lojas.
+            <p>A <strong>Lanterninha</strong> é uma criptomoeda desenvolvida especificamente para ser usada nas nossas
+                lojas.
                 Desenvolvida com tecnologia de <a href="https://pt.wikipedia.org/wiki/Blockchain" target="_blank">blockchain</a>,
-                a <strong>Lanterninha</strong> vai permitir criar um ambiente mais suscentável para os nossos clientes.</p>
+                a <strong>Lanterninha</strong> vai permitir criar um ambiente mais suscentável para os nossos clientes.
+            </p>
             <br/>
             <a href="{% url 'food:investCrypto' %}" class="button-link">Investir na Lanterninha</a>
             {% if not request.user|has_group:'Salesman' and not request.user.is_superuser %}
