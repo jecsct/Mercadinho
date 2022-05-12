@@ -190,12 +190,12 @@ ul.dropdown {
     position: absolute;
     right: 0;
     top: 42px;
-    top: 42px;
     margin: 0;
 }
 
 li:hover ul.dropdown {
     display: block; /* Display the dropdown */
+    min-width: 130px;
 }
 
 .dropdown li {
