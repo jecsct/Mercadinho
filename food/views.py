@@ -11,7 +11,6 @@ from food.models import Mensagem, Customer, Salesman
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomerForm, UserForm, ContactForm, SalesmanForm
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import User, Group
@@ -203,7 +202,7 @@ def productDetailPage(request, product_id):
     comments = Comment.objects.all().filter(product_id=product_id)
     product.addView()
     products = Product.objects.all().exclude(id=product_id)
-    context = {'product': product, 'comments': comments, "products": products}
+    context = {'product': product, 'comments': comments, "products": products[0:4]}
     return render(request, 'food/detalhe.html', context)
 
 
