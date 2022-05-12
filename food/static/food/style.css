@@ -71,7 +71,6 @@ a {
     grid-template-columns: repeat(8, 1fr);
     margin-bottom: 12px;
     grid-gap: 12px;
-    grid-row-gap: 44px;
 }
 
 .grid2 {
@@ -81,6 +80,7 @@ a {
     grid-column-start: 2;
     grid-column-end: 5;
     grid-gap: 12px;
+    grid-row-start: 1;
 }
 
 .item1 {
@@ -103,32 +103,21 @@ a {
 
 .item4 {
     grid-row-start: 1;
+    grid-row-end: 4;
     grid-column-start: 6;
     grid-column-end: -2;
 }
 
 .item5{
+    margin-top: 64px;
     grid-row-start: 2;
     grid-column-start: 2;
-    grid-column-end: 4;
-}
-
-.slider-produtos{
-    width: auto;
-    height: 400px;
-    overflow-y: auto;
-}
-
-.item6{
-    grid-row-start: 2;
-    grid-column-start: 4;
     grid-column-end: -2;
 }
 
-.slider-comment{
-    width: auto;
-    height: 200px;
-    overflow-y: auto;
+.item6{
+    grid-column-start: 2;
+    grid-column-end: -2;
 }
 
 .lanterna::before {
@@ -355,7 +344,6 @@ input[type=submit] {
     display: inline-grid;
     grid-template-columns: auto auto;
     grid-gap: 16px;
-    margin: 12px;
 }
 
 .review_section img {
@@ -365,7 +353,6 @@ input[type=submit] {
 }
 
 .review-section-text{
-    margin: 4px;
     width: 570px;
     overflow-wrap: break-word;
 }
