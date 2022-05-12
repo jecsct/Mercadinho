@@ -446,7 +446,7 @@ input[type=submit] {
 
 /*Perfil do utilizador*/
 .slider {
-    width: 350px;
+    width: auto;
     height: auto;
     display: flex;
     overflow-x: auto;
