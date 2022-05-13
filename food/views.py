@@ -1,4 +1,6 @@
 import random
+
+import numpy
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -16,9 +18,10 @@ import random
 
 
 def index(request):
-    products = Product.objects.all()
     if request.user.groups.filter(name='Salesman').exists():
-        products = products.filter(salesman_id=request.user.salesman.id)
+        products = Product.objects.filter(salesman_id=request.user.salesman.id)
+    else:
+        products = Product.objects.all()
     context = {'products_list': products}
     return render(request, 'food/index.html', context)
 
@@ -27,7 +30,7 @@ def contactos(request):
     if request.method == 'POST':
         Mensagem(email=request.POST.get("email"),
                  texto_mensagem=request.POST.get("message"),
-                 dataHora=datetime.datetime.now()).save()
+                 dataHora=datetime.datetime.now(), tratada=False).save()
         return HttpResponseRedirect(reverse('food:contactos'))
     return render(request, 'food/contactos.html')
 
@@ -45,6 +48,7 @@ def caixaMensagens(request):
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
 
+@login_required(login_url="food:loginutilizador")
 def tratarMensagem(request, mensagem_id):
     mensagem = Mensagem.objects.get(id=mensagem_id)
     mensagem.tratada = True
@@ -55,8 +59,7 @@ def tratarMensagem(request, mensagem_id):
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def cestoCompras(request):
-    user = User.objects.get(id=request.user.id)
-    customer = Customer.objects.get(user=user)
+    customer = Customer.objects.get(user=request.user)
     cesto_compras = CestoCompras.objects.filter(customer=customer)
     if cesto_compras:
         return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras, 'error_message': False})
@@ -67,26 +70,24 @@ def cestoCompras(request):
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def addToCart(request, product_id):
-    if request.POST.get('quant') is None:
-        user = request.user
-        customer = Customer.objects.get(user=user)
+    quant = request.POST.get('quant')
+    if quant is None:
+        customer = Customer.objects.get(user=request.user)
         product = Product.objects.get(id=product_id)
         shoppingCart = CestoCompras(customer=customer, product=product)
         shoppingCart.save()
         products_list = Product.objects.all()
         context = {'products_list': products_list, 'confirmation': 'Produto adicionado', 'p': product}
         return render(request, 'food/index.html', context)
-    if int(request.POST.get('quant')) > 0:
-        for x in range(int(request.POST.get('quant'))):
+    else:
+        for x in range(int(quant)):
             user = request.user
             customer = Customer.objects.get(user=user)
             product = Product.objects.get(id=product_id)
             shoppingCart = CestoCompras(customer=customer, product=product)
             shoppingCart.save()
-        Comment.objects.all().filter(product_id=product_id)
-        product.addView()
-        return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-    if int(request.POST.get('quant')) == 0:
+            Comment.objects.all().filter(product_id=product_id)
+            product.addView()
         return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
 
 
@@ -97,6 +98,8 @@ def removeFromCart(request, cestoCompras_id):
     return HttpResponseRedirect(reverse('food:cestocompras'))
 
 
+@login_required(login_url="food:loginutilizador")
+@allowed_users(allowed_roles=['Customer'])
 def limparCesto(request):
     customer = Customer.objects.get(user=request.user)
     CestoCompras.objects.filter(customer=customer).delete()
@@ -104,7 +107,7 @@ def limparCesto(request):
 
 
 @login_required(login_url="food:loginutilizador")
-@allowed_users(allowed_roles=['Customer','Salesman'])
+@allowed_users(allowed_roles=['Customer', 'Salesman'])
 def perfil(request):
     user = request.user
     if user.groups.filter(name='Customer'):
@@ -137,7 +140,7 @@ def registarCustomer(request):
             gender=request.POST["gender"],
             birthday=request.POST["birthday"],
             credit=request.POST["credits"],
-            user_id=user.id
+            user=user
         ).save()
         login(request, user)
         return HttpResponseRedirect(reverse('food:index'))
@@ -161,7 +164,7 @@ def registarSalesman(request):
             profile_pic=uploaded_file_url,
             rating=0,
             phone_number=request.POST["telephone"],
-            user_id=user.id
+            user=user
         ).save()
         login(request, user)
         return HttpResponseRedirect(reverse('food:index'))
@@ -176,11 +179,12 @@ def addProduct(request):
         fs = FileSystemStorage()
         filename = fs.save(productImage.name, productImage)
         uploaded_file_url = fs.url(filename)
+        salesman = Salesman(user=request.user)
         Product.objects.create(name=request.POST.get('productName'),
                                description=request.POST.get('productDescription'),
                                price=request.POST.get('productPrice'),
                                image=uploaded_file_url,
-                               salesman_id=request.user.salesman.id
+                               salesman=salesman
                                )
         return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
@@ -232,7 +236,6 @@ def productDetailPage(request, product_id):
     products = list(products)[:10]
     random.shuffle(products)
     context = {'product': product, 'comments': comments, "products": products}
-    print(request.session.get('doubleComment'))
     if request.session.get('doubleComment'):
         context = {'product': product, 'comments': comments, "products": products,
                    "doubleCommentWarning": request.session['doubleComment']}

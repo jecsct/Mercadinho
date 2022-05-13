@@ -14,34 +14,38 @@
         <p>O seu carrinho está vazio!</p> <br>
         <a href="{% url 'food:index' %}" class="button-link">Ver produtos</a>
     {% else %}
-        <ul>
-            <form method="POST">
-                {% csrf_token %}
-                {% for item in cesto_compras %}
-                    <li class="item-cestoCompras">
-                        <img src="{{ item.product.image }}" width="130px" height="130px" style="object-fit:cover;
-        border-radius: 50%;"/>
-                        <div style="display:inline-block;vertical-align:top;padding: 10px">
-                            <a href="{% url 'food:productDetailPage' item.product.id %}"
-                               class="item-titulo">{{ item.product.name }}</a>
-                            <p class="lanterna">{{ item.product.price }}</p>
-                        </div>
-                        <input
-                                type="submit"
-                                value="Remover"
-                                formaction="{% url 'food:removeFromCart' item.id %}"
-                                class="mensagem-Hora"
-                        />
-                    </li>
-                {% endfor %}
-            </form>
-        </ul>
-        <a href="{% url "food:limparCesto" %}" style="float:right; margin-right:300px;">Clique aqui para retirar todos
-            os items do seu Cesto de Compras</a> <br>
-        <div class="checkOut">
-            <p style="font:20px sans-serif">Deseja fazer o checkout?</p><br/>
-            <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
-            <a href="{% url 'food:pagamento' %}" class="button-link">Sim</a>
+        <div class="grid-cesto">
+            <div>
+                <ul>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% for item in cesto_compras %}
+                            <li class="item-cestoCompras">
+                                <a href="{% url 'food:productDetailPage' item.product.id %}"><img src="{{ item.product.image }}" width="130px" height="130px" style="object-fit:cover;
+        border-radius: 50%;"/></a>
+                                <div style="display:inline-block;vertical-align:top;padding: 10px">
+                                    <a href="{% url 'food:productDetailPage' item.product.id %}"
+                                       class="item-titulo">{{ item.product.name }}</a>
+                                    <p class="lanterna">{{ item.product.price }}</p>
+                                </div>
+                                <input
+                                        type="submit"
+                                        value="Remover"
+                                        formaction="{% url 'food:removeFromCart' item.id %}"
+                                        class="mensagem-Hora"
+                                />
+                            </li>
+                        {% endfor %}
+                    </form>
+                </ul>
+                <a href="{% url "food:limparCesto" %}" style="float:right; margin-right:300px;">Clique aqui para retirar todos
+                    os items do seu Cesto de Compras</a> <br>
+            </div>
+            <div class="checkOut cesto-item2">
+                <p style="font:20px sans-serif">Deseja fazer o checkout?</p><br/>
+                <a href="{% url 'food:index' %}" class="button-link">Ainda não</a>
+                <a href="{% url 'food:pagamento' %}" class="button-link">Sim</a>
+            </div>
         </div>
     {% endif %}
 {% endblock %}

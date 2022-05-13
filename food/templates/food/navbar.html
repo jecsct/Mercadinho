@@ -2,23 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>Title</title>
+    <title>Mercadinho</title>
 </head>
 <body>
 {% load static %}
 {% load custom_filters %}
-<link
-        rel="stylesheet"
-        type="text/css"
-        href="{% static 'food/style.css' %}"
-/>
+<link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}" />
 <nav>
     {% csrf_token %}
     <ul>
         <li>
             <div>
-                <a href="{% url 'food:index' %}" style="text-decoration: none;">
-                    <img src="/static/media/logo.png" class="nav-logo">
+                <a href="{% url 'food:index' %}">
+                    <img src="/static/media/logo.png" class="nav-logo" width="44.2px" style="padding: 6px;">
                 </a>
                 {% if request.user|has_group:'Customer' %}
                     <a class="mercadinho" href="{% url 'food:index' %}"> Mercadinho | Créditos: {{ request.user.customer.credit }}</a>
@@ -27,17 +23,17 @@
                 {% endif %}
             </div>
         </li>
-        <li class="navOption nav-profile-pic">
+        <li>
             {% if not request.user.is_authenticated or request.user.is_superuser %}
                 <a>
-                    <img src="/static/media/default_logo.png" class="nav-profile-pic">
+                    <img src="/static/media/default_logo.png" class="navOption" width="44.2px" style="padding: 6px;">
                 </a>
             {% else %}
                 <a>
                     {% if request.user|has_group:'Customer' %}
-                        <img src="{{ request.user.customer.profile_pic }}" class="nav-profile-pic">
+                        <img src="{{ request.user.customer.profile_pic }}" width="44.2px" height="44.2px" style="float: right; object-fit: cover">
                     {% elif request.user|has_group:'Salesman' %}
-                        <img src="{{ request.user.salesman.profile_pic }}" class="nav-profile-pic">
+                        <img src="{{ request.user.salesman.profile_pic }}" width="44.2px" height="44.2px" style="float: right; object-fit: cover">
                     {% endif %}
                 </a>
             {% endif %}
@@ -56,13 +52,8 @@
                         <a href="{% url 'food:perfil' %}" class="navOption">Perfil</a>
                     </li>
                     {% if request.user.is_superuser %}
-                    <li>
-                        <a href="{% url 'food:caixamensagens' %}" class="navOption">Mensagens</a>
-                    </li>
-                    {% endif %}
-                    {% if request.user|has_group:'Customer' %}
                         <li>
-                            <a class="navOption" href="{% url 'food:cestocompras' %}">Cesto de compras</a>
+                            <a href="{% url 'food:caixamensagens' %}" class="navOption">Mensagens</a>
                         </li>
                     {% endif %}
                     <li>
@@ -70,7 +61,11 @@
                     </li>
                 </ul>
             {% endif %}
-
+            {% if request.user|has_group:'Customer' %}
+                <li>
+                    <a href="{% url 'food:cestocompras' %}"><img class="navOption" src="/static/media/carrinho.png" width="44.2px" style="padding: 6px;"></a>
+                </li>
+            {% endif %}
         <li>
             {% if request.user.is_authenticated and request.user|has_group:'Salesman' %}
                 <a class="navOption" href="{% url 'food:addProduct' %}">Adicionar Produto</a>

@@ -48,6 +48,14 @@ a {
     color: black;
 }
 
+.center-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 80vh;
+}
+
 /* Mapa dos mercadinhos */
 .mapa {
     width: auto;
@@ -174,14 +182,6 @@ nav p {
     background-color: #cc0000;
 }
 
-.nav-profile-pic {
-    margin: 0;
-    padding: 0;
-    height: 44px;
-    width: 44px;
-    object-fit: cover;
-}
-
 .dropdown {
     float: right;
     min-width: 150px
@@ -217,7 +217,8 @@ li:hover ul.dropdown {
     border: solid 1px;
     background-color: #ffffff;
     padding: 30px;
-    margin: 3px 60px;
+    margin: 3px  60px;
+    border-radius: 12px;
 }
 
 .mensagem-Hora {
@@ -382,12 +383,15 @@ input[type=submit] {
     color: #eeeeee;
 }
 
-.pagamento {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    text-align: center;
-    padding: 80px;
+.grid-cesto{
+    display: inline-grid;
+    grid-template-rows: auto auto;
+    grid-gap: 16px;
+    width: 100%;
+}
+
+.cesto-item2{
+    margin-left: auto;
 }
 
 .texto-pagamento {
@@ -416,22 +420,22 @@ input[type=submit] {
 }
 
 .row {
-  display: flex;
+    display: flex;
 }
 
 .column {
-  flex: 50%;
+    flex: 50%;
 }
 
 .textarea-contatos {
     resize: none;
     width: 500px;
-    height: 300px;
+    height: 200px;
     font: 16px sans-serif;
 }
 .login-structure {
     display: grid;
-    grid-template-columns: 450px 300px;
+    grid-template-columns: auto auto;
     grid-template-rows: 500px;
     justify-content: center;
     vertical-align: middle;
@@ -475,12 +479,23 @@ input[type=submit] {
 }
 
 
+.grid-forms{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 16px;
+    width: 100%;
+}
+
+.grid-forms input{
+    width: 200px;
+}
+
 .center-container {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: left;
-    margin-left: 12px;
+    margin-left: 24px;
 }
 
 .teste-container {
