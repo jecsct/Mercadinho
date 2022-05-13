@@ -25,8 +25,8 @@
                 a <strong>Lanterninha</strong> vai permitir criar um ambiente mais suscentável para os nossos clientes.
             </p>
             <br/>
-            <a href="{% url 'food:investCrypto' %}" class="button-link">Investir na Lanterninha</a>
             {% if not request.user|has_group:'Salesman' and not request.user.is_superuser %}
+                <a href="{% url 'food:investCrypto' %}" class="button-link">Investir na Lanterninha</a>
                 <p style="font-size: 12px">*não nos responsabilizamos por quaisquer perdas monetárias</p>
             {% endif %}
         </div>
