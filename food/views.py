@@ -25,7 +25,6 @@ def index(request):
     context = {'products_list': products}
     return render(request, 'food/index.html', context)
 
-
 def contactos(request):
     if request.method == 'POST':
             Mensagem(email=request.POST.get("email"),
@@ -33,7 +32,6 @@ def contactos(request):
                      dataHora=datetime.datetime.now(), tratada=False).save()
             return HttpResponseRedirect(reverse('food:contactos'))
     return render(request, 'food/contactos.html')
-
 
 @login_required(login_url="food:loginutilizador")
 def caixaMensagens(request):
@@ -47,6 +45,7 @@ def caixaMensagens(request):
         lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=False)
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
+@login_required(login_url="food:loginutilizador")
 def tratarMensagem(request, mensagem_id):
     mensagem = Mensagem.objects.get(id=mensagem_id)
     mensagem.tratada = True
@@ -56,22 +55,18 @@ def tratarMensagem(request, mensagem_id):
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def cestoCompras(request):
-    user = User.objects.get(id=request.user.id)
-    customer = Customer.objects.get(user=user)
+    customer = Customer.objects.get(user=request.user)
     cesto_compras = CestoCompras.objects.filter(customer=customer)
     if cesto_compras:
         return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras,'error_message':False})
     else:
         return render(request, 'food/cestoCompras.html',{'error_message':True})
 
-
-
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def addToCart(request, product_id):
     if request.POST.get('quant') is None:
-        user = request.user
-        customer = Customer.objects.get(user=user)
+        customer = Customer.objects.get(user=request.user)
         product = Product.objects.get(id=product_id)
         shoppingCart = CestoCompras(customer=customer, product=product)
         shoppingCart.save()
