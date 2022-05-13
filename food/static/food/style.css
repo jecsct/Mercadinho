@@ -381,6 +381,17 @@ input[type=submit] {
     color: #eeeeee;
 }
 
+.grid-cesto{
+    display: inline-grid;
+    grid-template-rows: auto auto;
+    grid-gap: 16px;
+    width: 100%;
+}
+
+.cesto-item2{
+    margin-left: auto;
+}
+
 .pagamento {
     position: absolute;
     top: 25%;
@@ -425,7 +436,7 @@ input[type=submit] {
 .textarea-contatos {
     resize: none;
     width: 500px;
-    height: 300px;
+    height: 200px;
     font: 16px sans-serif;
 }
 .login-structure {
@@ -441,7 +452,7 @@ input[type=submit] {
     align-items: center;
     justify-content: center;
     text-align: left;
-    margin-left: 12px;
+    margin-left: 24px;
 }
 
 .teste-container {

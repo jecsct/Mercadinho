@@ -56,13 +56,8 @@
                         <a href="{% url 'food:perfil' %}" class="navOption">Perfil</a>
                     </li>
                     {% if request.user.is_superuser %}
-                    <li>
-                        <a href="{% url 'food:caixamensagens' %}" class="navOption">Mensagens</a>
-                    </li>
-                    {% endif %}
-                    {% if request.user|has_group:'Customer' %}
                         <li>
-                            <a class="navOption" href="{% url 'food:cestocompras' %}">Cesto de compras</a>
+                            <a href="{% url 'food:caixamensagens' %}" class="navOption">Mensagens</a>
                         </li>
                     {% endif %}
                     <li>
@@ -70,7 +65,11 @@
                     </li>
                 </ul>
             {% endif %}
-
+            {% if request.user|has_group:'Customer' %}
+                <li>
+                    <a href="{% url 'food:cestocompras' %}"><img class="navOption" src="/static/media/carrinho.png" width="44.2px" style="padding: 6px;"></a>
+                </li>
+            {% endif %}
         <li>
             {% if request.user.is_authenticated and request.user|has_group:'Salesman' %}
                 <a class="navOption" href="{% url 'food:addProduct' %}">Adicionar Produto</a>

@@ -1,4 +1,6 @@
 import random
+
+import numpy
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -219,7 +221,6 @@ def productDetailPage(request, product_id):
     products = list(products)[:10]
     random.shuffle(products)
     context = {'product': product, 'comments': comments, "products": products}
-    print(request.session.get('doubleComment'))
     if request.session.get('doubleComment'):
         context = {'product': product, 'comments': comments, "products": products,
                    "doubleCommentWarning": request.session['doubleComment']}
