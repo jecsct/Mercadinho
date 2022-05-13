@@ -65,7 +65,8 @@ def cestoCompras(request):
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def addToCart(request, product_id):
-    if request.POST.get('quant') is None:
+    quant = request.POST.get('quant')
+    if quant is None:
         customer = Customer.objects.get(user=request.user)
         product = Product.objects.get(id=product_id)
         shoppingCart = CestoCompras(customer=customer, product=product)
@@ -73,19 +74,16 @@ def addToCart(request, product_id):
         products_list = Product.objects.all()
         context = {'products_list': products_list, 'confirmation': 'Produto adicionado', 'p': product}
         return render(request, 'food/index.html', context)
-    if int(request.POST.get('quant')) > 0:
-        for x in range(int(request.POST.get('quant'))):
+    else:
+        for x in range(int(quant)):
             user = request.user
             customer = Customer.objects.get(user=user)
             product = Product.objects.get(id=product_id)
             shoppingCart = CestoCompras(customer=customer, product=product)
             shoppingCart.save()
-        Comment.objects.all().filter(product_id=product_id)
-        product.addView()
+            Comment.objects.all().filter(product_id=product_id)
+            product.addView()
         return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-    if int(request.POST.get('quant')) == 0:
-        return HttpResponseRedirect(reverse('food:productDetailPage', args=(product_id,)))
-
 
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
@@ -93,6 +91,8 @@ def removeFromCart(request, cestoCompras_id):
     get_object_or_404(CestoCompras, pk=cestoCompras_id).delete()
     return HttpResponseRedirect(reverse('food:cestocompras'))
 
+@login_required(login_url="food:loginutilizador")
+@allowed_users(allowed_roles=['Customer'])
 def limparCesto(request):
     customer = Customer.objects.get(user=request.user)
     CestoCompras.objects.filter(customer=customer).delete()
@@ -102,7 +102,6 @@ def limparCesto(request):
 def perfil(request):
     comments = Comment.objects.all().filter(user=request.user)
     return render(request, "food/perfil.html", {'comments': comments})
-
 
 @unauthenticated_user
 def registarCustomer(request):
@@ -122,7 +121,7 @@ def registarCustomer(request):
             gender=request.POST["gender"],
             birthday=request.POST["birthday"],
             credit=request.POST["credits"],
-            user_id=user.id
+            user=user
         ).save()
         login(request, user)
         return HttpResponseRedirect(reverse('food:index'))
@@ -161,11 +160,12 @@ def addProduct(request):
         fs = FileSystemStorage()
         filename = fs.save(productImage.name, productImage)
         uploaded_file_url = fs.url(filename)
+        salesman = Salesman(user=request.user)
         Product.objects.create(name=request.POST.get('productName'),
                                description=request.POST.get('productDescription'),
                                price=request.POST.get('productPrice'),
                                image=uploaded_file_url,
-                               salesman_id=request.user.salesman.id
+                               salesman=salesman
                                )
         return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
@@ -198,14 +198,11 @@ def logoututilizador(request):
     logout(request)
     return HttpResponseRedirect(reverse('food:index'))
 
-
 def mapPage(request):
     return render(request, 'food/mercadinhos_map.html')
 
-
 def aboutPage(request):
     return render(request, 'food/about.html')
-
 
 def productDetailPage(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -222,7 +219,6 @@ def productDetailPage(request, product_id):
                    "doubleCommentWarning": request.session['doubleComment']}
         del request.session['doubleComment']
     return render(request, 'food/detalhe.html', context)
-
 
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
@@ -253,7 +249,6 @@ def deleteProductComment(request, product_id):
     return HttpResponseRedirect(
         request.META.get('HTTP_REFERER', '/'))  # volta para a página anterior. necessário por causa do perfil
 
-
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
 def updateProductComment(request, product_id):
@@ -269,13 +264,11 @@ def updateProductComment(request, product_id):
     context = {'product': product, 'comment': comment}
     return render(request, 'food/updateProductComment.html', context)
 
-
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Salesman'])
 def deleteProduct(request, product_id):
     get_object_or_404(Product, pk=product_id).delete()
     return HttpResponseRedirect(reverse('food:index'))
-
 
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Salesman'])
@@ -295,14 +288,12 @@ def addProduct(request):
             return HttpResponseRedirect(reverse('food:index'))
     return render(request, 'food/add_product.html')
 
-
 def get_price(customer):
     shopping_cart = CestoCompras.objects.filter(customer=customer)
     price = 0
     for item in shopping_cart:
         price += item.product.price
     return price
-
 
 @login_required(login_url="food:loginutilizador")
 def pagamento(request):
@@ -312,7 +303,6 @@ def pagamento(request):
     if price == 0:
         return render(request, 'food/cestoCompras.html', {'error_message': True})
     return render(request, 'food/pagamento.html', {'price': price})
-
 
 def checkOut(request):
     user = User.objects.get(id=request.user.id)
