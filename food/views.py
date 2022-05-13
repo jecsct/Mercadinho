@@ -18,9 +18,10 @@ import random
 
 
 def index(request):
-    products = Product.objects.all()
     if request.user.groups.filter(name='Salesman').exists():
-        products = products.filter(salesman_id=request.user.salesman.id)
+        products = Product.objects.filter(salesman_id=request.user.salesman.id)
+    else:
+        products = Product.objects.all()
     context = {'products_list': products}
     return render(request, 'food/index.html', context)
 
@@ -29,7 +30,7 @@ def contactos(request):
     if request.method == 'POST':
             Mensagem(email=request.POST.get("email"),
                      texto_mensagem=request.POST.get("message"),
-                     dataHora=datetime.datetime.now()).save()
+                     dataHora=datetime.datetime.now(), tratada=False).save()
             return HttpResponseRedirect(reverse('food:contactos'))
     return render(request, 'food/contactos.html')
 
@@ -150,7 +151,7 @@ def registarSalesman(request):
             profile_pic=uploaded_file_url,
             rating=0,
             phone_number=request.POST["telephone"],
-            user_id=user.id
+            user=user
         ).save()
         login(request, user)
         return HttpResponseRedirect(reverse('food:index'))

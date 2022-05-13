@@ -21,8 +21,8 @@
                         {% csrf_token %}
                         {% for item in cesto_compras %}
                             <li class="item-cestoCompras">
-                                <img src="{{ item.product.image }}" width="130px" height="130px" style="object-fit:cover;
-        border-radius: 50%;"/>
+                                <a href="{% url 'food:productDetailPage' item.product.id %}"><img src="{{ item.product.image }}" width="130px" height="130px" style="object-fit:cover;
+        border-radius: 50%;"/></a>
                                 <div style="display:inline-block;vertical-align:top;padding: 10px">
                                     <a href="{% url 'food:productDetailPage' item.product.id %}"
                                        class="item-titulo">{{ item.product.name }}</a>
