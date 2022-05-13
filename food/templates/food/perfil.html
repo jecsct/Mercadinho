@@ -4,47 +4,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Perfil</title>
+    {% block head %}
+        <title>Mercadinho - Perfil</title>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
-    <h1>Perfil do utilizador</h1>
-    {% if request.user|has_group:'Customer' %}
-        <img src="{{ request.user.customer.profile_pic }}" style="width: 150px;"><br/><br/>
-    {% elif request.user|has_group:'Salesman' %}
-        <img src="{{ request.user.salesman.profile_pic }}" style="width: 150px;"><br/><br/>
-    {% endif %}
-    <p><strong>Username: </strong>{{ request.user.username }}</p><br/>
-    <p><strong>Email: </strong> {{ request.user.email }}</p><br/>
-    {% if request.user.customer %}
-        <p><strong>Tipo de utilizador: </strong>Cliente</p><br/>
-        <p class="lanterna_after"><strong>Créditos: </strong>{{ request.user.customer.credit }}</p><br/>
-        <p><strong>Género: </strong>{{ request.user.customer.gender }}</p><br/>
-        <p><strong>Aniversário: </strong>{{ request.user.customer.birthday }}</p>
-        {% if comments %}
-            <br/><h3>Comentários feitos pelo utilizador:</h3>
-            <div class="slider">
-                {% for comment in comments %}
-                    <li class="slide">
-                        <p class="lanterna">Produto: {{ comment.product.name }}</p>
-                        <p class="lanterna">Username: {{ comment.user.username }}</p>
-                        <p class="lanterna">Avaliação: {{ comment.rating }}</p>
-                        <p class="lanterna">Comentário: {{ comment.text }}</p>
-                        <br/>
-                        <form action="{% url 'food:deleteProductComment' comment.product.id %}" method="post">
-                            {% csrf_token %}
-                            <a href="{% url 'food:updateProductComment' comment.product.id %}"> Update</a>
-                            <input type="submit" value="Delete">
-                        </form>
-                    </li>
-                {% endfor %}
+    <div class="perfil-container">
+        <div class="info-capsule">
+            <div class="user-image">
+                <img src="{{ request.user.salesman.profile_pic }}" alt="user image">
             </div>
-        {% endif %}
-    {% elif request.user|has_group:'Salesman' %}
-        <p><strong>Tipo de utilizador: </strong>Vendedor</p><br/>
-        <p><strong>Classificação: </strong>{{ request.user.salesman.rating }}</p><br/>
-        <p><strong>Número de telefone: </strong>{{ request.user.salesman.phone_number }}</p>
-    {% endif %}
+            <div class="text-info">
+                <div class="user-info">
+                    <div>
+                        <h2>Informacao Tecnica</h2>
+                        <ul>
+                            {% for t in infoTecnica %}
+                                <li class="lanterna">{{ t }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <div>
+                        <h2>Informacao Pessoal</h2>
+                        <ul>
+                            {% for p in infoPessoal %}
+                                <li class="lanterna">{{ p }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 </body>
 </html>
+{##}
+{#    <h1>Perfil do utilizador</h1>#}
+{#    {% if request.user|has_group:'Customer' %}#}
+{#        <img src="{{ request.user.customer.profile_pic }}" style="width: 150px;"><br/><br/>#}
+{#    {% elif request.user|has_group:'Salesman' %}#}
+{#        <img src="{{ request.user.salesman.profile_pic }}" style="width: 150px;"><br/><br/>#}
+{#    {% endif %}#}
+{#    <p><strong>Username: </strong>{{ request.user.username }}</p><br/>#}
+{#    <p><strong>Email: </strong> {{ request.user.email }}</p><br/>#}
+{#    {% if request.user.customer %}#}
+{#        <p><strong>Tipo de utilizador: </strong>Cliente</p><br/>#}
+{#        <p class="lanterna_after"><strong>Créditos: </strong>{{ request.user.customer.credit }}</p><br/>#}
+{#        <p><strong>Género: </strong>{{ request.user.customer.gender }}</p><br/>#}
+{#        <p><strong>Aniversário: </strong>{{ request.user.customer.birthday }}</p>#}
+{#    {% elif request.user|has_group:'Salesman' %}#}
+{#        <p><strong>Tipo de utilizador: </strong>Vendedor</p><br/>#}
+{#        <p><strong>Classificação: </strong>{{ request.user.salesman.rating }}</p><br/>#}
+{#        <p><strong>Número de telefone: </strong>{{ request.user.salesman.phone_number }}</p>#}
+{#    {% endif %}#}
+{#    {{ infoPessoal }}#}

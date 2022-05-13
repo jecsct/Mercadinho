@@ -443,3 +443,43 @@ input[type=submit] {
     text-align: center;
     min-height: 83vh;
 }
+
+.perfil-container{
+    display: grid;
+    grid-template-rows: auto;
+    border: 1px #000000 solid;
+    margin: auto;
+}
+/*.perfil-container div{*/
+/*    border: 1px #000000 solid;*/
+/*}*/
+
+.info-capsule{
+
+}
+.user-image
+{
+    display: flex;
+    /*align-content: center;*/
+    /*align-content: center;*/
+}
+.user-image img{
+    height: auto;
+    width: auto;
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 50%;
+    transform: translate(0%,50%);
+    margin: auto;
+}
+
+.text-info{
+    display: grid;
+    grid-template-columns: auto auto;
+    border: 3px #98ffe7 solid;
+}
+
+.user-info{
+    display: flex;
+    margin: auto;
+}

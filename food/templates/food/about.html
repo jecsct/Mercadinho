@@ -1,9 +1,12 @@
 {% extends 'food/base.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>Sobre nós</title>
+    {% block head %}
+        <title>Mercadinho - Sobre nós</title>
+    {% endblock %}
     {% load custom_filters %}
 </head>
 <body>
