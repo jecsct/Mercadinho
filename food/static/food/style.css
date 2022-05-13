@@ -47,6 +47,14 @@ a {
     color: black;
 }
 
+.center-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 80vh;
+}
+
 /* Mapa dos mercadinhos */
 .mapa {
     width: auto;
@@ -390,14 +398,6 @@ input[type=submit] {
 
 .cesto-item2{
     margin-left: auto;
-}
-
-.center-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-height: 80vh;
 }
 
 .texto-pagamento {
