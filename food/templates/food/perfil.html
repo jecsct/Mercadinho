@@ -10,31 +10,34 @@
 </head>
 <body>
 {% block content %}
-    <div class="perfil-container">
-        <div class="info-capsule">
-            <div class="user-image">
-                <img src="{{ request.user.salesman.profile_pic }}" alt="user image">
-            </div>
-            <div class="text-info">
-                <div class="user-info">
-                    <div>
-                        <h2>Informacao Tecnica</h2>
-                        <ul>
-                            {% for t in infoTecnica %}
-                                <li class="lanterna">{{ t }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+    <div style="padding-top: 12px">
+        <div class="personal-info-container">
+            <img src="/food/static/media/banner.jpeg" alt="banner-image" style="max-width: 100%">
+            <img id="profile-pic" alt="profile-image" src={{ profile_pic }}>
+        </div>
+        <div class="text-info">
+            <div class="user-info">
+                <div>
+                    <h2>Informacao Tecnica</h2>
+                    <ul>
+                        {% for key,value in infoTecnica.items %}
+                            <li class="lanterna" style="text-align: center">
+                                {{ key }} : {{ value }}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-                <div class="user-info">
-                    <div>
-                        <h2>Informacao Pessoal</h2>
-                        <ul>
-                            {% for p in infoPessoal %}
-                                <li class="lanterna">{{ p }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+            </div>
+            <div class="user-info">
+                <div>
+                    <h2>Informacao Pessoal</h2>
+                    <ul>
+                        {% for key,value in infoPessoal.items %}
+                            <li class="lanterna" style="text-align: center">
+                                {{ key }} : {{ value }}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
@@ -62,3 +65,37 @@
 {#        <p><strong>Número de telefone: </strong>{{ request.user.salesman.phone_number }}</p>#}
 {#    {% endif %}#}
 {#    {{ infoPessoal }}#}
+
+
+{#<div class="perfil-container">#}
+{#        <div class="info-capsule">#}
+{#            <div>#}
+{#                <img src="/food/static/media/banner-teste.jpeg" alt="">#}
+{#            </div>#}
+{#            <div class="user-image">#}
+{#                <img src="{{ request.user.salesman.profile_pic }}" alt="user image">#}
+{#            </div>#}
+{#            <div class="text-info">#}
+{#                <div class="user-info">#}
+{#                    <div>#}
+{#                        <h2>Informacao Tecnica</h2>#}
+{#                        <ul>#}
+{#                            {% for t in infoTecnica %}#}
+{#                                <li class="lanterna">{{ t }}</li>#}
+{#                            {% endfor %}#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="user-info">#}
+{#                    <div>#}
+{#                        <h2>Informacao Pessoal</h2>#}
+{#                        <ul>#}
+{#                            {% for p in infoPessoal %}#}
+{#                                <li class="lanterna">{{ p }}</li>#}
+{#                            {% endfor %}#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}

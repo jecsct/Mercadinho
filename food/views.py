@@ -104,15 +104,19 @@ def limparCesto(request):
 
 
 @login_required(login_url="food:loginutilizador")
+@allowed_users(allowed_roles=['Customer','Salesman'])
 def perfil(request):
     user = request.user
     if user.groups.filter(name='Customer'):
-        infoTecnica = [user.username, "Cliente", user.customer.credit]
-        infoPessoal = [user.email, user.customer.gender, user.customer.birthday]
+        profile_pic = user.customer.profile_pic
+        infoTecnica = {"Username": user.username, "Tipo Cliente": "Cliente", "Créditos": user.customer.credit}
+        infoPessoal = {"Email": user.email, "Género": user.customer.gender, "Aniversário": user.customer.birthday}
     else:
-        infoTecnica = [user.username, "Salesman", user.salesman.rating]
-        infoPessoal = [user.email, user.salesman.phone_number, ]
-    return render(request, "food/perfil.html", {'infoTecnica': infoTecnica, 'infoPessoal': infoPessoal})
+        profile_pic = user.salesman.profile_pic
+        infoTecnica = {"Username": user.username, "Rating": user.salesman.rating, "Tipo Utilizador": "Vendedor"}
+        infoPessoal = {"Email": user.email, "Telefone": user.salesman.phone_number}
+    return render(request, "food/perfil.html",
+                  {"profile_pic": profile_pic, 'infoTecnica': infoTecnica, 'infoPessoal': infoPessoal})
 
 
 @unauthenticated_user

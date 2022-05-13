@@ -22,6 +22,7 @@ body {
     background-color: #eeeee0;
 }
 
+
 .page-container {
     position: relative;
     min-height: 98.2vh;
@@ -213,7 +214,7 @@ li:hover ul.dropdown {
 /* Caixa de mensagens */
 .mensagem {
     box-sizing: border-box;
-    border:solid 1px;
+    border: solid 1px;
     background-color: #ffffff;
     padding: 30px;
     margin: 3px 60px;
@@ -357,13 +358,13 @@ input[type=submit] {
     grid-gap: 16px;
 }
 
-.review_section img{
+.review_section img {
     width: 100px;
     height: 100px;
     object-fit: cover;
 }
 
-.review-section-text{
+.review-section-text {
     width: 570px;
     overflow-wrap: break-word;
 }
@@ -428,6 +429,44 @@ input[type=submit] {
     vertical-align: middle;
 }
 
+.info_container {
+    position: absolute;
+
+}
+
+.personal-info-container {
+        max-width: inherit;
+}
+
+.personal-info-container #profile-pic {
+    position: absolute;
+    left: 100px;
+    right: 100px;
+    top: 125px;
+
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: auto;
+}
+
+@media only screen and (max-width: 600px) {
+  .personal-info-container #profile-pic {
+    position: absolute;
+    left: 100px;
+    right: 100px;
+    top: 125px;
+
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: auto;
+  }
+}
+
+
 .center-container {
     display: flex;
     align-items: center;
@@ -444,42 +483,48 @@ input[type=submit] {
     min-height: 83vh;
 }
 
-.perfil-container{
+.perfil-container {
     display: grid;
     grid-template-rows: auto;
     border: 1px #000000 solid;
     margin: auto;
 }
+
 /*.perfil-container div{*/
 /*    border: 1px #000000 solid;*/
 /*}*/
 
-.info-capsule{
+.info-capsule {
 
 }
-.user-image
-{
+
+.user-image {
     display: flex;
     /*align-content: center;*/
     /*align-content: center;*/
 }
-.user-image img{
-    height: auto;
-    width: auto;
-    max-width: 150px;
-    max-height: 150px;
+
+.user-image img {
+    /*height: auto;*/
+    /*width: auto;*/
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
     border-radius: 50%;
-    transform: translate(0%,50%);
+    transform: translate(0%, 50%);
     margin: auto;
 }
 
-.text-info{
+.text-info {
     display: grid;
     grid-template-columns: auto auto;
-    border: 3px #98ffe7 solid;
+    /*border: 3px #98ffe7 solid;*/
+    padding-top: 50px;
 }
 
-.user-info{
+.user-info {
     display: flex;
     margin: auto;
+    justify-content: left;
 }
+
