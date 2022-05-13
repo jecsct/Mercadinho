@@ -19,11 +19,19 @@
                     <h2>Registar Vendedor</h2>
                     <form action="{% url 'food:registarSalesman' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <p>Username: <input name="username" type="username" required></p><br/>
-                        <p>Email: <input name="email" type="email" required></p><br/>
-                        <p>Password: <input name="password" type="password" required></p><br/>
-                        <p>Fotografia: <input name="photo" type="file" required></p><br/>
-                        <p>Número de telefone: <input name="telephone" type="tel" required></p><br/>
+                        <div class="grid-registar">
+                            <label>Username:</label>
+                            <input name="username" type="username" required>
+                            <label>Email:</label>
+                            <input name="email" type="email" required>
+                            <label>Password:</label>
+                            <input name="password" type="password" required>
+                            <label>Fotografia:</label>
+                            <input name="photo" type="file" required>
+                            <label>Número de telefone:</label>
+                            <input name="telephone" type="tel" required>
+                        </div>
+                        <br/>
                         <input type="submit" value="Gravar novo Vendedor"/>
                     </form>
                     <br>

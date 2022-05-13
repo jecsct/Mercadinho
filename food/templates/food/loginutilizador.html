@@ -25,8 +25,13 @@
                     {% endif %}
                     <form method="post" action="{% url 'food:loginutilizador' %}">
                         {% csrf_token %}
-                        Username: <input type="username" name="username"/><br/><br/>
-                        Password: <input type="password" name="password"/><br/><br/>
+                        <div class="grid-registar">
+                            <label>Username:</label>
+                            <input type="username" name="username"/>
+                            <label>Password: </label>
+                            <input type="password" name="password"/>
+                        </div>
+                        <br/>
                         <input type="submit" value="Login"/>
                     </form>
                     <br>

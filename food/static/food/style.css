@@ -426,11 +426,11 @@ input[type=submit] {
 }
 
 .row {
-  display: flex;
+    display: flex;
 }
 
 .column {
-  flex: 50%;
+    flex: 50%;
 }
 
 .textarea-contatos {
@@ -441,10 +441,21 @@ input[type=submit] {
 }
 .login-structure {
     display: grid;
-    grid-template-columns: 450px 300px;
+    grid-template-columns: auto auto;
     grid-template-rows: 500px;
     justify-content: center;
     vertical-align: middle;
+}
+
+.grid-registar{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 16px;
+    width: 100%;
+}
+
+.grid-registar input{
+    width: 200px;
 }
 
 .center-container {

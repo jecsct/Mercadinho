@@ -22,20 +22,29 @@
                     <h2>Registar Cliente</h2>
                     <form action="{% url 'food:registarSalesman' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <p>Username: <input name="username" type="username" required></p><br/>
-                        <p>Email: <input name="email" type="email" required></p><br/>
-                        <p>Password: <input name="password" type="password" required></p><br/>
-                        <p>Género: <input list="gender" name="gender"></p><br/>
+                        <div class="grid-registar">
+                            <label>Username:</label>
+                            <input name="username" type="username" required>
+                            <label>Email:</label>
+                            <input name="email" type="email" required>
+                            <label>Password:</label>
+                            <input name="password" type="password" required>
+                            <label>Género:</label>
+                            <input list="gender" name="gender" required>
+                            <label>Fotografia:</label>
+                            <input name="photo" type="file" required>
+                            <label>Aniversário:</label>
+                            <input name="birthday" type="date" required>
+                            <label>Créditos:</label>
+                            <input name="credits" type="number" required>
+                        </div>
+                        <br/>
+                        <input type="submit" value="Gravar novo Utilizador"/>
                         <datalist id="gender">
                             <option value="Male">
                             <option value="Female">
                             <option value="Other">
                         </datalist>
-
-                        <p>Fotografia: <input name="photo" type="file" required></p><br/>
-                        <p>Aniversário: <input name="birthday" type="date" required></p><br/>
-                        <p>Créditos: <input name="credits" type="number" required></p><br>
-                        <input type="submit" value="Gravar novo Utilizador"/>
                     </form>
                     <br>
                     <p>É um vendedor? Registe-se <a href="{% url 'food:registarSalesman' %}"
