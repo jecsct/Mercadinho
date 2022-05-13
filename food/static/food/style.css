@@ -392,12 +392,12 @@ input[type=submit] {
     margin-left: auto;
 }
 
-.pagamento {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    text-align: center;
-    padding: 80px;
+.center-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 80vh;
 }
 
 .texto-pagamento {
@@ -447,14 +447,14 @@ input[type=submit] {
     vertical-align: middle;
 }
 
-.grid-registar{
+.grid-forms{
     display: grid;
     grid-template-columns: auto auto;
     grid-gap: 16px;
     width: 100%;
 }
 
-.grid-registar input{
+.grid-forms input{
     width: 200px;
 }
 
