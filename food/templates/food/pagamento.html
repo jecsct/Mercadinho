@@ -1,29 +1,28 @@
 {% extends 'food/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>Title</title>
-      {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}"/>
-  </head>
-  <body>
-  {% block content %}
-  <form method="post" class="pagamento">
-      {% csrf_token %}
-        <h1>CheckOut</h1>
-        <br>
-      <label>Morada:</label>
-      <input type="text" name="morada" class="texto-pagamento"> <br> <br>
-      <label>Codigo Postal:</label>
-      <input type="text" name="ZipCode" class="texto-pagamento"> <br> <br>
-      <label> {{ price }} lanterninhas serão descontadas da sua conta. Deseja confirmar a transação?</label> <br> <br>
-      <input type="submit" value="Cancelar" formaction="cestoCompras">
-      <input type="submit" value="Sim" formaction="{% url 'food:checkOut' %}"><br><br>
-        {% if error_message %}
-            <p>{{ error_message }}</p>
-        {% endif %}
-  </form>
-   {% endblock %}
-  </body>
+</head>
+<body>
+{% block content %}
+    <form method="post" class="center-div">
+        <div>
+            {% csrf_token %}
+            <h1>Pagamento: </h1><br/>
+            <label>Morada:</label>
+            <input type="text" name="morada" class="texto-pagamento"><br/><br/>
+            <label>Codigo Postal:</label>
+            <input type="text" name="ZipCode" class="texto-pagamento"><br/><br/>
+            <label> {{ price }} lanterninhas serão descontadas da sua conta. Deseja confirmar a transação?</label> <br/> <br/>
+            <input type="submit" value="Cancelar" formaction="cestoCompras">
+            <input type="submit" value="Sim" formaction="{% url 'food:checkOut' %}"><br><br>
+            {% if error_message %}
+                <p>{{ error_message }}</p>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}
+</body>
 </html>
