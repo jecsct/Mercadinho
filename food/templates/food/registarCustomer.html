@@ -15,12 +15,12 @@
         <div class="login-structure">
             <div style="background-color: #0022FF; border-radius: 25px;">
                 <img src="/food/static/media/register-customer.jfif" alt="registar_customer_image"
-                     style="border-radius: 25px">
+                     style="border-radius: inherit">
             </div>
             <div class="center-container">
                 <div>
                     <h2>Registar Cliente</h2>
-                    <form action="{% url 'food:registarSalesman' %}" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'food:registarCustomer' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <p>Username: <input name="username" type="username" required></p><br/>
                         <p>Email: <input name="email" type="email" required></p><br/>

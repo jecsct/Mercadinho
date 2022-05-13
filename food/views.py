@@ -25,10 +25,10 @@ def index(request):
 
 def contactos(request):
     if request.method == 'POST':
-            Mensagem(email=request.POST.get("email"),
-                     texto_mensagem=request.POST.get("message"),
-                     dataHora=datetime.datetime.now()).save()
-            return HttpResponseRedirect(reverse('food:contactos'))
+        Mensagem(email=request.POST.get("email"),
+                 texto_mensagem=request.POST.get("message"),
+                 dataHora=datetime.datetime.now()).save()
+        return HttpResponseRedirect(reverse('food:contactos'))
     return render(request, 'food/contactos.html')
 
 
@@ -44,11 +44,13 @@ def caixaMensagens(request):
         lista_mensagens = Mensagem.objects.order_by('-dataHora').filter(tratada=False)
     return render(request, 'food/caixaMensagens.html', {'lista_mensagens': lista_mensagens})
 
+
 def tratarMensagem(request, mensagem_id):
     mensagem = Mensagem.objects.get(id=mensagem_id)
     mensagem.tratada = True
     mensagem.save()
     return HttpResponseRedirect(reverse('food:caixamensagens'))
+
 
 @login_required(login_url="food:loginutilizador")
 @allowed_users(allowed_roles=['Customer'])
@@ -57,10 +59,9 @@ def cestoCompras(request):
     customer = Customer.objects.get(user=user)
     cesto_compras = CestoCompras.objects.filter(customer=customer)
     if cesto_compras:
-        return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras,'error_message':False})
+        return render(request, 'food/cestoCompras.html', {'cesto_compras': cesto_compras, 'error_message': False})
     else:
-        return render(request, 'food/cestoCompras.html',{'error_message':True})
-
+        return render(request, 'food/cestoCompras.html', {'error_message': True})
 
 
 @login_required(login_url="food:loginutilizador")
@@ -95,15 +96,27 @@ def removeFromCart(request, cestoCompras_id):
     get_object_or_404(CestoCompras, pk=cestoCompras_id).delete()
     return HttpResponseRedirect(reverse('food:cestocompras'))
 
+
 def limparCesto(request):
     customer = Customer.objects.get(user=request.user)
     CestoCompras.objects.filter(customer=customer).delete()
     return HttpResponseRedirect(reverse('food:cestocompras'))
 
+
 @login_required(login_url="food:loginutilizador")
+@allowed_users(allowed_roles=['Customer','Salesman'])
 def perfil(request):
-    comments = Comment.objects.all().filter(user=request.user)
-    return render(request, "food/perfil.html", {'comments': comments})
+    user = request.user
+    if user.groups.filter(name='Customer'):
+        profile_pic = user.customer.profile_pic
+        infoTecnica = {"Username": user.username, "Tipo Cliente": "Cliente", "Créditos": user.customer.credit}
+        infoPessoal = {"Email": user.email, "Género": user.customer.gender, "Aniversário": user.customer.birthday}
+    else:
+        profile_pic = user.salesman.profile_pic
+        infoTecnica = {"Username": user.username, "Rating": user.salesman.rating, "Tipo Utilizador": "Vendedor"}
+        infoPessoal = {"Email": user.email, "Telefone": user.salesman.phone_number}
+    return render(request, "food/perfil.html",
+                  {"profile_pic": profile_pic, 'infoTecnica': infoTecnica, 'infoPessoal': infoPessoal})
 
 
 @unauthenticated_user
