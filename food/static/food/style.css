@@ -181,14 +181,6 @@ nav p {
     background-color: #cc0000;
 }
 
-.nav-profile-pic {
-    margin: 0;
-    padding: 0;
-    height: 44px;
-    width: 44px;
-    object-fit: cover;
-}
-
 .dropdown {
     float: right;
     min-width: 150px
