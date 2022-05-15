@@ -68,9 +68,9 @@ class Customer(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=1000)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    name = models.CharField(max_length=25)
+    description = models.CharField(max_length=200)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
     image = models.ImageField(null=True, blank=True)
     sales = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     views = models.IntegerField(default=0, validators=[MinValueValidator(0)])

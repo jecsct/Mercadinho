@@ -3,7 +3,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Title</title>
+    {% block head %}
+    <title>Mercadinho - Pagamento</title>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
@@ -12,9 +14,9 @@
             {% csrf_token %}
             <h1>Pagamento: </h1><br/>
             <label>Morada:</label>
-            <input type="text" name="morada" class="texto-pagamento"><br/><br/>
+            <input type="text" name="morada" class="texto-pagamento" maxlength="100"><br/><br/>
             <label>Codigo Postal:</label>
-            <input type="text" name="ZipCode" class="texto-pagamento"><br/><br/>
+            <input type="text" name="ZipCode" class="texto-pagamento" pattern="[0-9]{4}-[0-9]{3}"><br/><br/>
             <label> {{ price }} lanterninhas serão descontadas da sua conta. Deseja confirmar a transação?</label> <br/> <br/>
             <input type="submit" value="Cancelar" formaction="cestoCompras">
             <input type="submit" value="Sim" formaction="{% url 'food:checkOut' %}"><br><br>

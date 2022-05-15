@@ -12,20 +12,20 @@
 <body>
 {% block content %}
     <div class="about_general">
-        <div class="container_info_header">
+        <header class="container_info_header">
             <img src="/food/static/media/about_header.gif" alt="Connosco seguem o plano" style="width:100%;">
-        </div>
-        <div class="about_info">
-            <p>Somos um mercado de produtos alimentares importados, maioritariamente, do continente asiático, que se
-                foca em ter sempre os melhores e mais frescos produtos.</p>
+        </header>
+        <section class="about_info">
             <p>
-                Qualquer pessoa pode vender os seus produtos no nosso site desde que passe por uma rapida verificacao
-                para assegurar a qualidade dos seus produtos e poder se tornar em que a nossa marca confie
+                Somos um mercado de produtos alimentares importados, maioritariamente, do continente asiático, que se
+                foca em ter sempre os melhores e mais frescos produtos.
             </p>
-            <p>Para além de nos focarmos em termos a melhor qualidade de produtos, também nos focamos no desenvolvimento
+            <p>
+                Para além de nos focarmos em termos a melhor qualidade de produtos, também nos focamos no desenvolvimento
                 da nossa própria
                 criptomoeda, a <strong>Lanterninha</strong>.</p>
-            <p>A <strong>Lanterninha</strong> é uma criptomoeda desenvolvida especificamente para ser usada nas nossas
+            <p>
+                A <strong>Lanterninha</strong> é uma criptomoeda desenvolvida especificamente para ser usada nas nossas
                 lojas.
                 Desenvolvida com tecnologia de <a href="https://pt.wikipedia.org/wiki/Blockchain" target="_blank">blockchain</a>,
                 a <strong>Lanterninha</strong> vai permitir criar um ambiente mais suscentável para os nossos clientes.
@@ -35,7 +35,7 @@
                 <a href="{% url 'food:investCrypto' %}" class="button-link">Investir na Lanterninha</a>
                 <p style="font-size: 12px">*não nos responsabilizamos por quaisquer perdas monetárias</p>
             {% endif %}
-        </div>
+        </section>
     </div>
 {% endblock %}
 </body>

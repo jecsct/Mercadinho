@@ -15,19 +15,20 @@
     {% endif %}
     {% if products_list %}
         <br/>
-        <div class="product_list">
+        <div class="product-list-index">
             {% for product in products_list %}
-                <div class="product">
+                <div>
                     <a href="{% url 'food:productDetailPage' product.id %}">
-                        <img class="product_image" src="{{ product.image }}" alt="imagem do produto : {{ product.name }}"/>
-                        <p class="product_text">{{ product.name }}</p>
-                        <p class="lanterna product_price">Preço: {{ product.price }}</p>
+                        <img class="product-image-index" src="{{ product.image }}" alt="imagem do produto: {{ product.name }}"/>
+                        <p class="product-text-index">{{ product.name }}</p>
+                        <p class="lanterna-antes product-price-index">Preço: {{ product.price }}</p>
                         {% if not request.user|has_group:'Salesman' %}
-                            <div class="center_button"><a class="product_button"
-                                                          href="{% url 'food:addToCart' product.id %}">Adicionar ao
-                                cesto</a></div>
+                            <div class="center-button-index">
+                                <a class="product-button-index" href="{% url 'food:addToCart' product.id %}">Adicionar ao
+                                    cesto</a>
+                            </div>
                             {% if confirmation and product.id == p.id %}
-                                <p class="product_added">{{ confirmation }}</p>
+                                <p class="product-added-index">{{ confirmation }}</p>
                             {% endif %}
                         {% endif %}
                     </a>

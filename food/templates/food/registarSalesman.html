@@ -9,7 +9,7 @@
 </head>
 <body>
 {% block content %}
-    <div class="teste-container">
+    <div class="container-login">
         <div class="login-structure">
             <div style="background-color: #0022FF; border-radius: 25px;">
                 <img src="/food/static/media/register_salesman.jfif" alt="login_panda_image" style="border-radius: inherit">
@@ -19,6 +19,9 @@
                     <h2>Registar Vendedor</h2>
                     <form action="{% url 'food:registarSalesman' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+                        {% if error_message %}
+                            {{ error_message }}<br/><br/>
+                        {% endif %}
                         <div class="grid-forms">
                             <label>Username:</label>
                             <input name="username" type="username" required>
@@ -29,7 +32,7 @@
                             <label>Fotografia:</label>
                             <input name="photo" type="file" required>
                             <label>Número de telefone:</label>
-                            <input name="telephone" type="tel" required>
+                            <input name="telephone" type="tel" pattern="[0-9]{9}" required>
                         </div>
                         <br/>
                         <input type="submit" value="Gravar novo Vendedor"/>

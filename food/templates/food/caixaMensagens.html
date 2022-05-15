@@ -3,19 +3,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>Mensagens</title>
+    {% block head %}
+    <title>Mercadinho - Mensagens</title>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
     <h1>Caixa de Entrada</h1>
-    <div class="mensagem-Hora" style="margin-right: 60px">
+    <div class="mensagem-filtro">
     <form action="{% url 'food:caixamensagens' %}" method="post">
         {% csrf_token %}
         <label>Filtrar:</label>
         <select name="filtro">
-            <option value="none" selected disabled hidden>Select an Option</option>
+            <option value="none" selected disabled hidden>Selecione uma opção</option>
             <option value="False">Mensagens Novas</option>
-            <option value="True">Tratadas</option>
+            <option value="True">Resolvidas</option>
         </select>
         <input type="submit" value="Filtrar">
     </form>
@@ -25,8 +27,8 @@
             <div class="mensagem">
                 <a href="{% url "food:tratarMensagem" mensagem.id %}" class="button-link" style="float:right">Marcar como resolvida</a>
                 <p>De: {{ mensagem.email }}</p> <br>
-                <div>Mensagem: {{ mensagem.texto_mensagem }}</div>
-                <p class="mensagem-Hora">{{ mensagem.dataHora }}</p>
+                <p>Mensagem: {{ mensagem.texto_mensagem }}</p>
+                <p class="mensagem-hora">{{ mensagem.dataHora }}</p>
             </div>
             <br>
         {% endfor %}

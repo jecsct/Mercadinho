@@ -3,32 +3,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>Contactos</title>
+    {% block head %}
+        <title>Mercadinho - Contactos</title>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
-    <div class="row">
-    <div class="column" style="margin-left: 30px; margin-top: 20px">
-        <h1>Contactos</h1>
-    <ul>
-        <li class="lanterna"><strong>Facebook</strong>: Mercadinho Portugal</li>
-        <li class="lanterna"><strong>Instagram</strong>: @mercadinho.pt</li>
-        <li class="lanterna"><strong>Telefone</strong>: +351 888 888 888</li>
-        <li class="lanterna"><strong>Email</strong>: mercadinho@email.com</li>
-    </ul> <br>
-        <h1>Contacte-nos!</h1>
-    <form action="{% url 'food:contactos' %}" method="post">
-        {% csrf_token %}
-            <label>De: </label><br/>
-            <input name="email" type="email" style="width: 500px;font:16px sans-serif;" value="{{ request.user.email }}" required><br/><br/>
-            <label for="message" required>Texto da mensagem: </label><br/>
-            <textarea id="message" name="message" class="textarea-contatos"></textarea><br/><br/>
-            <input type="submit" value="Enviar Mensagem" />
-    </form>
-    </div>
-    <div class="column">
-        <img src="/static/media/logo.png">
-    </div>
+    <div class="row-contactos">
+        <div class="column-contactos">
+            <h1>Contactos</h1>
+            <ul>
+                <li class="lanterna-antes"><strong>Facebook</strong>: Mercadinho Portugal</li>
+                <li class="lanterna-antes"><strong>Instagram</strong>: @mercadinho.pt</li>
+                <li class="lanterna-antes"><strong>Telefone</strong>: +351 888 888 888</li>
+                <li class="lanterna-antes"><strong>Email</strong>: mercadinho@email.com</li>
+            </ul>
+            <br/>
+            <h1>Contacte-nos!</h1>
+            <form action="{% url 'food:contactos' %}" method="post">
+                {% csrf_token %}
+                <label>De: </label><br/>
+                <input class="email-contactos" name="email" type="email" value="{{ request.user.email }}" required><br/><br/>
+                <label for="message" required>Texto da mensagem: </label><br/>
+                <textarea id="message" name="message" class="textarea-contactos"></textarea><br/><br/>
+                <input type="submit" value="Enviar Mensagem" />
+            </form>
+        </div>
+        <div class="column-contactos">
+            <img src="/static/media/logo.png">
+        </div>
     </div>
 {% endblock %}
 </body>

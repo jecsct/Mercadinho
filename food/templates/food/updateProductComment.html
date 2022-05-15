@@ -3,14 +3,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% block head %}
     <title>Mercadinho - Update Comentario</title>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
     <form action="{% url 'food:updateProductComment' product.id %}" method="post">
         {% csrf_token %}
         <h1>Alterar comentário:</h1>
-            <textarea name="newCommentText" id="newCommentText" rows="4" cols="38">{{ comment.text }}</textarea><br/><br/>
+            <textarea name="newCommentText" id="newCommentText" rows="4" cols="38" maxlength="255">{{ comment.text }}</textarea><br/><br/>
         <label>Avaliação: </label>
         <input max="5.0" min="0.0" name="newCommentRating" step="0.1" type="number" value="{{ comment.rating }}"
                style="width: 220px;" required><br/><br/>

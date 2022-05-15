@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>Mercadinho</title>
 </head>
 <body>
 {% load static %}
@@ -17,16 +16,16 @@
                     <img src="/static/media/logo.png" class="nav-logo" width="44.2px" style="padding: 6px;">
                 </a>
                 {% if request.user|has_group:'Customer' %}
-                    <a class="mercadinho" href="{% url 'food:index' %}"> Mercadinho | Créditos: {{ request.user.customer.credit }}</a>
+                    <a class="mercadinho-nav" href="{% url 'food:index' %}"> Mercadinho | Créditos: {{ request.user.customer.credit }}</a>
                 {% else %}
-                    <a class="mercadinho" href="{% url 'food:index' %}">Mercadinho</a>
+                    <a class="mercadinho-nav" href="{% url 'food:index' %}">Mercadinho</a>
                 {% endif %}
             </div>
         </li>
         <li>
             {% if not request.user.is_authenticated or request.user.is_superuser %}
                 <a>
-                    <img src="/static/media/default_logo.png" class="navOption" width="44.2px" style="padding: 6px;">
+                    <img src="/static/media/default_logo.png" class="nav-option" width="44.2px" style="padding: 6px;">
                 </a>
             {% else %}
                 <a>
@@ -38,50 +37,50 @@
                 </a>
             {% endif %}
             {% if not request.user.is_authenticated %}
-                <ul class="dropdown">
+                <ul class="dropdown-nav">
                     <li>
-                        <a class="navOption" href="{% url 'food:registarCustomer' %}">Registar Utilizador</a>
+                        <a class="nav-option" href="{% url 'food:registarCustomer' %}">Registar Utilizador</a>
                     </li>
                     <li>
-                        <a class="navOption" href="{% url 'food:loginutilizador' %}">Entrar</a>
+                        <a class="nav-option" href="{% url 'food:loginutilizador' %}">Entrar</a>
                     </li>
                 </ul>
             {% else %}
-                <ul class="dropdown">
+                <ul class="dropdown-nav">
+                {% if not request.user.is_superuser %}
                     <li>
-                        <a href="{% url 'food:perfil' %}" class="navOption">Perfil</a>
+                        <a href="{% url 'food:perfil' %}" class="nav-option">Perfil</a>
                     </li>
-                    {% if request.user.is_superuser %}
+                    {% elif request.user.is_superuser %}
                         <li>
-                            <a href="{% url 'food:caixamensagens' %}" class="navOption">Mensagens</a>
+                            <a href="{% url 'food:caixamensagens' %}" class="nav-option">Mensagens</a>
                         </li>
                     {% endif %}
                     <li>
-                        <a class="navOption" href="{% url 'food:logoututilizador' %}">Sair</a>
+                        <a class="nav-option" href="{% url 'food:logoututilizador' %}">Sair</a>
                     </li>
                 </ul>
             {% endif %}
             {% if request.user|has_group:'Customer' %}
                 <li>
-                    <a href="{% url 'food:cestocompras' %}"><img class="navOption" src="/static/media/carrinho.png" width="44.2px" style="padding: 6px;"></a>
+                    <a href="{% url 'food:cestocompras' %}"><img class="nav-option" src="/static/media/carrinho.png" width="44.2px" style="padding: 6px;"></a>
                 </li>
             {% endif %}
         <li>
             {% if request.user.is_authenticated and request.user|has_group:'Salesman' %}
-                <a class="navOption" href="{% url 'food:addProduct' %}">Adicionar Produto</a>
+                <a class="nav-option" href="{% url 'food:addProduct' %}">Adicionar Produto</a>
             {% endif %}
         </li>
         <li>
-            <a class="navOption" href="{% url 'food:mapPage' %}">Mapa dos mercadinhos</a>
+            <a class="nav-option" href="{% url 'food:mapPage' %}">Mapa dos mercadinhos</a>
         </li>
         <li>
-            <a class="navOption" href="{% url 'food:about' %}">Sobre nós</a>
+            <a class="nav-option" href="{% url 'food:about' %}">Sobre nós</a>
         </li>
         <li>
-            <a class="navOption" href="{% url 'food:contactos' %}">Contactos</a>
+            <a class="nav-option" href="{% url 'food:contactos' %}">Contactos</a>
         </li>
     </ul>
 </nav>
-
 </body>
 </html>

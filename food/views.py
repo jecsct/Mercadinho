@@ -1,21 +1,19 @@
-import random
-
-import numpy
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-import datetime
 from django.contrib.auth.decorators import login_required
 from food.models import Mensagem, Customer, Salesman
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-
 from .models import Product, Comment, CestoCompras
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import User, Group
 import random
+import datetime
 
+def redirect_view(request):
+    return redirect('food:index')
 
 def index(request):
     if request.user.groups.filter(name='Salesman').exists():
@@ -129,21 +127,24 @@ def registarCustomer(request):
         fs = FileSystemStorage()
         filename = fs.save(image.name, image)
         uploaded_file_url = fs.url(filename)
-        user = User.objects.create_user(
-            username=request.POST["username"],
-            password=request.POST["password"],
-            email=request.POST["email"]
-        )
-        Group.objects.get(name='Customer').user_set.add(user)
-        Customer(
-            profile_pic=uploaded_file_url,
-            gender=request.POST["gender"],
-            birthday=request.POST["birthday"],
-            credit=request.POST["credits"],
-            user=user
-        ).save()
-        login(request, user)
-        return HttpResponseRedirect(reverse('food:index'))
+        if not User.objects.filter(username=request.POST["username"]):
+            user = User.objects.create_user(
+                username=request.POST["username"],
+                password=request.POST["password"],
+                email=request.POST["email"]
+            )
+            Group.objects.get(name='Customer').user_set.add(user)
+            Customer(
+                profile_pic=uploaded_file_url,
+                gender=request.POST["gender"],
+                birthday=request.POST["birthday"],
+                credit=request.POST["credits"],
+                user=user
+            ).save()
+            login(request, user)
+            return HttpResponseRedirect(reverse('food:index'))
+        else:
+            return render(request, 'food/registarCustomer.html', {'error_message': 'Utilizador já criado com esse username'})
     return render(request, 'food/registarCustomer.html')
 
 
@@ -154,20 +155,24 @@ def registarSalesman(request):
         fs = FileSystemStorage()
         filename = fs.save(image.name, image)
         uploaded_file_url = fs.url(filename)
-        user = User.objects.create_user(
-            username=request.POST["username"],
-            password=request.POST["password"],
-            email=request.POST["email"]
-        )
-        Group.objects.get(name='Salesman').user_set.add(user)
-        Salesman(
-            profile_pic=uploaded_file_url,
-            rating=0,
-            phone_number=request.POST["telephone"],
-            user=user
-        ).save()
-        login(request, user)
-        return HttpResponseRedirect(reverse('food:index'))
+        if not User.objects.filter(username=request.POST["username"]):
+            user = User.objects.create_user(
+                username=request.POST["username"],
+                password=request.POST["password"],
+                email=request.POST["email"]
+            )
+            Group.objects.get(name='Salesman').user_set.add(user)
+            Salesman(
+                profile_pic=uploaded_file_url,
+                rating=0,
+                phone_number=request.POST["telephone"],
+                user=user
+            ).save()
+            login(request, user)
+            return HttpResponseRedirect(reverse('food:index'))
+        else:
+            return render(request, 'food/registarSalesman.html',
+                          {'error_message': 'Utilizador já criado com esse username'})
     return render(request, 'food/registarSalesman.html')
 
 
@@ -182,7 +187,7 @@ def addProduct(request):
         salesman = Salesman(user=request.user)
         Product.objects.create(name=request.POST.get('productName'),
                                description=request.POST.get('productDescription'),
-                               price=request.POST.get('productPrice'),
+                               price=float(request.POST.get('productPrice')),
                                image=uploaded_file_url,
                                salesman=salesman
                                )

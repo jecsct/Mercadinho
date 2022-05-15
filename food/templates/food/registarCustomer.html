@@ -11,7 +11,7 @@
 </head>
 <body>
 {% block content %}
-    <div class="teste-container">
+    <div class="container-login">
         <div class="login-structure">
             <div style="background-color: #0022FF; border-radius: 25px;">
                 <img src="/food/static/media/register-customer.jfif" alt="registar_customer_image"
@@ -22,6 +22,9 @@
                     <h2>Registar Cliente</h2>
                     <form action="{% url 'food:registarCustomer' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+                        {% if error_message %}
+                            {{ error_message }}<br/><br/>
+                        {% endif %}
                         <div class="grid-forms">
                             <label>Username:</label>
                             <input name="username" type="username" required>
@@ -30,21 +33,21 @@
                             <label>Password:</label>
                             <input name="password" type="password" required>
                             <label>Género:</label>
-                            <input list="gender" name="gender" required>
+                            <select name="gender" required>
+                                <option value="none" selected disabled hidden>Selecione uma opção</option>
+                                <option value="Male">Masculino</option>
+                                <option value="Female">Feminino</option>
+                                <option value="Other">Outro</option>
+                            </select>
                             <label>Fotografia:</label>
                             <input name="photo" type="file" required>
                             <label>Aniversário:</label>
                             <input name="birthday" type="date" required>
                             <label>Créditos:</label>
-                            <input name="credits" type="number" required>
+                            <input name="credits" min="1" max="1000000" type="number" required>
                         </div>
                         <br/>
                         <input type="submit" value="Gravar novo Utilizador"/>
-                        <datalist id="gender">
-                            <option value="Male">
-                            <option value="Female">
-                            <option value="Other">
-                        </datalist>
                     </form>
                     <br>
                     <p>É um vendedor? Registe-se <a href="{% url 'food:registarSalesman' %}"

@@ -3,18 +3,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     {% block head %}
         <title>Mercadinho - Login</title>
     {% endblock %}
 </head>
 <body>
 {% block content %}
-    <div class="teste-container">
+    <div class="container-login">
         <div class="login-structure">
-            <div style="background-color: #0022FF; border-radius: 25px;">
-                <img src="/food/static/media/panda_login.jfif" alt="login_panda_image" style="border-radius: inherit">
+            <div>
+                <img src="/food/static/media/panda_login.jfif" alt="login_panda_image">
             </div>
             <div class="center-container">
                 <div>
@@ -36,8 +34,7 @@
                     </form>
                     <br>
                     <p>
-                        Ainda não tem conta? Crie uma <a href="{% url 'food:registarCustomer' %}"
-                                                         style="color: blue">aqui</a>!
+                        Ainda não tem conta? Crie uma <a href="{% url 'food:registarCustomer' %}" style="color: blue">aqui</a>!
                     </p>
                 </div>
             </div>
